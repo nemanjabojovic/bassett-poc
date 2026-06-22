@@ -205,6 +205,7 @@
       "icon": "",
       "name": "HideAway Trestle Counter Table",
       "staticFrame" : true,
+      "type": "table",
       "brandId": "bassett",
       "textures": ["Fawn", "Sandstone", "Navy", "Tidal Blue"],
       "status": "Complete",

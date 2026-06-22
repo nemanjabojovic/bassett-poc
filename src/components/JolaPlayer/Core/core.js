@@ -1887,7 +1887,7 @@ export default class Core {
       model.url,
       async (result) => {
         try {
-          await this.loadModelMaps(model, result.scene);
+          // await this.loadModelMaps(model, result.scene);
 
           // Monterey
           if (model?.collectionName === "Monterey") {
@@ -2443,11 +2443,11 @@ export default class Core {
       const index = this.modelConfiguration.elements.indexOf(element);
       let newModel = models[index].scene;
 
-      if (this.loadMapPerModelCollection) {
-        await this.loadModelMaps(modelData, newModel);
-      } else if (modelData.byoMapsPerModel) {
-        await this.loadModelMaps(modelData, newModel, true);
-      }
+      // if (this.loadMapPerModelCollection) {
+      //   await this.loadModelMaps(modelData, newModel);
+      // } else if (modelData.byoMapsPerModel) {
+      //   await this.loadModelMaps(modelData, newModel, true);
+      // }
 
       if (modelData.arm) {
         // Fallback if no armType is selected

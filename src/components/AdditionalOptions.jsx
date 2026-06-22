@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import additionalOptions from "../assets/icons/additionalOptions.svg";
 import Button from "./Button";
 import defaultView from "../assets/icons/defaultView.svg";
 import rightView from "../assets/icons/rightView.svg";
@@ -10,10 +9,7 @@ import camera from "../assets/icons/camera.svg";
 import animationsIcon from "../assets/icons/animations.svg";
 import dimensions from "../assets/icons/dimensions.svg";
 
-const AdditionalOptions = ({
-  isOpenAdditionalOption,
-  setIsOpenAdditionalOption,
-}) => {
+const AdditionalOptions = () => {
   const [animationsAvailable, setAnimationsAvailable] = useState(false);
 
   const handleDefaultView = () => {
@@ -90,10 +86,6 @@ const AdditionalOptions = ({
     },
   ];
 
-  const handleAdditionalOption = () => {
-    setIsOpenAdditionalOption(!isOpenAdditionalOption);
-  };
-
   const handleAnimationToggle = () => {
     window.player.playAnimation();
   };
@@ -105,39 +97,24 @@ const AdditionalOptions = ({
   }, []);
 
   return (
-    <div className='additional-options'>
-      <div className='additional-options-closed'>
+    <div className='additional-options-closed'>
+      {icons.map((item, index) => (
+        <div key={index} className={`tooltip-container ${item.classTitle}`}>
+          <Button
+            icon={<img src={item.icon} alt={item.title} />}
+            className='additional-options-buttons'
+            onClick={item.onClick}
+          />
+          <span className='tooltip-text'>{item.title}</span>
+        </div>
+      ))}
+      {animationsAvailable && (
         <Button
-          icon={<img src={additionalOptions} alt='additionalOptions' />}
-          className='additional-options-buttons'
-          onClick={handleAdditionalOption}
-        />
-        {isOpenAdditionalOption && (
-          <div className='additional-options-dropdown'>
-            {icons.map((item, index) => (
-              <div
-                key={index}
-                className={`tooltip-container ${item.classTitle}`}
-              >
-                <Button
-                  icon={<img src={item.icon} alt={`Icon ${index}`} />}
-                  className={`additional-options-buttons not-rounded  ${item.title === "Floor" ? "floor" : ""
-                    }
-                  ${item.title === "Animations" ? "animations" : ""}
-                  `}
-                  onClick={item.onClick}
-                />
-                <span className='tooltip-text'>{item.title}</span>
-              </div>
-            ))}
-          </div>
-        )}
-        {animationsAvailable && (<Button
-          icon={<img src={animationsIcon} alt='additionalOptions' />}
+          icon={<img src={animationsIcon} alt='Animation' />}
           className='additional-options-buttons'
           onClick={handleAnimationToggle}
-        />)}
-      </div>
+        />
+      )}
     </div>
   );
 };

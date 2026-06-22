@@ -120,15 +120,6 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
       </div>
 
       <div className='config-panel-footer'>
-        <div className='config-dimensions'>
-          <span>Height {frame?.height || '--'}</span>
-          <span>Width {frame?.width || '--'}</span>
-          <span>Depth {frame?.depth || '--'}</span>
-        </div>
-        <div className='config-footer-price-row'>
-          <button className='config-clear-btn'>Clear Configuration</button>
-          <span className='config-price'>$0.00</span>
-        </div>
         <div className='config-cta-row'>
           <button className='config-summary-btn'>View Summary</button>
           <button className='config-cart-btn'>Add to Cart</button>

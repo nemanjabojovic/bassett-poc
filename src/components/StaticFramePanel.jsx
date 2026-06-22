@@ -24,21 +24,120 @@ const ChevronIcon = ({ open }) => (
   </svg>
 )
 
-const StaticFramePanel = ({ sku, frame, onClose }) => {
-  const [fabricOpen, setFabricOpen] = useState(true)
-  const [cushionOpen, setCushionOpen] = useState(false)
-  const [search, setSearch] = useState('')
-  const [showConfirm, setShowConfirm] = useState(false)
-
-  const frameName = frame?.name || sku || ''
-
-  const fabrics = frame?.textures
-    ? data.fabrics.filter(f => frame.textures.includes(f.name))
-    : data.fabrics
-
-  const filtered = fabrics.filter(f =>
-    !search || f.name.toLowerCase().includes(search.toLowerCase())
+const SwatchSection = ({ label, items, search, onSearch, searchPlaceholder }) => {
+  const [open, setOpen] = useState(true)
+  const filtered = items.filter(f =>
+    !search || f.name.toLowerCase().includes(search.toLowerCase()) || f.sku.toLowerCase().includes(search.toLowerCase())
   )
+  return (
+    <div className='config-section'>
+      <button className='config-section-header' onClick={() => setOpen(v => !v)}>
+        <span className='config-section-label'>{label}</span>
+        <ChevronIcon open={open} />
+      </button>
+      {open && (
+        <div className='config-section-content'>
+          <input
+            className='config-search'
+            placeholder={searchPlaceholder}
+            value={search}
+            onChange={e => onSearch(e.target.value)}
+          />
+          <div className='config-swatch-grid'>
+            {filtered.length > 0 ? filtered.map((item, i) => (
+              <div key={i} className='config-swatch'>
+                <div
+                  className='config-swatch-img'
+                  style={{ backgroundImage: item.icon ? `url(${item.icon})` : 'none' }}
+                />
+                <span className='config-swatch-name'>{item.name}</span>
+              </div>
+            )) : (
+              <p className='config-empty'>No results</p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const DropdownSection = ({ label, options }) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className='config-section'>
+      <button className='config-section-header' onClick={() => setOpen(v => !v)}>
+        <span className='config-section-label'>{label}</span>
+        <ChevronIcon open={open} />
+      </button>
+      {open && (
+        <div className='config-section-content'>
+          {options.length > 0 ? (
+            <div className='config-option-list'>
+              {options.map((opt, i) => (
+                <div key={i} className='config-option-item'>{opt}</div>
+              ))}
+            </div>
+          ) : (
+            <p className='config-empty'>No options</p>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const FabricBody = ({ frame }) => {
+  const [search, setSearch] = useState('')
+  const allOptions = [...(data.fabrics || []), ...(data.leathers || [])]
+  const frameOptions = frame?.textures
+    ? allOptions.filter(f => frame.textures.includes(f.sku))
+    : allOptions
+
+  return (
+    <>
+      <SwatchSection
+        label='Fabric Options'
+        items={frameOptions}
+        search={search}
+        onSearch={setSearch}
+        searchPlaceholder='Search Fabrics'
+      />
+      <DropdownSection label='Cushion Options' options={[]} />
+    </>
+  )
+}
+
+const TableBody = ({ frame }) => {
+  const [topSearch, setTopSearch] = useState('')
+  const [baseSearch, setBaseSearch] = useState('')
+  const finishes = (frame?.textures || []).map(t => ({ sku: t, name: t, icon: null }))
+
+  return (
+    <>
+      <SwatchSection
+        label='Top Finish'
+        items={finishes}
+        search={topSearch}
+        onSearch={setTopSearch}
+        searchPlaceholder='Search Finishes'
+      />
+      <SwatchSection
+        label='Base Finish'
+        items={finishes}
+        search={baseSearch}
+        onSearch={setBaseSearch}
+        searchPlaceholder='Search Finishes'
+      />
+      <DropdownSection label='Edge Profiles' options={['Classic', 'Eased', 'Bevel']} />
+    </>
+  )
+}
+
+const StaticFramePanel = ({ sku, frame, onClose }) => {
+  const [showConfirm, setShowConfirm] = useState(false)
+  const isTable = frame?.type === 'table'
+  const frameName = frame?.name || sku || ''
 
   return (
     <aside className='config-panel'>
@@ -57,66 +156,10 @@ const StaticFramePanel = ({ sku, frame, onClose }) => {
       </div>
 
       <div className='config-panel-body'>
-        <div className='config-section'>
-          <button
-            className='config-section-header'
-            onClick={() => setFabricOpen(v => !v)}
-          >
-            <span className='config-section-label'>Fabric Options</span>
-            <ChevronIcon open={fabricOpen} />
-          </button>
-
-          {fabricOpen && (
-            <div className='config-section-content'>
-              <input
-                className='config-search'
-                placeholder='Search Fabrics'
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
-              <div className='config-swatch-grid'>
-                {filtered.length > 0 ? filtered.map((fabric, i) => (
-                  <div key={i} className='config-swatch'>
-                    <div
-                      className='config-swatch-img'
-                      style={{ backgroundImage: fabric.icon ? `url(${fabric.icon})` : 'none' }}
-                    />
-                    <span className='config-swatch-name'>{fabric.name}</span>
-                  </div>
-                )) : (
-                  <p className='config-empty'>No fabrics found</p>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className='config-section'>
-          <button
-            className='config-section-header'
-            onClick={() => setCushionOpen(v => !v)}
-          >
-            <span className='config-section-label'>Cushion Options</span>
-            <ChevronIcon open={cushionOpen} />
-          </button>
-          {cushionOpen && (
-            <div className='config-section-content'>
-              <p className='config-empty'>No cushion options</p>
-            </div>
-          )}
-        </div>
+        {isTable ? <TableBody frame={frame} /> : <FabricBody frame={frame} />}
       </div>
 
       <div className='config-panel-footer'>
-        <div className='config-dimensions'>
-          <span>Height {frame?.height || '--'}</span>
-          <span>Width {frame?.width || '--'}</span>
-          <span>Depth {frame?.depth || '--'}</span>
-        </div>
-        <div className='config-footer-price-row'>
-          <button className='config-clear-btn'>Clear Configuration</button>
-          <span className='config-price'>$0.00</span>
-        </div>
         <div className='config-cta-row'>
           <button className='config-summary-btn'>View Summary</button>
           <button className='config-cart-btn'>Add to Cart</button>

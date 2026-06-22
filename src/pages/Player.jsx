@@ -6,7 +6,7 @@ import { resolveModelOptions } from '../components/JolaPlayer/utils'
 import StaticFramePanel from '../components/StaticFramePanel'
 import SectionalPanel from '../components/SectionalPanel'
 import JolaIcon from '../assets/icons/jolaLogo.svg'
-import backArrow from '../assets/icons/arrow-back.svg'
+import AdditionalOptions from '../components/AdditionalOptions'
 
 const Player = ({
   activePlayer,
@@ -23,6 +23,8 @@ const Player = ({
   additionalOptionsCollectionFilter,
   setStaticModelWithAnimation,
   staticModelWithAnimation,
+  isOpenAdditionalOption,
+  setIsOpenAdditionalOption,
   goToLanding,
 }) => {
   const playerRef = useRef()
@@ -107,13 +109,31 @@ const Player = ({
         </div>
 
         <div className='viewer-nav'>
-          <img src={JolaIcon} alt='Jola' className='viewer-jola-logo' />
-          <button className='viewer-back-btn' onClick={goToLanding}>
-            <img src={backArrow} alt='Back' />
-          </button>
+          <img src={JolaIcon} alt='Jola' className='viewer-jola-logo' onClick={goToLanding} />
+          <AdditionalOptions
+            isOpenAdditionalOption={isOpenAdditionalOption}
+            setIsOpenAdditionalOption={setIsOpenAdditionalOption}
+          />
         </div>
 
         {playerOptions && <JolaPlayer ref={playerRef} options={playerOptions} />}
+
+        <div className='viewer-footer'>
+          <div className='viewer-footer-dims'>
+            <span>Height {playerOptions?.frame?.height || '--'}</span>
+            <span>Width {playerOptions?.frame?.width || '--'}</span>
+            <span>Depth {playerOptions?.frame?.depth || '--'}</span>
+          </div>
+          <div className='viewer-footer-right'>
+            <button className='viewer-clear-btn'>
+              <svg width='14' height='14' viewBox='0 0 14 14' fill='none'>
+                <path d='M1 3h12M5 3V2h4v1M2 3l1 9h8l1-9' stroke='currentColor' strokeWidth='1.2' strokeLinecap='round' strokeLinejoin='round' />
+              </svg>
+              Clear Configuration
+            </button>
+            <span className='viewer-price'>$0.00</span>
+          </div>
+        </div>
       </div>
 
       {isStaticFrame ? (
