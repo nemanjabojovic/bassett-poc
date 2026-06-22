@@ -1904,3 +1904,465 @@ canvas {
   border: 0.5px solid gray;
   text-align: center;
 }
+
+/* Configurator view */
+
+.configurator-view {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.viewer-area {
+  position: relative;
+  flex: 1;
+  background: #eeeff2;
+  overflow: hidden;
+}
+
+.viewer-area #player {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.viewer-area #loading-screen {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: #eeeff2;
+}
+
+.viewer-nav {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 20;
+}
+
+.viewer-jola-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.viewer-back-btn {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.viewer-back-btn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Config panel */
+
+.config-panel {
+  width: 300px;
+  flex-shrink: 0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #e5e7eb;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.config-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.config-panel-title-group {
+  flex: 1;
+  margin-right: 12px;
+}
+
+.config-panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.config-panel-sku {
+  font-size: 11px;
+  color: #71757b;
+  margin-top: 4px;
+}
+
+.config-panel-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #71757b;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.config-panel-close:hover {
+  color: #333;
+}
+
+.config-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+
+.config-section {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.config-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.config-section-header:hover {
+  background: #f9f9f9;
+}
+
+.config-section-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.config-section-content {
+  padding: 0 16px 14px;
+}
+
+.config-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 12px;
+  outline: none;
+}
+
+.config-search:focus {
+  border-color: #333;
+}
+
+.config-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.config-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.config-swatch-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #e5e7eb;
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.config-swatch:hover .config-swatch-img {
+  border-color: #333;
+}
+
+.config-swatch-name {
+  font-size: 9px;
+  color: #71757b;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.config-empty {
+  font-size: 12px;
+  color: #71757b;
+  padding: 4px 0;
+}
+
+/* Sectional layout grid */
+
+.config-layout-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.config-layout-new,
+.config-layout-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 8px 4px;
+  border: 1px dashed #e5e7eb;
+  border-radius: 6px;
+}
+
+.config-layout-new:hover,
+.config-layout-item:hover {
+  border-color: #333;
+}
+
+.config-layout-new-icon {
+  font-size: 22px;
+  color: #71757b;
+  line-height: 1;
+}
+
+.config-layout-new p,
+.config-layout-item p {
+  font-size: 9px;
+  color: #71757b;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.config-layout-thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+/* Option list (arm types etc.) */
+
+.config-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.config-option-item {
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+}
+
+.config-option-item:hover {
+  border-color: #333;
+  background: #f9f9f9;
+}
+
+/* Footer */
+
+.config-panel-footer {
+  flex-shrink: 0;
+  border-top: 1px solid #e5e7eb;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.config-dimensions {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: #71757b;
+}
+
+.config-footer-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.config-clear-btn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  color: #71757b;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  font-family: 'Soleil', sans-serif;
+}
+
+.config-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.config-cta-row {
+  display: flex;
+  gap: 8px;
+}
+
+.config-summary-btn {
+  flex: 1;
+  padding: 11px 0;
+  background: white;
+  border: 1px solid #333;
+  border-radius: 6px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+.config-cart-btn {
+  flex: 1;
+  padding: 11px 0;
+  background: #333;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 12px;
+  color: white;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+.config-summary-btn:hover {
+  background: #f5f5f5;
+}
+
+.config-cart-btn:hover {
+  background: #444;
+}
+
+/* Clear configuration confirm modal */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 36px 32px;
+  max-width: 480px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+}
+
+.modal-dismiss {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #71757b;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-dismiss:hover {
+  color: #333;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: #71757b;
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-confirm-btn {
+  padding: 14px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.modal-confirm-btn:hover {
+  background: #444;
+}
+
+.modal-cancel-btn {
+  padding: 14px;
+  background: white;
+  color: #333;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.modal-cancel-btn:hover {
+  background: #f5f5f5;
+}

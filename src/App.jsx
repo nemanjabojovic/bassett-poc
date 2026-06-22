@@ -273,6 +273,7 @@ function App() {
         additionalOptionsCollectionFilter={additionalOptionsCollectionFilter}
         staticModelWithAnimation={staticModelWithAnimation}
         setStaticModelWithAnimation={setStaticModelWithAnimation}
+        goToLanding={goToLanding}
       />
     )
   }
