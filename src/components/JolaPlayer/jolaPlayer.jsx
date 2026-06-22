@@ -171,7 +171,7 @@ const JolaPlayer = forwardRef(
       };
     }, [playerReady, webglFailed]);
 
-    if (!options || !options.frame || !options.brand || !options.data) {
+    if (!options || !options.frame  || !options.data) {
       console.warn("JolaPlayer: invalid options, skipping init", options);
       return null;
     }

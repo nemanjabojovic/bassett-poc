@@ -6,13 +6,14 @@
       "modelPath": "bradington-young",
       "configuratorTypes": [
         {
-          "name": "Static Frames",
+          "name": "Static",
           "numberOfBatches": 10
         },
         {
-          "name": "Sectionals",
+          "name": "Sectional",
           "collections": [
-            "Winter"
+            "Winter",
+            "bassett"
           ]
         },
         {
@@ -21,8 +22,7 @@
             "Luxe for Living",
             "Sectional Seating by Design",
             "Plaza Midwood",
-            "Luxury Motion",
-            "bassett"
+            "Luxury Motion"
           ],
           "additionalOptionsRules": {
             "optionTypesByCollection": {

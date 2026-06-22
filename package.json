@@ -29,7 +29,7 @@
     "start": "react-scripts start",
     "prebuild": "bash -c 'if [ -L public/resources ]; then rm public/resources; fi'",
     "build": "react-scripts build",
-    "postbuild": "bash -c 'ln -s ~/projects/hookerfurniture-3d/ public/resources'",
+    "postbuild": "bash -c 'ln -s ~/projects/bassett-3d/ public/resources'",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src --max-warnings=0"

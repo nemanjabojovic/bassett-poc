@@ -2025,35 +2025,13 @@ export default class Core {
   async init() {
     this.setCollection(this.collection);
 
-    switch (this.collection) {
-      case "lyon-fabric":
-      case "myrtle-fabric":
-      case "chelsea":
-      case "carmel":
-      case "donte":
-      case "hudson":
-      case "heath":
-      case "larabee":
-      case "monterey":
-      case "venezio":
-      case "vera":
-      case "nora":
-      case "nellie":
-      case "bea":
-      case "emme":
-      case "winter":
-        this.loadMapPerModelCollection = true;
-        break;
-      default:
-        this.loadMapPerModelCollection = false;
-        break;
-    }
+  
 
-    this.brand.id !== "BY"
-      ? (this.selectedMaterialType = "Fabric")
-      : (this.selectedMaterialType = "Leather");
+    // this.brand.id !== "BY"
+    //   ? (this.selectedMaterialType = "Fabric")
+    //   : (this.selectedMaterialType = "Leather");
 
-    this.setDefaultCollectionOptions(this.collection, this.brand.id);
+    this.setDefaultCollectionOptions(this.collection, this.brand?.id);
 
     await this.loadInitalMaps();
 
@@ -3180,6 +3158,7 @@ export default class Core {
 
   // SET DEFAULT ADDITIONAL OPTIONS FOR COLLECTION
   setDefaultCollectionOptions(collection, brandId) {
+    console.log(collection,brandId)
     if (collection) {
       // Filtered additional options per collection
       let collectionOptionsData = {};

@@ -16,8 +16,7 @@ const FEATURED_PRODUCTS = [
     icon: swivelImg,
     staticFrame: true,
     byo: false,
-    brand: 'BY',
-    conftype: 'Static Frames',
+    conftype: 'Static',
     sku: '1144-09',
     collection: null,
   },
@@ -26,8 +25,7 @@ const FEATURED_PRODUCTS = [
     icon: tableImg,
     staticFrame: true,
     byo: false,
-    brand: 'BY',
-    conftype: 'Static Frames',
+    conftype: 'Static',
     sku: '4027-K3470',
     collection: null,
   },
@@ -36,8 +34,7 @@ const FEATURED_PRODUCTS = [
     icon: sectionalImg,
     staticFrame: false,
     byo: true,
-    brand: 'BY',
-    conftype: 'Build Your Own',
+    conftype: 'Sectional',
     sku: 'M000-LSECT3',
     collection: 'bassett',
   },
@@ -46,8 +43,7 @@ const FEATURED_PRODUCTS = [
     icon: sofaImg,
     staticFrame: true,
     byo: false,
-    brand: 'BY',
-    conftype: 'Static Frames',
+    conftype: 'Static',
     sku: '2848-Q2_Z4',
     collection: null,
   },
@@ -187,50 +183,28 @@ function App() {
   }, [brandInstance, brandInstanceConfiguratorType, collection])
 
   useEffect(() => {
-    const brandParam = searchParams.get('brand')
     const confTypeParam = searchParams.get('conftype')
     const collectionParam = searchParams.get('collection')
     const modelParam = searchParams.get('model')
 
-    if (brandParam) {
-      const selectedBrand = Brands.find((b) => b.brandShorthand === brandParam)
-      if (selectedBrand) {
-        setBrandInstance(selectedBrand)
-        setModelPath(selectedBrand.modelPath)
+    if (!confTypeParam) return
 
-        if (modelParam) {
-          setSearchParamsModel(modelParam)
-        }
+    if (modelParam) setSearchParamsModel(modelParam)
 
-        if (confTypeParam) {
-          const configuratorType = selectedBrand.configuratorTypes.find(
-            (type) => type.name === decodeURIComponent(confTypeParam)
-          )
-          if (configuratorType) {
-            setBrandInstanceConfiguratorType(configuratorType)
-
-            if (configuratorType.name === 'Static Frames') {
-              setStaticFramesConfiguratorType(true)
-              setActivePlayer('Player')
-            }
-
-            if (collectionParam && configuratorType.collections) {
-              const decodedCollection = decodeURIComponent(collectionParam)
-              if (configuratorType.collections.includes(decodedCollection)) {
-                setCollection(collectionParam)
-                setStaticFramesConfiguratorType(false)
-                setActivePlayer('Player')
-              }
-            }
-          }
-        }
-      }
+    if (confTypeParam === 'Static') {
+      setBrandInstanceConfiguratorType({ name: 'Static' })
+      setStaticFramesConfiguratorType(true)
+      setActivePlayer('Player')
+    } else if (confTypeParam === 'Sectional') {
+      if (collectionParam) setCollection(collectionParam)
+      setBrandInstanceConfiguratorType({ name: 'Sectional' })
+      setStaticFramesConfiguratorType(false)
+      setActivePlayer('Player')
     }
-  }, [searchParams, Brands])
+  }, [searchParams])
 
   const handleConfigureNow = (product) => {
     const newParams = new URLSearchParams()
-    newParams.set('brand', product.brand)
     newParams.set('conftype', product.conftype)
     if (product.staticFrame) {
       newParams.set('model', product.sku)

@@ -85,7 +85,7 @@ const Player = ({
     setPlayerOptions(options)
   }, [skuToLoad, configurationToLoad])
 
-  const isStaticFrame = brandInstanceConfiguratorType?.name === 'Static Frames'
+  const isStaticFrame = brandInstanceConfiguratorType?.name === 'Static'
   const currentSku = searchParams.get('model') || skuToLoad
 
   return (
