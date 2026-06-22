@@ -1,0 +1,439 @@
+{
+  "materialApplicationAreas": [
+    {
+      "dbValue": "PrimaryCover",
+      "name": "Base Fabric",
+      "targetedMaterials": ["main"]
+    },
+    {
+      "dbValue": "ContrastingFA_TA_TB_Border",
+      "name": "Contrasting Front Arm, Top Arm, Top Back Border",
+      "targetedMaterials": ["arm_front", "arm_top", "back_top_border"]
+    },
+    {
+      "dbValue": "ContrastingInArm",
+      "name": "Contrasting Inside Arm",
+      "targetedMaterials": ["arm_inside"]
+    },
+    {
+      "dbValue": "ContrastingInsideArm",
+      "name": "Contrasting Inside Arm",
+      "targetedMaterials": ["arm_inside"]
+    },
+    {
+      "dbValue": "ContrastingInArmTopArmIAPanel",
+      "name": "Contrasting InArm TopArm InArm Panel",
+      "targetedMaterials": ["arm_inside", "arm_inside_panel", "arm_top"]
+    },
+    {
+      "dbValue": "ContrastingInArm_ArmPanel",
+      "name": "Contrasting Inside Arm & Arm Panel",
+      "targetedMaterials": ["arm_inside", "arm_panel"]
+    },
+    {
+      "dbValue": "ContrastingInArmTopArm",
+      "name": "Contrasting Inside Arm & Top Arm",
+      "targetedMaterials": ["arm_inside", "arm_top"]
+    },
+    {
+      "dbValue": "ContrastingInArmsInBack",
+      "name": "Contrasting Inside Arm and Inside Back",
+      "targetedMaterials": ["arm_inside", "back_inside"]
+    },
+    {
+      "dbValue": "ContrastingInArmInWing",
+      "name": "Contrasting Inside Arm & Inwing",
+      "targetedMaterials": ["arm_inside", "wing_inside"]
+    },
+    {
+      "dbValue": "ContrastingOutArm",
+      "name": "Contrasting Outside Arm",
+      "targetedMaterials": ["arm_outside"]
+    },
+    {
+      "dbValue": "ContrastingOutsideArm",
+      "name": "Contrasting Outside Arm",
+      "targetedMaterials": ["arm_outside"]
+    },
+    {
+      "dbValue": "ContrastingOA_OB_Border",
+      "name": "Outarm Outback Border",
+      "targetedMaterials": ["arm_outside_border", "back_outside_border"]
+    },
+    {
+      "dbValue": "ContrastingOutArmPanel",
+      "name": "Contrasting Outarm Panel",
+      "targetedMaterials": ["arm_outside_panel"]
+    },
+    {
+      "dbValue": "ContrastingOutArm_OutBack",
+      "name": "Contrasting Outside Arm, Outside Back",
+      "targetedMaterials": ["arm_outside", "back_outside"]
+    },
+    {
+      "dbValue": "ContrastingOutBackandOutArms",
+      "name": "Contrasting Outside Back and Outside Arms",
+      "targetedMaterials": ["arm_outside", "back_outside"]
+    },
+    {
+      "dbValue": "ContrastingOutsideBack/OutArm",
+      "name": "Contrasting Outside Arm and Back",
+      "targetedMaterials": ["arm_outside", "back_outside"]
+    },
+    {
+      "dbValue": "ContrastingOutsideBackWithArm",
+      "name": "Contrasting Outside Arm and Back",
+      "targetedMaterials": ["arm_outside", "back_outside", "base_welt"]
+    },
+    {
+      "dbValue": "ContrastingUpperOA_OB_OA",
+      "name": "Outarm Outback",
+      "targetedMaterials": ["arm_outside", "back_outside"]
+    },
+    {
+      "dbValue": "ContrastingOut-Arm/Back/Wing",
+      "name": "Contrasting Outside Arm, Outside Back, and Outside Wing",
+      "targetedMaterials": ["arm_outside", "back_outside", "wing_outside"]
+    },
+    {
+      "dbValue": "ContrastingOutArm_OW_OutBack",
+      "name": "Contrasting Outside Arm, Outside Back, and Outside Wing",
+      "targetedMaterials": ["arm_outside", "back_outside", "wing_outside"]
+    },
+    {
+      "dbValue": "ContrastingOutArmOutWing",
+      "name": "Contrasting Outside Arm, Outside Wing",
+      "targetedMaterials": ["arm_outside", "wing_outside"]
+    },
+    {
+      "dbValue": "ContrastingArmPanel",
+      "name": "Contrasting Arm Panel",
+      "targetedMaterials": ["arm_panel"]
+    },
+    {
+      "dbValue": "ContrastingInArmPanel",
+      "name": "Contrasting Arm Panel",
+      "targetedMaterials": ["arm_panel"]
+    },
+    {
+      "dbValue": "ContrastingArmPanel,WingBorder",
+      "name": "Contrasting Arm and Wing Border",
+      "targetedMaterials": ["arm_panel", "wing_border"]
+    },
+    {
+      "dbValue": "ContrastingTopArm",
+      "name": "Contrasting Top Arm",
+      "targetedMaterials": ["arm_top"]
+    },
+    {
+      "dbValue": "ContrastingTopArmBorder",
+      "name": "Contrasting Top Arm Border",
+      "targetedMaterials": ["arm_top_border"]
+    },
+    {
+      "dbValue": "ContrastingTopArm_BackBorder",
+      "name": "Contrasting Top Arm & Back Border",
+      "targetedMaterials": ["arm_top", "back_border"]
+    },
+    {
+      "dbValue": "ContrastingTopArmTopBackOBBrdr",
+      "name": "Contrasting Top Arm, Top Back, Outside Back Border",
+      "targetedMaterials": ["arm_top", "back_top", "back_outside_border"]
+    },
+    {
+      "dbValue": "ContrastingTopArm_TopWing",
+      "name": "Contrasting Top Arm & Top Wing",
+      "targetedMaterials": ["arm_top", "wing_top"]
+    },
+    {
+      "dbValue": "ContrastingBackPillow",
+      "name": "Back Cushion",
+      "targetedMaterials": ["back_cushion"]
+    },
+    {
+      "dbValue": "ContrastingInBack",
+      "name": "Contrasting Back Cushion",
+      "targetedMaterials": ["back_cushion"]
+    },
+    {
+      "dbValue": "ContrastingInBackandInArms",
+      "name": "Contrasting Back Cushion and Inside Arms",
+      "targetedMaterials": ["back_cushion", "arm_inside"]
+    },
+    {
+      "dbValue": "ContrastingCushion_InBack",
+      "name": "Contrasting Inside Back",
+      "targetedMaterials": ["back_inside"]
+    },
+    {
+      "dbValue": "ContrastingInsideBack",
+      "name": "Contrasting Inside Back",
+      "targetedMaterials": ["back_inside"]
+    },
+    {
+      "dbValue": "ContrastingISBCushion",
+      "name": "Contrasting Inside Back Cushion",
+      "targetedMaterials": ["back_inside_cushion"]
+    },
+    {
+      "dbValue": "ContrastingInBackBorder",
+      "name": "Contrasting Inback Border",
+      "targetedMaterials": ["back_inside_border"]
+    },
+    {
+      "dbValue": "ContrastingInBackPanel",
+      "name": "Contrasting Inback Panel",
+      "targetedMaterials": ["back_inside_panel"]
+    },
+    {
+      "dbValue": "ContrastingOutsideBack",
+      "name": "Contrasting Outside Back",
+      "targetedMaterials": ["back_outside"]
+    },
+    {
+      "dbValue": "ContrastingOBBorder",
+      "name": "Contrasting Outside Back Border",
+      "targetedMaterials": ["back_outside_border"]
+    },
+    {
+      "dbValue": "ContrastingOBInner",
+      "name": "ContrastingOBInner",
+      "targetedMaterials": ["back_outside_panel"]
+    },
+    {
+      "dbValue": "ContrastingOutBackFrontBorder",
+      "name": "ContrastingOutBackFrontBorder",
+      "targetedMaterials": ["back_outside", "front_border"]
+    },
+    {
+      "dbValue": "ContrastingButtons",
+      "name": "Contrasting Buttons",
+      "targetedMaterials": ["button"]
+    },
+    {
+      "dbValue": "ContrastingExtraBorder",
+      "name": "Contrasting Extra Border",
+      "targetedMaterials": ["extra_border"]
+    },
+    {
+      "dbValue": "ContrastingBorder",
+      "name": "Contrasting Front Rail",
+      "targetedMaterials": ["front"]
+    },
+    {
+      "dbValue": "ContrastingFrontRail",
+      "name": "Contrasting Front Rail",
+      "targetedMaterials": ["front"]
+    },
+    {
+      "dbValue": "ContrastingSeatDeck",
+      "name": "Contrasting SeatDeck",
+      "targetedMaterials": ["front"]
+    },
+    {
+      "dbValue": "ContrastingSides",
+      "name": "ContrastingSides",
+      "targetedMaterials": ["front"]
+    },
+    {
+      "dbValue": "ContrastingFootrest",
+      "name": "Contrasting Footrest",
+      "targetedMaterials": ["front_footrest"]
+    },
+    {
+      "dbValue": "ContrastingBkPilFace_HdRstFace",
+      "name": "Top Headrest Pillow Face",
+      "targetedMaterials": ["headrest_top_face"]
+    },
+    {
+      "dbValue": "TPSecondaryCover",
+      "name": "Additional Fabric on Pillow",
+      "targetedMaterials": ["Missing Info"]
+    },
+    {
+      "dbValue": "CompleteContrastingOttomanTop",
+      "name": "Complete Ottoman Top",
+      "targetedMaterials": ["ottoman_top", "ottoman_top_complete"]
+    },
+    {
+      "dbValue": "ContrastingOttomanTop",
+      "name": "Contrasting Ottoman Top",
+      "targetedMaterials": ["ottoman_top"]
+    },
+    {
+      "dbValue": "ContrastingOtTop",
+      "name": "Contrasting Ottoman Top",
+      "targetedMaterials": ["ottoman_top"]
+    },
+    {
+      "dbValue": "OttomanTop",
+      "name": "Ottoman Top",
+      "targetedMaterials": ["ottoman_top"]
+    },
+    {
+      "dbValue": "ContrastingOAOBBand",
+      "name": "Contrasting Outarm Outback Band",
+      "targetedMaterials": ["outside_band"]
+    },
+    {
+      "dbValue": "ContrastingCushion",
+      "name": "Contrasting Seat Cushion",
+      "targetedMaterials": ["seat_cushion"]
+    },
+    {
+      "dbValue": "ContrastingSeat",
+      "name": "Contrasting Seat Cushion",
+      "targetedMaterials": ["seat_cushion"]
+    },
+    {
+      "dbValue": "Contrast_CushionBrdr_BkPlwBrdr",
+      "name": "Contrasting Back and Seat Border",
+      "targetedMaterials": ["seat_cushion_border", "back_cushion_border"]
+    },
+    {
+      "dbValue": "ContrastingCushionWelt",
+      "name": "Contrasting Cushion Welt",
+      "targetedMaterials": ["seat_cushion_welt"]
+    },
+    {
+      "dbValue": "ContrastingCushion-BackPillow",
+      "name": "Contrasting Seat Cushion & Back Cushion",
+      "targetedMaterials": ["seat_cushion", "back_cushion"]
+    },
+    {
+      "dbValue": "ContrastingCushionHRBkPillow",
+      "name": "Contrasting Top Headrest Pillow & Bottom Headrest Pillow",
+      "targetedMaterials": ["headrest_top", "headrest_bottom"]
+    },
+    {
+      "dbValue": "ContrastingSlingBack",
+      "name": "Contrasting Sling Back",
+      "targetedMaterials": ["sling"]
+    },
+    {
+      "dbValue": "TPContrastingCover",
+      "name": "Toss Pillow Contrasting Cover",
+      "targetedMaterials": ["throw_pillow"]
+    },
+    {
+      "dbValue": "TPContrastingBorderLeather",
+      "name": "Pillow Contrasting Border - Leather",
+      "targetedMaterials": ["throw_pillow_border"]
+    },
+    {
+      "dbValue": "TPBiasWelt",
+      "name": "Pillow Bias Welt",
+      "targetedMaterials": ["throw_pillow_welt"]
+    },
+    {
+      "dbValue": "TPContrastingWelt",
+      "name": "Toss Pillow Contrasting Welt",
+      "targetedMaterials": ["throw_pillow_welt"]
+    },
+    {
+      "dbValue": "TPContrastingWeltFabric",
+      "name": "Toss Pillow Contrasting Welt - Fabric",
+      "targetedMaterials": ["throw_pillow_welt"]
+    },
+    {
+      "dbValue": "TPContrastingWeltLeather",
+      "name": "Toss Pillow Contrasting Welt - Leather",
+      "targetedMaterials": ["throw_pillow_welt"]
+    },
+    {
+      "dbValue": "ContrastingTopBand",
+      "name": "ContrastingTopBand",
+      "targetedMaterials": ["top_band"]
+    },
+    {
+      "dbValue": "ContrastingOAOBTrimBorder",
+      "name": "Outarm Outback Trim Border",
+      "targetedMaterials": ["trim_border"]
+    },
+    {
+      "dbValue": "BiasWelt",
+      "name": "Bias Welt",
+      "targetedMaterials": ["welt"]
+    },
+    {
+      "dbValue": "ContrastingWelt",
+      "name": "Contrasting Welt",
+      "targetedMaterials": ["welt"]
+    },
+    {
+      "dbValue": "ContrastingGimpWelt",
+      "name": "Contrasting Gimp Welt",
+      "targetedMaterials": ["gimp"]
+    },
+    {
+      "dbValue": "ContrastingInWing",
+      "name": "Contrasting In Wing",
+      "targetedMaterials": ["wing_inside"]
+    },
+    {
+      "dbValue": "ContrastingInTopOutWing",
+      "name": "Contrasting InWing TopWing Outwing",
+      "targetedMaterials": ["wing_inside", "wing_outside", "wing_top"]
+    },
+    {
+      "dbValue": "ContrastingInWingTopOutWing",
+      "name": "Contrasting InWing TopWing Outwing",
+      "targetedMaterials": ["wing_inside", "wing_outside", "wing_top"]
+    },
+    {
+      "dbValue": "ContrastingOutsideWing",
+      "name": "Contrasting Outside Wing",
+      "targetedMaterials": ["wing_outside"]
+    },
+    {
+      "dbValue": "ContrastingFrontPillows-18",
+      "name": "Contrasting Front Pillows",
+      "targetedMaterials": ["front_pillows"]
+    },
+    {
+      "dbValue": "ContrastingFrontPillows-24",
+      "name": "Contrasting Front Pilllows",
+      "targetedMaterials": ["front_pillows"]
+    },
+    {
+      "dbValue": "ContrastingBackPillows-24",
+      "name": "Contrasting Back Pillows",
+      "targetedMaterials": ["back_pillows"]
+    },
+    {
+      "dbValue": "BackPillow-24-ContrastWelt",
+      "name": "Contrasting Back Pillows Welt",
+      "targetedMaterials": ["back_pillows_welt"]
+    },
+    {
+      "dbValue": "FrontPillow-18-ContrastWelt",
+      "name": "Contrasting Front Pillows Welt",
+      "targetedMaterials": ["front_pillows_welt"]
+    },
+    {
+      "dbValue": "FrontPillow-24-ContrastWelt",
+      "name": "Contrasting Front Pillows Welt",
+      "targetedMaterials": ["front_pillows_welt"]
+    },
+    {
+      "dbValue": "SW-ContrastingWelt",
+      "name": "ContrastingWelt",
+      "targetedMaterials": ["welt"]
+    },
+    {
+      "dbValue": "ContrastingCurtain",
+      "name": "Contrasting Curtain",
+      "targetedMaterials": ["curtain"]
+    },
+    {
+      "dbValue": "ContrastingWeltAndButtons",
+      "name": "Contrasting Welt And Buttons",
+      "targetedMaterials": ["buttons", "buttons_welt"]
+    },
+    {
+      "dbValue": "ContrastingBasePanel",
+      "name": "Contrasting Base Panel",
+      "targetedMaterials": ["base_panel"]
+    }
+  ]
+}

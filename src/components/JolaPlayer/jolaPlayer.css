@@ -1,0 +1,75 @@
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.drag-and-drop-buttons {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  padding: 8px 40px;
+  background-color: white;
+  gap: 50px;
+  text-align: center;
+}
+
+.drag-and-drop-button {
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.drag-and-drop-button img {
+  padding: 5px 5px 2px 5px;
+  width: auto;
+  height: auto;
+  clip-path: circle(40%);
+}
+
+.drag-and-drop-button p {
+  font-size: 10px;
+  margin-bottom: 0;
+}
+
+.selectedElementDiv {
+  padding: 10px 5px;
+  background-color: #9ca3af;
+  border-radius: 25px;
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+}
+
+.selectedElementDiv p {
+  color: white;
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 12px;
+}
+
+@media (max-width: 768px) {
+  .lil-gui {
+    --width: 150px;
+    --font-size: 10px;
+    --input-height: 18px;
+    --padding: 3px 5px;
+    transform: scale(0.7);
+    transform-origin: top right;
+  }
+
+  .player-stats {
+    transform: scale(0.5);
+    transform-origin: top left;
+  }
+}

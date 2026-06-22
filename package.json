@@ -1,0 +1,59 @@
+{
+  "name": "jola-configurator",
+  "version": "0.2.0",
+  "private": true,
+  "homepage": "/bassett",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.1.10",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tweenjs/tween.js": "^18.5.0",
+    "chokidar": "^5.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1",
+    "react-scripts": "5.0.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "three": "^0.181.0",
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "prebuild": "bash -c 'if [ -L public/resources ]; then rm public/resources; fi'",
+    "build": "react-scripts build",
+    "postbuild": "bash -c 'ln -s ~/projects/hookerfurniture-3d/ public/resources'",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src --max-warnings=0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "eslint-plugin-compat": "^6.0.1"
+  }
+}
