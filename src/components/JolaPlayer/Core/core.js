@@ -1824,20 +1824,20 @@ export default class Core {
   }
 
   async loadInitalMaps() {
-    await this.loadFabric(
-      {
-        name: "hazelnut",
-        map: `${this.resourcesPath}/textures/woods/hazelnut/hazelnut.jpg`,
-        type: "wood",
-        repeatWidth: 10,
-        repeatHeight: 10,
+    // await this.loadFabric(
+    //   {
+    //     name: "hazelnut",
+    //     map: `${this.resourcesPath}/textures/woods/hazelnut/hazelnut.jpg`,
+    //     type: "wood",
+    //     repeatWidth: 10,
+    //     repeatHeight: 10,
 
-        normalMap: `${
-          this.resourcesPath
-        }/textures/woods/hazelnut/hazelnut_normal.jpg`,
-      },
-      "wood",
-    );
+    //     normalMap: `${
+    //       this.resourcesPath
+    //     }/textures/woods/hazelnut/hazelnut_normal.jpg`,
+    //   },
+    //   "wood",
+    // );
 
     this.materials.push({
       name: "unfinished",
@@ -1879,9 +1879,7 @@ export default class Core {
 
     this.selectedFrame = model;
 
-    model.url = `${this.resourcesPath}/models/${
-      this.brand.modelPath
-    }/static-frames/batch-${model.batchNumber}/${model.sku}/${model.sku}.gltf`;
+    model.url = `${this.resourcesPath}/models/${model.sku}/${model.sku}.gltf`;
 
     this.model.children = [];
 
@@ -2360,9 +2358,9 @@ export default class Core {
             break;
         }
 
-        if (collectionMapsObject)
-          this.collectionMaps =
-            await this.loadObjectMappedTextures(collectionMapsObject);
+        // if (collectionMapsObject)
+        //   this.collectionMaps =
+        //     await this.loadObjectMappedTextures(collectionMapsObject);
       }
 
     this.blankExternalMaps = {

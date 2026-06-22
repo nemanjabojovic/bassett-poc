@@ -113,9 +113,7 @@ const Player = ({
           </button>
         </div>
 
-        <div id='player'>
-          {playerOptions && <JolaPlayer ref={playerRef} options={playerOptions} />}
-        </div>
+        {playerOptions && <JolaPlayer ref={playerRef} options={playerOptions} />}
       </div>
 
       {isStaticFrame ? (

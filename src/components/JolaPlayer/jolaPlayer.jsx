@@ -16,13 +16,14 @@ const JolaPlayer = forwardRef(
     const playerRef = useRef(null);
     const [webglFailed, setWebglFailed] = useState(false);
     const [playerReady, setPlayerReady] = useState(false);
-    const devUrls = ["localhost", "jolanas"];
+    // const devUrls = ["localhost", "jolanas"];
+    const devUrls = [];
     useEffect(() => {
       const container = containerRef.current;
       if (!container || playerRef.current) return;
       if (!container.id) container.id = options.containerId || "player";
 
-      devUrls.some((url) => window.location.href.includes(url))
+      devUrls?.some((url) => window.location.href.includes(url))
         ? (options.gui = true)
         : (options.gui = false);
 
@@ -178,12 +179,7 @@ const JolaPlayer = forwardRef(
 
     if (webglFailed) {
       return (
-        <div
-          className={`${
-            isConfigOpen ? "h-full" : "w-full"
-          } aspect-[5/3] flex items-center justify-center bg-[#eeeff2]`}
-          style={{ textAlign: "center", padding: "2rem" }}
-        >
+        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#eeeff2', textAlign: 'center', padding: '2rem' }}>
           <p style={{ color: "#666", fontSize: "14px" }}>
             3D viewer is not available on this device.
             <br />
@@ -195,13 +191,7 @@ const JolaPlayer = forwardRef(
 
     return (
       <div
-        className={`${isConfigOpen ? "h-full" : "w-full"} aspect-[5/3] ${
-          isCGIPlayerActive && false ? "transition-opacity duration-100" : ""
-        } ${
-          modelLoading || !isCGIPlayerActive
-            ? "opacity-0 pointer-events-none absolute"
-            : "opacity-100"
-        } 'overlay-player'`}
+        style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}
         ref={containerRef}
       />
     );
