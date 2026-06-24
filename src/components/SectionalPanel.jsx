@@ -205,15 +205,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                     {byoFrames.map((f, i) => (
                       <div
                         key={i}
-                        className='config-layout-item'
-                        onClick={() => {
-                          if (window.player?.swap) {
-                            window.player.setSwapElement(f)
-                          } else {
-                            window.player?.addConfiguration({ id: f.id, temp: true })
-                            window.player?.setEditSelected(true)
-                          }
-                        }}
+                        className='config-layout-item config-layout-item--draggable'
                         onMouseDown={(e) => {
                           e.preventDefault()
                           window.player?.onDragStart(f.id)

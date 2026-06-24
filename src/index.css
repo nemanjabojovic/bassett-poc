@@ -2263,6 +2263,14 @@ canvas {
   border-color: #333;
 }
 
+.config-layout-item--draggable {
+  cursor: grab;
+}
+
+.config-layout-item--draggable:active {
+  cursor: grabbing;
+}
+
 .config-layout-item-wrap {
   display: flex;
   flex-direction: column;
