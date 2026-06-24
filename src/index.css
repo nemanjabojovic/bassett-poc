@@ -376,448 +376,6 @@ code {
   flex-direction: column-reverse;
 }
 
-/* Left sidebar */
-.leftsidebar-test {
-  display: flex;
-  flex-direction: row;
-}
-
-.leftsidebar-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 20px;
-  gap: 23px;
-}
-
-.leftsidebar-section .leftsidebar div {
-  cursor: pointer;
-}
-
-.leftsidebar {
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 25px;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 8px;
-}
-
-.leftsidebar-icons {
-  cursor: pointer;
-  background-color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  padding: 5px;
-}
-
-.leftsidebar .active {
-  background-color: #f07f26;
-  stroke: white;
-}
-
-.leftsidebar-bottom-menu {
-  display: flex;
-  justify-content: start;
-  align-items: end;
-}
-
-/* leftside-bar-select */
-.leftsidebar-select {
-  position: relative;
-  /* TODO FIX WIDTH */
-  width: 550px;
-  height: 100%;
-  background-color: white;
-  border-radius: 25px;
-  overflow: hidden;
-}
-
-.back-next-buttons {
-  box-sizing: border-box;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  border-top: 1px solid #e5e7eb;
-  gap: 10px;
-  padding: 5px 20px;
-  z-index: 1000;
-  background: white;
-
-  .back-button {
-    cursor: pointer;
-    color: #333;
-    background-color: white;
-    padding: 10px 18px;
-    flex: 1 0 0;
-    border-radius: 32px;
-    border: 1px solid #e5e7eb;
-  }
-  .next-button {
-    background-color: #333;
-    color: white;
-    padding: 10px 18px;
-    flex: 1 0 0;
-    border-radius: 32px;
-    cursor: pointer;
-  }
-}
-
-.close-leftside-bar {
-  width: 10dvh;
-  height: 100%;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 120%;
-  background-color: white;
-  text-wrap: nowrap;
-  border-radius: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  h1 {
-    transform: rotate(-90deg);
-    font-size: 35px;
-  }
-}
-
-.leftsidebar-button {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  button {
-    border: none;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 5px;
-
-    position: absolute;
-    z-index: 200;
-    left: 0;
-
-    cursor: pointer;
-  }
-}
-
-/* .lefside-bar-menu {
-} */
-
-.content-wrapper {
-  display: flex;
-  flex-direction: column;
-  padding: 24px 20px;
-  gap: 23px;
-}
-
-.content-wrapper h1 {
-  color: #333;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 120%; /* 28.8px */
-}
-
-.leftsidebar-dropdown {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.leftsidebar-input {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  transition: 0.5s;
-
-  img {
-    background: #fff;
-    border: #eeeff2 1px solid;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  input {
-    transition: 0.5s;
-    border: 1px solid #eeeff2;
-    margin-left: 10px;
-  }
-  input:focus {
-    border: 1px solid gray;
-  }
-}
-
-/* bottom sidebar */
-
-.bottomsidebar {
-  background: rgba(255, 255, 255, 0.4);
-  width: 100%;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  cursor: pointer;
-  height: fit-content;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 18px;
-  background-color: #f07f26;
-  color: white;
-  overflow: auto;
-
-  .active {
-    color: black;
-    background-color: white;
-    stroke: black;
-  }
-}
-
-.bottomsidebar-test {
-  color: black;
-  background-color: white;
-  border-radius: 25px;
-
-  width: 100%;
-
-  /* TODO - Fix accordingly */
-  .leftsidebar-button {
-    display: none;
-  }
-
-  .jolaLogo {
-    display: none;
-  }
-}
-
-.bottomsidebar-section {
-  display: flex;
-}
-
-.bottomsidebar-select {
-  width: 100%;
-  height: 30dvh;
-  overflow: hidden;
-}
-
-.bottomsidebar-select-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-/* .bottom-content-wrapper {
-} */
-
-.bottomsidebar-dropdown {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-/* TODO - find better way */
-.leftsidebar-pick.bottomsidebar-pick {
-  justify-content: center;
-
-  h1 {
-    font-size: 14px;
-    padding: 5px;
-    color: #71757b;
-    text-align: center;
-    /* border-bottom: 2px white solid; */
-  }
-  .active {
-    color: #333;
-    border-bottom: 2px solid #333;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
-}
-
-.bottomside-submenu {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  /* justify-content: center; */
-  overflow-x: hidden;
-  overflow-y: hidden;
-  white-space: nowrap;
-  scrollbar-width: thin;
-  scrollbar-color: #71757b transparent;
-}
-
-.bottomside-submenu-wrapper {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-}
-.bottomsidebar-submenu-items {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-}
-.bottomside-submenu-single-item {
-  width: 100px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.reverse-column {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 20px;
-}
-
-.bottomside-submenu img {
-  width: 100%;
-  height: auto;
-  padding: 5px;
-  object-fit: contain;
-  border: 1px solid transparent;
-  transition: border-color 0.1s;
-}
-.bottomside-submenu .active-item {
-  border-color: #71757b;
-}
-.bottomsidebar-text {
-  cursor: pointer;
-  display: flex;
-  padding: 10px 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  h1 {
-    font-family: Soleil;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
-}
-
-/*Dropdown Menu*/
-
-.dropdown-menu {
-  display: flex;
-  padding: 12px 16px;
-  align-items: center;
-  gap: 6px;
-  border-radius: 42px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-.dropdown-menu .dropdown-label {
-  color: #71757b;
-}
-.dropdown-menu .dropdown-select {
-  color: #333333;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.leftsidebar-pick {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  justify-content: start;
-  align-items: center;
-  flex-wrap: wrap;
-
-  h1 {
-    color: #71757b;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    cursor: pointer;
-    text-align: center;
-  }
-  .active {
-    color: #333;
-    border-bottom: 2px solid #333;
-  }
-}
-
-/* Listed items in lefside menu*/
-
-.leftsidebar-submenu {
-  display: flex;
-}
-
-.leftsidebar-submenu-items {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: start;
-  /* align-items: center; */
-  gap: 20px;
-
-  max-height: 900px;
-  overflow-x: hidden;
-  scrollbar-width: none;
-}
-
-.leftsidebar-submenu-single-item {
-  width: 150px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-}
-
-.leftsidebar-submenu-name {
-  font-size: 12px;
-  text-wrap: wrap;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 120%;
-  text-align: center;
-  text-transform: capitalize;
-}
-.leftsidebar-submenu img {
-  width: 100%;
-  height: auto;
-  /* padding: 5px; */
-  object-fit: contain;
-  border: 1px solid transparent;
-  transition: border-color 0.1s;
-}
-.leftsidebar-submenu .active-item {
-  border-color: #71757b;
-}
-
-/* testing */
-
 .model-section {
   position: relative;
   flex: 1;
@@ -1046,20 +604,6 @@ canvas {
   margin-top: 15px;
   border-radius: 20px;
   gap: 15px;
-}
-
-.leftsidebar-orientation,
-.bottomsidebar-orientation {
-  display: flex;
-  flex-direction: row;
-  justify-self: center;
-  align-items: center;
-  gap: 5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  p {
-    font-size: 15px;
-  }
 }
 
 .delete-edit-button {
@@ -1627,31 +1171,6 @@ canvas {
 
     height: 100%;
   }
-
-  .bottomsidebar-test {
-    order: 1;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 101;
-  }
-
-  .bottomsidebar-text h1 {
-    font-size: 16px;
-    font-weight: 300;
-  }
-
-  .bottomsidebar-pick h1 {
-    font-size: 15px;
-    font-weight: 400;
-  }
-  .bottomsidebar-pick .active {
-    font-weight: 600;
-    border-bottom: 1px solid #000;
-    padding-bottom: 3px;
-  }
-
   .price-cta-info {
     padding-right: 0;
   }
@@ -1659,34 +1178,6 @@ canvas {
     font-weight: 400;
     justify-content: flex-end;
   }
-
-  .bottomsidebar {
-    /* overflow: scroll; */
-  }
-  .bottomsidebar-select {
-    height: fit-content;
-  }
-
-  .bottomside-submenu {
-    /* overflow: scroll; */
-  }
-
-  .bottomside-submenu .leftsidebar-submenu-single-item {
-    width: 110px;
-  }
-
-  .bottomside-submenu .leftsidebar-submenu-single-item.nailOption {
-    width: 30%;
-  }
-  .bottomside-submenu .leftsidebar-submenu-single-item h3 {
-    text-wrap: wrap;
-    white-space: normal;
-  }
-
-  .leftsidebar-input {
-    display: none;
-  }
-
   .delete-edit-section .orientation,
   .tutorial {
     display: none;
@@ -1724,11 +1215,6 @@ canvas {
   .additional-options .zoom-in {
     display: inline-block;
   }
-
-  .leftsidebar-input {
-    display: flex;
-  }
-
   /* Summary */
 
   .summaryBottomBothSides {
@@ -1769,48 +1255,8 @@ canvas {
   .price-cta-info .info-price {
     justify-content: flex-end;
   }
-
-  .bottomsidebar .active {
-    /* overflow: hidden; */
-  }
-
   .editConfiguration .button .label,
   .clearConfiguration .button .label {
-    display: none;
-  }
-
-  .bottomsidebar {
-    overflow: scroll;
-    justify-content: flex-start;
-  }
-
-  .bottomsidebar .bottomsidebar-text {
-    text-wrap: nowrap;
-    white-space: nowrap;
-  }
-
-  .bottomsidebar-dropdown {
-    position: relative;
-  }
-
-  .bottomsidebar-dropdown .dropdown-menu {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  .home-hero {
-    padding-bottom: 0;
-    padding-top: 0;
-    margin-bottom: 10px;
-  }
-
-  .leftsidebar-submenu-single-item {
-    width: 100px;
-  }
-
-  .leftsidebar-input {
     display: none;
   }
 
@@ -1822,24 +1268,6 @@ canvas {
   .additional-options .full-screen {
     display: none;
   }
-
-  .bottomsidebar-select {
-    height: unset;
-  }
-
-  .bottomsidebar-select .content-wrapper {
-    gap: 0;
-  }
-
-  .bottomsidebar-select .content-wrapper .reverse-column {
-    gap: 10px;
-  }
-
-  .bottomsidebar-select .content-wrapper .bottomside-submenu {
-    overflow-x: scroll;
-    margin-top: 10px;
-  }
-
   .drag-and-drop-buttons {
     gap: 10px;
     padding: 8px 10px;
@@ -1858,28 +1286,6 @@ canvas {
   .summaryPhoto {
     height: 300px;
   }
-}
-
-.content-wrapper {
-  height: calc(100% - 74px);
-}
-
-.content-wrapper > div:nth-of-type(0) {
-  height: cacl(100% - 250px);
-}
-
-.leftside-bar-menu {
-  height: 100%;
-}
-
-.leftsidebar-submenu {
-  height: calc(100% - 74px);
-}
-
-.leftsidebar-submenu-items {
-  max-height: 100%;
-  padding-bottom: 200px;
-  width: 100%;
 }
 
 /* Light Rotate Container */
@@ -2317,6 +1723,12 @@ canvas {
   color: #71757b;
 }
 
+/* ============================================================
+   BUILD OVERVIEW CARD
+   Floating component list shown in BYO mode (View Components)
+   Used by: src/components/modals/BuildOverview.jsx
+   ============================================================ */
+
 .build-overview-overlay {
   position: fixed;
   inset: 0;
@@ -2409,6 +1821,10 @@ canvas {
   font-size: 12px;
   color: #71757b;
 }
+
+/* ============================================================
+   END BUILD OVERVIEW CARD
+   ============================================================ */
 
 .config-byo-back {
   background: none;
@@ -2655,7 +2071,12 @@ canvas {
   letter-spacing: -0.5px;
 }
 
-/* Clear configuration confirm modal */
+/* ============================================================
+   CONFIRM MODALS
+   Close configurator + Clear configuration confirm dialogs
+   Used by: src/components/modals/CloseConfirmModal.jsx
+            src/components/modals/ClearConfirmModal.jsx
+   ============================================================ */
 
 .modal-overlay {
   position: fixed;
@@ -2763,7 +2184,16 @@ canvas {
   background: #f5f5f5;
 }
 
-/* View Summary Modal */
+/* ============================================================
+   END CONFIRM MODALS
+   ============================================================ */
+
+/* ============================================================
+   VIEW SUMMARY MODAL
+   Full-screen summary shown when "View Summary" is clicked
+   Used by: src/components/modals/ViewSummaryModal.jsx
+   ============================================================ */
+
 .summary-overlay {
   position: fixed;
   inset: 0;
@@ -3051,3 +2481,7 @@ canvas {
 .summary-save-btn:hover {
   background: #111;
 }
+
+/* ============================================================
+   END VIEW SUMMARY MODAL
+   ============================================================ */

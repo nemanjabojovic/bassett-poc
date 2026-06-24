@@ -1,8 +1,14 @@
+import { useState, useEffect } from 'react'
 import data from '../JolaPlayer/data.json'
 import armSelectionImg from '../../assets/icons/arm_selection.png'
 
 const ViewSummaryModal = ({ sku, frame, configElementIds, selectedArm, tallBack, dimensions, selectedCover, onClose }) => {
-  const screenshot = window.player?.getScreenshot()
+  const [screenshot, setScreenshot] = useState(null)
+
+  useEffect(() => {
+    const dataUrl = window.player?.getScreenshot('default')
+    if (dataUrl) setScreenshot(dataUrl)
+  }, [])
 
   const grouped = configElementIds.reduce((acc, id) => {
     const f = data.frames.find(fr => fr.id === id)
