@@ -37,6 +37,7 @@ const JolaPlayer = forwardRef(
 
       window.player = playerRef.current;
       setPlayerReady(true);
+      window.dispatchEvent(new Event('playerReady'));
 
       const onResize = () => playerRef.current.resize();
       window.addEventListener("resize", onResize);

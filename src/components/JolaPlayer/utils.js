@@ -60,7 +60,10 @@ export function resolveModelOptions(sku) {
   // --- 4. BYO FALLBACK (If no static frame found after all permutations) ---
 
   // For BYO, we use the original, non-permuted, but KIT-cleaned SKU.
-  const [armSku, frameSku, backSku] = sku.split("-");
+  // Frame IDs may contain hyphens (e.g. M000-LSECT3), so only split on the first dash.
+  const firstDash = sku.indexOf("-");
+  const armSku = sku.substring(0, firstDash);
+  const frameSku = sku.substring(firstDash + 1);
 
   const armType = data.collectionOptions.armTypes.find((a) => a.sku === armSku);
 
@@ -81,14 +84,6 @@ export function resolveModelOptions(sku) {
   options.frame = frameByo;
   options.staticFrame = false;
   options.materialType = frameByo.upholsteryFilter;
-
-  if (backSku) {
-    const backType = data.collectionOptions.backTypes.find(
-      (b) => b.id === backSku,
-    );
-    if (!backType) return null; // bad back part
-    options.backType = backType;
-  }
 
   return options;
 }
