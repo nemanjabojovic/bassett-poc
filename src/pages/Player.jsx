@@ -102,6 +102,7 @@ const Player = ({
     options.signalModelConfigurationChange = () => {
       const dims = window.player?.getDimensions()
       if (dims) setDimensions(dims)
+      window.dispatchEvent(new Event('playerConfigurationChanged'))
     }
 
     setPlayerOptions(options)

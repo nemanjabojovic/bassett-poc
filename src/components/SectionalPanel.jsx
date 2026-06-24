@@ -34,7 +34,7 @@ const ChevronIcon = ({ open }) => (
   </svg>
 )
 
-const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => (
+const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick, meta }) => (
   <button className='config-section-header' onClick={onClick}>
     <span className='config-section-label'>{label}</span>
     <div className='config-section-header-meta'>
@@ -44,10 +44,52 @@ const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => 
       {selectedName && (
         <span className='config-section-selected-text'>{selectedName}</span>
       )}
+      {meta}
       <ChevronIcon open={open} />
     </div>
   </button>
 )
+
+const BuildOverview = ({ configElementIds, onClose }) => {
+  const grouped = configElementIds.reduce((acc, id) => {
+    const f = data.frames.find(fr => fr.id === id)
+    if (!f) return acc
+    const key = f.id
+    if (!acc[key]) acc[key] = { frame: f, qty: 0 }
+    acc[key].qty++
+    return acc
+  }, {})
+  const items = Object.values(grouped)
+
+  return (
+    <div className='build-overview-overlay' onClick={onClose}>
+      <div className='build-overview' onClick={e => e.stopPropagation()}>
+        <div className='build-overview-header'>
+          <div>
+            <p className='build-overview-title'>Build Overview</p>
+            <p className='build-overview-count'>{configElementIds.length} Component{configElementIds.length !== 1 ? 's' : ''}</p>
+          </div>
+          <button className='build-overview-close' onClick={onClose}>&#10005;</button>
+        </div>
+        <div className='build-overview-list'>
+          {items.map((item, i) => (
+            <div key={i} className='build-overview-item'>
+              {item.frame.icon
+                ? <img src={item.frame.icon} alt={item.frame.name} className='build-overview-thumb' />
+                : <div className='build-overview-thumb' />
+              }
+              <div className='build-overview-info'>
+                <p className='build-overview-name'>{item.frame.name}</p>
+                <p className='build-overview-detail'>QTY: {item.qty}</p>
+                <p className='build-overview-detail'>SKU: {item.frame.sku}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const SectionalPanel = ({ sku, frame, onClose }) => {
   const [layoutOpen, setLayoutOpen] = useState(true)
@@ -62,6 +104,7 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
   const [tallBack, setTallBack] = useState(null)
   const [buildMode, setBuildMode] = useState('popular')
   const [configElementIds, setConfigElementIds] = useState([])
+  const [showBuildOverview, setShowBuildOverview] = useState(false)
 
   const frameName = frame?.name || sku || ''
 
@@ -100,12 +143,27 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
     setConfigElementIds(first.elements.map(e => e.id))
   }, [])
 
+  useEffect(() => {
+    const handler = () => {
+      const elements = window.player?.modelConfiguration?.elements
+      if (elements) setConfigElementIds(elements.map(e => e.id))
+    }
+    window.addEventListener('playerConfigurationChanged', handler)
+    return () => window.removeEventListener('playerConfigurationChanged', handler)
+  }, [])
+
   return (
     <aside className='config-panel'>
       {showConfirm && (
         <CloseConfirmModal
           onConfirm={onClose}
           onCancel={() => setShowConfirm(false)}
+        />
+      )}
+      {showBuildOverview && (
+        <BuildOverview
+          configElementIds={configElementIds}
+          onClose={() => setShowBuildOverview(false)}
         />
       )}
       <div className='config-panel-header'>
@@ -119,10 +177,17 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
       <div className='config-panel-body'>
         <div className='config-section'>
           <SectionHeader
-            label='Select a Layout'
-            selectedName={selectedLayout?.name || null}
+            label={buildMode === 'byo' ? 'Pick a Component' : 'Select a Layout'}
+            selectedName={buildMode === 'popular' ? (selectedLayout?.name || null) : null}
+            selectedIcon={buildMode === 'popular' && selectedLayout?.icon ? selectedLayout.icon : null}
             open={layoutOpen}
             onClick={() => setLayoutOpen(v => !v)}
+            meta={buildMode === 'byo' ? (
+              <span className='config-byo-meta' onClick={e => { e.stopPropagation(); setShowBuildOverview(true) }}>
+                <span className='config-byo-count'>{configElementIds.length} Component{configElementIds.length !== 1 ? 's' : ''}</span>
+                <span className='config-byo-view'>View Components</span>
+              </span>
+            ) : null}
           />
           {layoutOpen && (
             <div className='config-section-content'>
@@ -132,7 +197,6 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                     className='config-layout-new'
                     onClick={() => {
                       setSelectedLayout(null)
-                      setConfigElementIds([])
                       setBuildMode('byo')
                       window.player?.clearConfiguration()
                       window.player?.setEditSelected(true)
@@ -152,7 +216,6 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                         className={`config-layout-item${selectedLayout?.name === pc.name ? ' config-layout-item--selected' : ''}`}
                         onClick={() => {
                           setSelectedLayout(pc)
-                          setConfigElementIds(pc.elements.map(e => e.id))
                           window.player?.setConfiguration(pc)
                           window.player?.setEditSelected(false)
                         }}
@@ -182,7 +245,6 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                     onClick={() => {
                       setBuildMode('popular')
                       if (selectedLayout) {
-                        setConfigElementIds(selectedLayout.elements.map(e => e.id))
                         window.player?.setConfiguration(selectedLayout)
                       }
                     }}
@@ -198,7 +260,6 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                           if (window.player?.swap) {
                             window.player.setSwapElement(f)
                           } else {
-                            setConfigElementIds(prev => [...prev, f.id])
                             window.player?.addConfiguration({ id: f.id, temp: true })
                             window.player?.setEditSelected(true)
                           }
