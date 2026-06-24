@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import data from './JolaPlayer/data.json'
 import armSelectionImg from '../assets/icons/arm_selection.png'
+import CloseConfirmModal from './modals/CloseConfirmModal'
+import BuildOverview from './modals/BuildOverview'
+import ViewSummaryModal from './modals/ViewSummaryModal'
 
 const allTextures = [
   ...(data.fabrics || []),
@@ -10,20 +13,6 @@ const allTextures = [
 
 const resolveTextures = (skus) =>
   skus ? allTextures.filter(t => skus.includes(t.sku)) : allTextures
-
-const CloseConfirmModal = ({ onConfirm, onCancel }) => (
-  <div className='modal-overlay'>
-    <div className='modal'>
-      <button className='modal-dismiss' onClick={onCancel}>&#10005;</button>
-      <p className='modal-title'>Are you sure you want to close the configurator?</p>
-      <p className='modal-subtitle'>We will return you to the previous screen</p>
-      <div className='modal-actions'>
-        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Close</button>
-        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue Building</button>
-      </div>
-    </div>
-  </div>
-)
 
 const ChevronIcon = ({ open }) => (
   <svg
@@ -50,48 +39,7 @@ const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick, meta 
   </button>
 )
 
-const BuildOverview = ({ configElementIds, onClose }) => {
-  const grouped = configElementIds.reduce((acc, id) => {
-    const f = data.frames.find(fr => fr.id === id)
-    if (!f) return acc
-    const key = f.id
-    if (!acc[key]) acc[key] = { frame: f, qty: 0 }
-    acc[key].qty++
-    return acc
-  }, {})
-  const items = Object.values(grouped)
-
-  return (
-    <div className='build-overview-overlay' onClick={onClose}>
-      <div className='build-overview' onClick={e => e.stopPropagation()}>
-        <div className='build-overview-header'>
-          <div>
-            <p className='build-overview-title'>Build Overview</p>
-            <p className='build-overview-count'>{configElementIds.length} Component{configElementIds.length !== 1 ? 's' : ''}</p>
-          </div>
-          <button className='build-overview-close' onClick={onClose}>&#10005;</button>
-        </div>
-        <div className='build-overview-list'>
-          {items.map((item, i) => (
-            <div key={i} className='build-overview-item'>
-              {item.frame.icon
-                ? <img src={item.frame.icon} alt={item.frame.name} className='build-overview-thumb' />
-                : <div className='build-overview-thumb' />
-              }
-              <div className='build-overview-info'>
-                <p className='build-overview-name'>{item.frame.name}</p>
-                <p className='build-overview-detail'>QTY: {item.qty}</p>
-                <p className='build-overview-detail'>SKU: {item.frame.sku}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const SectionalPanel = ({ sku, frame, onClose }) => {
+const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
   const [layoutOpen, setLayoutOpen] = useState(true)
   const [armOpen, setArmOpen] = useState(false)
   const [tallBackOpen, setTallBackOpen] = useState(false)
@@ -105,6 +53,8 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
   const [buildMode, setBuildMode] = useState('popular')
   const [configElementIds, setConfigElementIds] = useState([])
   const [showBuildOverview, setShowBuildOverview] = useState(false)
+  const [showSummary, setShowSummary] = useState(false)
+  const [selectedCover, setSelectedCover] = useState(data.fabrics?.[0] || null)
 
   const frameName = frame?.name || sku || ''
 
@@ -360,7 +310,10 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                   <div
                     key={i}
                     className='config-swatch'
-                    onClick={() => window.player?.loadFabric(item, 'main', true)}
+                    onClick={() => {
+                      setSelectedCover(item)
+                      window.player?.loadFabric(item, 'main', true)
+                    }}
                   >
                     <div
                       className='config-swatch-img'
@@ -393,10 +346,23 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
 
       <div className='config-panel-footer'>
         <div className='config-cta-row'>
-          <button className='config-summary-btn'>View Summary</button>
+          <button className='config-summary-btn' onClick={() => setShowSummary(true)}>View Summary</button>
           <button className='config-cart-btn'>Add to Cart</button>
         </div>
       </div>
+
+      {showSummary && (
+        <ViewSummaryModal
+          sku={sku}
+          frame={frame}
+          configElementIds={configElementIds}
+          selectedArm={activeArm}
+          tallBack={tallBack}
+          dimensions={dimensions}
+          selectedCover={selectedCover}
+          onClose={() => setShowSummary(false)}
+        />
+      )}
     </aside>
   )
 }

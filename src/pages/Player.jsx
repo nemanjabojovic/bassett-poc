@@ -7,20 +7,7 @@ import StaticFramePanel from '../components/StaticFramePanel'
 import SectionalPanel from '../components/SectionalPanel'
 import JolaIcon from '../assets/icons/jolaLogo.svg'
 import AdditionalOptions from '../components/AdditionalOptions'
-
-const ClearConfirmModal = ({ onConfirm, onCancel }) => (
-  <div className='modal-overlay'>
-    <div className='modal'>
-      <button className='modal-dismiss' onClick={onCancel}>&#10005;</button>
-      <p className='modal-title'>Are you sure you want to clear the configuration you&apos;ve made?</p>
-      <p className='modal-subtitle'>Once you start over, you&apos;ll lose all progress you&apos;ve made in your configuration.</p>
-      <div className='modal-actions'>
-        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Start Over</button>
-        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue with the Current Build</button>
-      </div>
-    </div>
-  </div>
-)
+import ClearConfirmModal from '../components/modals/ClearConfirmModal'
 
 const Player = ({
   activePlayer,
@@ -108,6 +95,19 @@ const Player = ({
     setPlayerOptions(options)
   }, [skuToLoad, configurationToLoad])
 
+  useEffect(() => {
+    const handler = () => {
+      const dims = window.player?.getDimensions()
+      if (dims) setDimensions(dims)
+    }
+    window.addEventListener('animationsAvailable', handler)
+    window.addEventListener('animationsNotAvailable', handler)
+    return () => {
+      window.removeEventListener('animationsAvailable', handler)
+      window.removeEventListener('animationsNotAvailable', handler)
+    }
+  }, [])
+
   const isStaticFrame = brandInstanceConfiguratorType?.name === 'Static'
   const currentSku = searchParams.get('model') || skuToLoad
 
@@ -157,12 +157,14 @@ const Player = ({
             <span>Depth {dimensions?.depth ? `${Math.round(dimensions.depth)}"` : '--'}</span>
           </div>
           <div className='viewer-footer-right'>
-            <button className='viewer-clear-btn' onClick={() => setShowClearConfirm(true)}>
-              <svg width='14' height='14' viewBox='0 0 14 14' fill='none'>
-                <path d='M1 3h12M5 3V2h4v1M2 3l1 9h8l1-9' stroke='currentColor' strokeWidth='1.2' strokeLinecap='round' strokeLinejoin='round' />
-              </svg>
-              Clear Configuration
-            </button>
+            {!isStaticFrame && (
+              <button className='viewer-clear-btn' onClick={() => setShowClearConfirm(true)}>
+                <svg width='14' height='14' viewBox='0 0 14 14' fill='none'>
+                  <path d='M1 3h12M5 3V2h4v1M2 3l1 9h8l1-9' stroke='currentColor' strokeWidth='1.2' strokeLinecap='round' strokeLinejoin='round' />
+                </svg>
+                Clear Configuration
+              </button>
+            )}
             <span className='viewer-price'>
               {playerOptions?.frame?.price != null
                 ? `$${playerOptions.frame.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -183,6 +185,7 @@ const Player = ({
           sku={currentSku}
           frame={playerOptions?.frame}
           onClose={goToLanding}
+          dimensions={dimensions}
         />
       )}
     </div>
