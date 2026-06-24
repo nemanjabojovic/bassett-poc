@@ -76,30 +76,6 @@ import {
 
 import { contactShadow, blurShadow } from "./contactShadow.js";
 
-const COLORS = {
-  white: new Color(0xffffff),
-  black: new Color(0x000000),
-  metalLight: new Color(0xdddddd),
-  metalDark: new Color(0x363636),
-  chain: new Color(0xffffff),
-};
-
-const WELT_OPTIONS = {
-  NoWelt: { name: "NoWelt" },
-  SelfWelt: { name: "SelfWelt" },
-  Flange: { name: "Flange" },
-};
-
-const WELT_AREAS = {
-  cushion: "Cushion",
-  frontPillow: "Front Pillow",
-  backPillow: "Back Pillow",
-};
-
-const NAIL = {
-  detail: 10,
-  material: new MeshStandardMaterial({ name: "nail_finish" }),
-};
 
 export default class Core {
   constructor(containerId, options) {
@@ -232,10 +208,6 @@ export default class Core {
 
     this.collectionMaps = null;
 
-  
-    this.WELT_OPTIONS = WELT_OPTIONS;
-    this.WELT_AREAS = WELT_AREAS;
-
     this.update = this.update.bind(this);
     this._rafId = requestAnimationFrame(this.update.bind(this));
 
@@ -284,10 +256,10 @@ export default class Core {
     };
 
     this.signalModelConfigurationChange =
-      options?.signalModelConfigurationChange || (() => {});
-    this.setModelLoading = options?.setModelLoading || (() => {});
-    this.setSwapInitiated = options?.setSwapInitiated || (() => {});
-    this.setSwapCompleted = options?.setSwapCompleted || (() => {});
+      options?.signalModelConfigurationChange || (() => { });
+    this.setModelLoading = options?.setModelLoading || (() => { });
+    this.setSwapInitiated = options?.setSwapInitiated || (() => { });
+    this.setSwapCompleted = options?.setSwapCompleted || (() => { });
 
     this.setSaturationShaderValues();
   }
@@ -500,16 +472,8 @@ export default class Core {
       (frame) =>
         frame.collection === this.collection && frame.id === element.id,
     );
-    //TODO: Fix conditions for frame addition to url
-    let modelURL = `${this.resourcesPath}/models/${this.brand.modelPath}/${
-      this.collection
-    }/${
-      this.brand.id === "BY" ||
-      this.collection === "loft-living" ||
-      this.collection === "simply-me"
-        ? "frame-"
-        : ""
-    }${modelData.id}.gltf `;
+
+    let modelURL = `${this.resourcesPath}/models/${"frame-"}${modelData.id}/${"frame-"}${modelData.id}.gltf`;
 
     let modelObject = Object.assign({}, modelData);
     modelObject.url = modelURL;
@@ -536,314 +500,6 @@ export default class Core {
 
   // NAILS FUNCTIONS //
 
-  async checkForCurves() {
-    let curves = [];
-
-    this.model.traverse((child) => {
-      if (child.name.includes("_curve") && child.type === "LineSegments") {
-        curves.push(child);
-
-        if (child.material) {
-          child.visible = false;
-        }
-      }
-    });
-    if (curves && this.nailsVisible) {
-      await this.createNails();
-    }
-  }
-
-  extractNailOption(value) {
-    let extractedOption = value.match(/#\d{1,2}(?=[^A-Za-z0-9]|$)/);
-    return extractedOption ? extractedOption[0] : value;
-  }
-
-  // TODO: 'Bolje resenje za cusom nailsSizeByPosition'
-  async setCustomNailSizeByPosition(position, value, customSpacing = false) {
-    let nailPreset = this.nailPresets.find((x) => x.size === value);
-
-    let filteredCurves = [];
-
-    for (const curveName in this.nailSizes) {
-      position.forEach((pos) => {
-        if (curveName.includes(pos)) {
-          filteredCurves.push(curveName);
-        }
-      });
-    }
-    filteredCurves.forEach((curve) => {
-      this.nailSizes[curve] = nailPreset.size;
-      this.nailSpacing
-        ? (this.nailDistances[curve] = nailPreset.spacing)
-        : customSpacing
-          ? (this.nailDistances[curve] = nailPreset.spacing)
-          : (this.nailDistances[curve] = nailPreset.standard);
-    });
-    await this.createNails();
-  }
-
-  hideCurves(model = this.model) {
-    model.traverse((child) => {
-      if (child.name.includes("_curve") && child.type === "LineSegments") {
-        child.visible = true;
-        child.material.transparent = true;
-        child.material.opacity = 0;
-      }
-    });
-  }
-
-  extractCurveParameters(name) {
-    let allowedOptions = ["standard_nail", "standard_nail2"];
-
-    //trazi match sa allowedOptions
-    let matchedOption = allowedOptions.find((opt) =>
-      name.startsWith(opt + "_"),
-    );
-
-    if (matchedOption) {
-      // Regex koji uzima ostatak nakon pronađene opcije
-      let pattern = new RegExp(
-        `^(${matchedOption})_([a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*)_curve_#(\\d+)_([A-Z])`,
-      );
-      let match = name.match(pattern);
-
-      if (match) {
-        let option = match[1];
-        let area = match[2];
-        let number = match[3];
-        let spacing = match[4];
-
-        return {
-          optionName: option,
-          area: area,
-          nailSize: number,
-          spacing: spacing,
-        };
-      } else {
-        // console.log("String format doesn't match expected pattern.");
-      }
-    } else {
-      // console.log("Option not allowed.");
-    }
-  }
-
-  async createNails() {
-    const marginOfError = 0.000000000000005;
-
-    if (!this.nailsVisible) {
-      this.hideCurves();
-      return;
-    }
-
-    for (const model of this.model.children) {
-      let curves = [];
-
-      model.traverse((child) => {
-        if (child.name.includes("_curve") && child.type === "LineSegments") {
-          this.disposeObject(child);
-          curves.push(child);
-        }
-      });
-
-      for (const curve of curves) {
-        let extractedParameters = this.extractCurveParameters(curve.name);
-        function numToFixed(num, dec = 16) {
-          return parseFloat(num.toFixed(dec));
-        }
-        if (!curve.material) {
-          return;
-        } else curve.material.visible = true;
-
-        let vectors = [];
-
-        let count = curve.geometry.attributes.position.count;
-        let array = curve.geometry.attributes.position.array;
-
-        for (let index = 0; index < count; index++) {
-          let vector = new Vector3(
-            array[index * 3],
-            array[index * 3 + 1],
-            array[index * 3 + 2],
-          );
-
-          vectors.push(vector);
-        }
-
-        let items = [];
-
-        let currentItem = new Vector3();
-        let currentDistance = 0;
-        let curveName = curve.name.replace(/.\d+/g, "");
-
-        if (!this.nailSizes[curveName]) {
-          this.nailSizes[curveName] = this.defaultNailSize.size;
-          this.nailDistances[curveName] = this.defaultNailSize.standard;
-        }
-
-        let nailSpacing;
-        if (extractedParameters) {
-          const byNailSize6 =
-            this.brand.id === "BY" && extractedParameters.nailSize === "6"
-              ? `${extractedParameters.nailSize}_BY`
-              : null;
-          let nailPreset = this.nailPresets.find(
-            (x) => x.size === (byNailSize6 || extractedParameters.nailSize),
-          );
-
-          nailSpacing =
-            extractedParameters.spacing === "H"
-              ? nailPreset.standard
-              : nailPreset.spacing;
-        } else {
-          nailSpacing = this.nailDistances[curveName];
-        }
-
-        let fullDistance = 0;
-        for (let index = 1; index < vectors.length; index++) {
-          fullDistance += vectors[index].distanceTo(vectors[index - 1]);
-        }
-
-        fullDistance = numToFixed(fullDistance);
-
-        let numberOfItems;
-
-        numberOfItems = Math.floor(fullDistance / nailSpacing);
-
-        let difference = numToFixed(fullDistance - numberOfItems * nailSpacing);
-
-        let distanceToAdd = numToFixed(difference / numberOfItems);
-
-        let newDistance = numToFixed(nailSpacing + distanceToAdd, 16);
-
-        for (let index = 0; index < vectors.length; index++) {
-          if (items.length === 0) {
-            let item = vectors[index];
-
-            items.push(item);
-          } else {
-            let previousItem = currentDistance
-              ? currentItem
-              : items[items.length - 1];
-
-            if (
-              previousItem.distanceTo(vectors[index]) >=
-              newDistance - currentDistance
-            ) {
-              let offsetVector = new Vector3()
-                .copy(vectors[index])
-                .add(new Vector3().copy(previousItem).negate())
-                .setLength(newDistance - currentDistance - marginOfError);
-
-              let item = new Vector3().copy(previousItem).add(offsetVector);
-
-              items.push(item);
-
-              currentDistance = 0;
-              index--;
-            } else {
-              currentItem = new Vector3().copy(vectors[index]);
-              numToFixed(
-                (currentDistance += previousItem.distanceTo(currentItem)),
-              );
-            }
-          }
-        }
-
-        // create instanced mesh
-        const nailCount = items.length;
-
-        let radius;
-        if (extractedParameters) {
-          const nailPreset = this.nailPresets.find(
-            (x) => x.size === extractedParameters.nailSize,
-          );
-          radius = nailPreset.radius;
-        } else {
-          radius = 0.003935;
-        }
-
-        const geometry = new SphereGeometry(radius, NAIL.detail, NAIL.detail);
-        this.modifyUV(geometry);
-
-        const material = NAIL.material;
-        const instancedMesh = new InstancedMesh(geometry, material, nailCount);
-        instancedMesh.name = `Nail Mesh`;
-
-        let nailGroup = new Group();
-        nailGroup.name = "Nail Group";
-
-        nailGroup.add(instancedMesh);
-
-        const instance = new Object3D();
-        items.forEach((item, i) => {
-          instance.position.copy(item);
-          instance.updateMatrix();
-          instancedMesh.setMatrixAt(i, instance.matrix);
-        });
-
-        nailGroup.parentCurve = curve.name;
-        nailGroup.curveParameters = extractedParameters;
-
-        if (model.userData.model) {
-          nailGroup.parentModelId = model.userData.model.id;
-        }
-
-        // TODO: change parenting and remove curve material opacity/transparent
-
-        curve.add(nailGroup);
-        curve.visible = true;
-        curve.material.transparent = true;
-        curve.material.opacity = 0;
-      }
-    }
-
-    await this.updateNails();
-  }
-
-  modifyUV(geometry) {
-    const uv = geometry.attributes.uv;
-
-    for (let i = 0; i < uv.count; i++) {
-      let u = uv.getX(i);
-      let v = uv.getY(i);
-
-      // symmetrical uv
-      if (u < 0.5) u = u * 2;
-      else u = (1 - u) * 2;
-
-      // flip vertically
-      uv.setXY(i, u, 1 - v);
-    }
-
-    uv.needsUpdate = true;
-  }
-
-  async updateNails() {
-    let material = this.materials.find((mat) => mat.name === "nailColor");
-
-    if (material) {
-      this.model.traverse((child) => {
-        if (child.material && child.material?.name.includes("nail_finish")) {
-          child.material.map = material.map;
-          child.material.color = new Color(1, 1, 1);
-          child.material.roughness = material.roughness || 0.5;
-          child.material.roughnessMap = null;
-          child.material.metalness = material.metalness || 0.5;
-          child.material.needsUpdate = true;
-        }
-      });
-    }
-
-    this.model.traverse((nailGroup) => {
-      if (nailGroup.curveParameters) {
-        nailGroup.visible = nailGroup.parentCurve.includes("standard_nail_")
-          ? `#${nailGroup.curveParameters.nailSize}` ===
-            this.selectedNailOptionStandard
-          : `#${nailGroup.curveParameters.nailSize}` ===
-            this.selectedNailOptionStandard2;
-      }
-    });
-  }
 
   clearButtons() {
     this.buttons.children = [];
@@ -877,15 +533,13 @@ export default class Core {
 
     this.clearSelected();
     //TODO: Fix conditions for frame addition to url
-    let modelURL = `${this.resourcesPath}/models/${this.brand.modelPath}/${
-      this.collection
-    }/low-poly/${
-      this.brand.id === "BY" ||
-      this.collection === "loft-living" ||
-      this.collection === "simply-me"
+    let modelURL = `${this.resourcesPath}/models/${this.brand.modelPath}/${this.collection
+      }/low-poly/${this.brand.id === "BY" ||
+        this.collection === "loft-living" ||
+        this.collection === "simply-me"
         ? "frame-"
         : ""
-    }${id}.gltf`;
+      }${id}.gltf`;
 
     let exists = await this.tryFetchModel(modelURL);
 
@@ -1133,7 +787,7 @@ export default class Core {
 
       if (index > 0) {
         let previousObject = this.model.children[index - 1];
-        let componentR = previousObject.getObjectByName("component_R");
+        let componentR = previousObject.getObjectByName("component_r");
 
         let componentQuaternion = new Quaternion();
         componentR?.getWorldQuaternion(componentQuaternion);
@@ -1198,8 +852,8 @@ export default class Core {
     this.spaces.children = [];
 
     this.model.children.forEach((child, index) => {
-      let componentL = child.getObjectByName("component_L");
-      let componentR = child.getObjectByName("component_R");
+      let componentL = child.getObjectByName("component_l");
+      let componentR = child.getObjectByName("component_r");
 
       let spacePosition;
       let spaceRotation;
@@ -1574,7 +1228,7 @@ export default class Core {
       1;
     this.mouse.y =
       -((event.clientY - rect.top) / this.renderer.domElement.clientHeight) *
-        2 +
+      2 +
       1;
 
     if (!this.controls.enabled) {
@@ -1979,11 +1633,10 @@ export default class Core {
       this.selectedBaseType = data.legSwitch[0];
     }
 
-    let legPath = `${
-      this.resourcesPath
-    }/models/legs/${this.selectedBaseType.name
-      .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-      .toLowerCase()}s/leg-${this.selectedBaseType.sku.replace("#", "")}.gltf`;
+    let legPath = `${this.resourcesPath
+      }/models/legs/${this.selectedBaseType.name
+        .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+        .toLowerCase()}s/leg-${this.selectedBaseType.sku.replace("#", "")}.gltf`;
 
     let leg = (await this.loadObject(legPath)).scene;
 
@@ -2014,7 +1667,7 @@ export default class Core {
   async init() {
     this.setCollection(this.collection);
 
-  
+
 
     // this.brand.id !== "BY"
     //   ? (this.selectedMaterialType = "Fabric")
@@ -2080,313 +1733,10 @@ export default class Core {
     }
   }
 
-  async checkInitialSetup() {
-    if (!this.loadMapPerModelCollection)
-      if (!this.collectionMaps) {
-        let collectionMapsObject;
 
-        const customMapPath = `${this.resourcesPath}/models/${
-          this.brand.modelPath
-        }/${this.collection}/custom-maps`;
-
-        switch (this.collection) {
-          case "luxe-for-living":
-            collectionMapsObject = {
-              armOutsideInsidePanel: {
-                fabric: {
-                  normalMap: `${customMapPath}/arm_outside_inside_panel_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/arm_outside_inside_panel_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/arm_outside_inside_panel_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/arm_outside_inside_panel_LEATHER_AO.jpg`,
-                },
-              },
-              backInside: {
-                fabric: {
-                  normalMap: `${customMapPath}/back_inside_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_inside_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/back_inside_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_inside_LEATHER_AO.jpg`,
-                },
-              },
-              backOutside: {
-                fabric: {
-                  normalMap: `${customMapPath}/back_outside_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_outside_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/back_outside_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_outside_LEATHER_AO.jpg`,
-                },
-              },
-              front: {
-                fabric: {
-                  normalMap: `${customMapPath}/front_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/front_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/front_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/front_LEATHER_AO.jpg`,
-                },
-              },
-
-              defaultCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/cushion_LEATHER_AO.jpg`,
-                },
-              },
-              customCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/67_68_OT_41_42_cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/67_68_OT_41_42_cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/67_68_OT_41_42_cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/67_68_OT_41_42_cushion_LEATHER_AO.jpg`,
-                },
-              },
-            };
-            break;
-
-          case "sectional-seating-by-design":
-            collectionMapsObject = {
-              stitch: {
-                fabric: {
-                  normalMap: this.blankNormal,
-                  aoMap: this.blankAO,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/stitch_Normal.jpg`,
-                  aoMap: `${customMapPath}/stitch_AO.jpg`,
-                },
-              },
-              defaultCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/cushion_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/cushion_AO.jpg`,
-                },
-              },
-              customCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/41_42_68_OT_cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/41_42_68_OT_cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/41_42_68_OT_cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/41_42_68_OT_cushion_LEATHER_AO.jpg`,
-                },
-              },
-              chairCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/25_cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/25_cushion_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/25_cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/25_cushion_AO.jpg`,
-                },
-              },
-            };
-
-            break;
-
-          case "plaza-midwood":
-            collectionMapsObject = {
-              stitch: {
-                fabric: {
-                  normalMap: this.blankNormal,
-                  aoMap: this.blankAO,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/stitch_Normal.jpg`,
-                  aoMap: `${customMapPath}/stitch_AO.jpg`,
-                },
-              },
-              defaultCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/cushion_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/cushion_AO.jpg`,
-                },
-              },
-              backAndCushion25_25SW: {
-                fabric: {
-                  normalMap: `${customMapPath}/25_25SW_cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/25_25SW_cushion_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/25_25SW_cushion_Normal.jpg`,
-                  aoMap: `${customMapPath}/25_25SW_cushion_AO.jpg`,
-                },
-              },
-              backAndCushion87_97: {
-                fabric: {
-                  normalMap: `${customMapPath}/87_97_cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/87_97_cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/87_97_cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/87_97_cushion_LEATHER_AO.jpg`,
-                },
-              },
-              backAndCushion98: {
-                fabric: {
-                  normalMap: `${customMapPath}/98_cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/98_cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/98_cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/98_cushion_LEATHER_AO.jpg`,
-                },
-              },
-              customCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/41_42_68_CO_SO_OT_cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/41_42_68_CO_SO_OT_cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/41_42_68_CO_SO_OT_cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/41_42_68_CO_SO_OT_cushion_LEATHER_AO.jpg`,
-                },
-              },
-            };
-            break;
-          case "luxury-motion":
-            collectionMapsObject = {
-              stitch: {
-                fabric: {
-                  normalMap: `${customMapPath}/stitch_Normal.jpg`,
-                  aoMap: `${customMapPath}/stitch_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/stitch_Normal.jpg`,
-                  aoMap: `${customMapPath}/stitch_AO.jpg`,
-                },
-              },
-              defaultCushion: {
-                fabric: {
-                  normalMap: `${customMapPath}/seat_cushion_FABRIC_Normal.jpg`,
-                  aoMap: `${customMapPath}/seat_cushion_FABRIC_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/seat_cushion_LEATHER_Normal.jpg`,
-                  aoMap: `${customMapPath}/seat_cushion_LEATHER_AO.jpg`,
-                },
-              },
-              back_cushion_916_920_968: {
-                fabric: {
-                  normalMap: `${customMapPath}/back_cushion_916-920-968_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_916-920-968_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/back_cushion_916-920-968_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_916-920-968_AO.jpg`,
-                },
-              },
-              back_cushion_949_950_960: {
-                fabric: {
-                  normalMap: `${customMapPath}/back_cushion_949-950-960_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_949-950-960_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/back_cushion_949-950-960_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_949-950-960_AO.jpg`,
-                },
-              },
-              back_cushion_951: {
-                fabric: {
-                  normalMap: `${customMapPath}/back_cushion_951_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_951_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/back_cushion_951_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_951_AO.jpg`,
-                },
-              },
-              back_cushion_962: {
-                fabric: {
-                  normalMap: `${customMapPath}/back_cushion_962_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_962_AO.jpg`,
-                },
-                leather: {
-                  normalMap: `${customMapPath}/back_cushion_962_Normal.jpg`,
-                  aoMap: `${customMapPath}/back_cushion_962_AO.jpg`,
-                },
-              },
-            };
-            break;
-          default:
-            console.log(
-              `Unknown collectionMapsObject for ${this.brand.modelPath}`,
-            );
-            break;
-        }
-
-        // if (collectionMapsObject)
-        //   this.collectionMaps =
-        //     await this.loadObjectMappedTextures(collectionMapsObject);
-      }
-
-    this.blankExternalMaps = {
-      blanks: {
-        fabric: {
-          normalMap: this.blankNormal,
-          aoMap: this.blankAO,
-        },
-        leather: {
-          normalMap: this.blankNormal,
-          aoMap: this.blankAO,
-        },
-      },
-    };
-
-    if (
-      !this.staticFramesConfigurator &&
-      (this.brand.id === "BY" ||
-        this.collection === "loft-living" ||
-        this.collection === "simply-me")
-    ) {
-      if (!this.collectionLeg)
-        this.collectionLeg = (
-          await this.loadObject(
-            `${this.resourcesPath}/models/${this.brand.modelPath}/${
-              this.collection
-            }/legs.gltf`,
-          )
-        ).scene;
-      if (
-        !this.defaultSupportLeg &&
-        (this.collection === "plaza-midwood" ||
-          this.collection === "luxury-motion")
-      )
-        this.defaultSupportLeg = (
-          await this.loadObject(
-            `${this.resourcesPath}/models/${this.brand.modelPath}/${
-              this.collection
-            }/default_support_leg.gltf`,
-          )
-        ).scene;
-    }
-  }
 
   async loadConfiguration() {
     if (!this.modelConfiguration || this.isRunning) return;
-    await this.checkInitialSetup();
 
     delete this.modelLoaded;
 
@@ -2437,10 +1787,10 @@ export default class Core {
         let previousObject =
           this.model.children[this.model.children.length - 1];
 
-        let componentR = previousObject.getObjectByName("component_R");
+        let componentR = previousObject.getObjectByName("component_r");
         componentR.getWorldQuaternion(newModel.quaternion);
 
-        let componentL = newModel.getObjectByName("component_L");
+        let componentL = newModel.getObjectByName("component_l");
 
         newModel.rotateX(-componentL.rotation.x);
         newModel.rotateY(-componentL.rotation.y);
@@ -2504,7 +1854,6 @@ export default class Core {
       this._needsShadowUpdate = true;
     }
 
-    this.createNails();
 
     this.scene.add(this.buttons);
 
@@ -2537,9 +1886,8 @@ export default class Core {
   }
 
   async loadMapsPerModelSSW(collectionName) {
-    let customMapPath = `${this.resourcesPath}/models/${
-      this.brand.modelPath
-    }/static-frames/custom-maps`;
+    let customMapPath = `${this.resourcesPath}/models/${this.brand.modelPath
+      }/static-frames/custom-maps`;
     switch (collectionName) {
       case "Havana":
         await this.loadFabric(
@@ -2976,26 +2324,23 @@ export default class Core {
           },
           "wood_frame",
         );
-      break;
+        break;
       default:
         break;
     }
   }
 
   async sswLoadTexturePerSku(model, materialName) {
-    let path = `${this.resourcesPath}/models/${
-      this.brand.modelPath
-    }/static-frames/custom-maps`;
+    let path = `${this.resourcesPath}/models/${this.brand.modelPath
+      }/static-frames/custom-maps`;
 
     let dashedMaterialName = materialName.replace(" ", "-");
     let lowDashedMaterialName = materialName.replace(" ", "_");
 
-    let baseColorPath = `${path}/${dashedMaterialName.toLowerCase()}/${
-      model.collectionName
-    }/${model.collectionName}-${dashedMaterialName}_${model.sku}.jpg`;
-    let normalMapPath = `${path}/${dashedMaterialName.toLowerCase()}/${
-      model.collectionName
-    }/${model.collectionName}-${dashedMaterialName}_${model.sku}_Normal.jpg`;
+    let baseColorPath = `${path}/${dashedMaterialName.toLowerCase()}/${model.collectionName
+      }/${model.collectionName}-${dashedMaterialName}_${model.sku}.jpg`;
+    let normalMapPath = `${path}/${dashedMaterialName.toLowerCase()}/${model.collectionName
+      }/${model.collectionName}-${dashedMaterialName}_${model.sku}_Normal.jpg`;
 
     let materialObj = {
       map: baseColorPath,
@@ -3013,7 +2358,7 @@ export default class Core {
 
   // SET DEFAULT ADDITIONAL OPTIONS FOR COLLECTION
   setDefaultCollectionOptions(collection, brandId) {
-    console.log(collection,brandId)
+    console.log(collection, brandId)
     if (collection) {
       // Filtered additional options per collection
       let collectionOptionsData = {};
@@ -3393,9 +2738,8 @@ export default class Core {
   }
 
   async loadArm(newModel, modelData, draggedModel = false) {
-    let path = `${this.resourcesPath}/models/${this.brand.modelPath}/${
-      this.collection
-    }/`;
+    let path = `${this.resourcesPath}/models/${this.brand.modelPath}/${this.collection
+      }/`;
 
     let leftArmURL = draggedModel
       ? `${path}low-poly/side-${this.selectedArmType.sku}-L.gltf`
@@ -3499,20 +2843,20 @@ export default class Core {
         ) {
           let leftArmClone = draggedModel
             ? this.loadedArms
-                .find(
-                  (x) =>
-                    x.userData.sku === this.selectedArmType.sku &&
-                    x.userData.url.includes(`-L`) &&
-                    x.userData.url.includes(`low-poly`),
-                )
-                .clone()
+              .find(
+                (x) =>
+                  x.userData.sku === this.selectedArmType.sku &&
+                  x.userData.url.includes(`-L`) &&
+                  x.userData.url.includes(`low-poly`),
+              )
+              .clone()
             : this.loadedArms
-                .find(
-                  (x) =>
-                    x.userData.sku === this.selectedArmType.sku &&
-                    x.userData.url.includes(`-L`),
-                )
-                .clone();
+              .find(
+                (x) =>
+                  x.userData.sku === this.selectedArmType.sku &&
+                  x.userData.url.includes(`-L`),
+              )
+              .clone();
 
           let leftArmSocketPosition =
             leftArmClone.getObjectByName("side_L").position;
@@ -3545,20 +2889,20 @@ export default class Core {
         ) {
           let rightArmClone = draggedModel
             ? this.loadedArms
-                .find(
-                  (x) =>
-                    x.userData.sku === this.selectedArmType.sku &&
-                    x.userData.url.includes(`${this.selectedArmType.sku}-R`) &&
-                    x.userData.url.includes(`low-poly`),
-                )
-                .clone()
+              .find(
+                (x) =>
+                  x.userData.sku === this.selectedArmType.sku &&
+                  x.userData.url.includes(`${this.selectedArmType.sku}-R`) &&
+                  x.userData.url.includes(`low-poly`),
+              )
+              .clone()
             : this.loadedArms
-                .find(
-                  (x) =>
-                    x.userData.sku === this.selectedArmType.sku &&
-                    x.userData.url.includes(`${this.selectedArmType.sku}-R`),
-                )
-                .clone();
+              .find(
+                (x) =>
+                  x.userData.sku === this.selectedArmType.sku &&
+                  x.userData.url.includes(`${this.selectedArmType.sku}-R`),
+              )
+              .clone();
           let rightArmSocketPosition =
             rightArmClone.getObjectByName("side_R").position;
 
@@ -3697,7 +3041,7 @@ export default class Core {
     // Only flag a render if the camera actually moved (threshold to ignore damping drift)
     var cameraMoved =
       this._prevCameraPosition.distanceToSquared(this.camera.position) >
-        1e-10 ||
+      1e-10 ||
       this._prevControlsTarget.distanceToSquared(this.controls.target) > 1e-10;
     if (cameraMoved) {
       this._needsRender = true;
@@ -3898,33 +3242,9 @@ export default class Core {
               }
             }
           }
-          //CUSTOM MATERIALS
-          if (
-            element.material.name.includes("rubber") ||
-            element.material.name.toLowerCase().includes("metal")
-          ) {
-            element.material.color.copy(
-              element.material.name.toLowerCase().includes("white")
-                ? COLORS.metalLight
-                : COLORS.metalDark,
-            );
+       
 
-            element.material.map = null;
-            element.material.name.includes("rubber")
-              ? (element.material.roughness = 0.9)
-              : (element.material.roughness = 0.4);
-          }
-
-          if (element.material.name === "chain") {
-            element.material.color.copy(COLORS.chain);
-            element.material.roughness = 0.2;
-            element.material.metalness = 1;
-          }
-
-          if (element.material.name.includes("void")) {
-            element.material.color.copy(COLORS.black);
-            element.material.roughness = 0.4;
-          }
+   
 
           //Assign baked maps to material normalMap/aoMap
           let materialWithBake = this.materialWithBake(element.material.name);
@@ -3939,8 +3259,8 @@ export default class Core {
           let material = element.material.name.includes("_welt")
             ? false
             : this.materials.find(
-                (material) => material.name === element.material.name,
-              );
+              (material) => material.name === element.material.name,
+            );
 
           if (!material) {
             //First check if it fallbacks on main material
@@ -4013,8 +3333,6 @@ export default class Core {
                 element.material.map.colorSpace = SRGBColorSpace;
                 element.material.map.channel = 0;
 
-                // Override color to default
-                element.material.color.copy(COLORS.white);
               }
             }
             // Set roughness map or remove if roughnessMap is left from old fabric
@@ -4041,8 +3359,7 @@ export default class Core {
                 element.material.sheenColor.set(material.sheenColor);
               } else {
                 console.warn(
-                  `Property sheenColor couldn't be set, ${
-                    element.material.name
+                  `Property sheenColor couldn't be set, ${element.material.name
                   } is not type of MeshPhysicalMaterial`,
                 );
               }
@@ -4130,21 +3447,21 @@ export default class Core {
                 element.material.normalMap = element.userData
                   .collectionExclusion
                   ? this.collectionMaps.customCushion[
-                      `${this.selectedMaterialType.toLowerCase()}`
-                    ].normalMap
+                    `${this.selectedMaterialType.toLowerCase()}`
+                  ].normalMap
                   : this.collectionMaps.defaultCushion[
-                      `${this.selectedMaterialType.toLowerCase()}`
-                    ].normalMap;
+                    `${this.selectedMaterialType.toLowerCase()}`
+                  ].normalMap;
 
                 element.material.normalMap.channel = 1;
 
                 element.material.aoMap = element.userData.collectionExclusion
                   ? this.collectionMaps.customCushion[
-                      `${this.selectedMaterialType.toLowerCase()}`
-                    ].aoMap
+                    `${this.selectedMaterialType.toLowerCase()}`
+                  ].aoMap
                   : this.collectionMaps.defaultCushion[
-                      `${this.selectedMaterialType.toLowerCase()}`
-                    ].aoMap;
+                    `${this.selectedMaterialType.toLowerCase()}`
+                  ].aoMap;
                 element.material.aoMap.channel = 1;
                 element.material.roughnessMap = null;
 
@@ -4196,329 +3513,15 @@ export default class Core {
   }
 
   updateModel(model = this.model) {
-    if (this.collection === "luxe-for-living") {
-      model.traverse((child) => {
-        if (child.name === "Back_Cushion_Group") {
-          for (const back of child.children) {
-            back.visible = back.name.includes(
-              this.selectedBackType.objectNameSuffix,
-            );
-          }
-        } else if (child.name === "Legs_Group") {
-          for (const back of child.children) {
-            back.visible = back.name.includes(
-              this.selectedBaseType.objectNameSuffix,
-            );
-          }
-        } else if (child.material && child.material.name === "welt") {
-          child.visible = this.selectedStitchType?.objectNameSuffix === "Welt";
-        }
-
-        if (
-          this.brand.id === "BY" &&
-          (child.name === "41" || child.name === "42" || child.name === "25SW")
-        ) {
-          this.updateModelExclusionsBYluxeForLiving(child);
-        }
-      });
-    } else if (this.collection === "sectional-seating-by-design") {
-      model.traverse((child) => {
-        if (child.name === "Back_Group") {
-          for (const back of child.children) {
-            back.visible = back.name.includes(this.selectedArmType.sku);
-          }
-        } else if (child.name === "Legs_Group") {
-          for (const back of child.children) {
-            back.visible = back.name.includes(
-              this.selectedBaseType.objectNameSuffix,
-            );
-          }
-        } else if (child.name === "Leg_Clone") {
-          if (
-            ["220", "221", "223"].some((sku) =>
-              child.userData.attachedToSocket.includes(sku),
-            )
-          ) {
-            child.visible = child.userData.attachedToSocket.includes(
-              this.selectedArmType.sku,
-            );
-          }
-        } else if (child.material && child.material.name === "welt") {
-          if (!child.name.includes("41") && !child.name.includes("42"))
-            child.visible =
-              this.selectedStitchType?.objectNameSuffix === "Welt";
-        }
-
-        if (child.name === "41" || child.name === "42") {
-          this.updateModelExclusionsBYsectionalSeatingByDesign(child);
-        }
-      });
-    } else if (this.collection === "plaza-midwood") {
-      model.traverse((child) => {
-        if (child.name === "Back_Group") {
-          for (const back of child.children) {
-            if (back.name.includes("Back_Group")) {
-              back.visible = back.name.includes(
-                this.selectedArmType.sku.slice(1),
-              );
-            }
-          }
-        } else if (child.name === "Back_Cushion_Group") {
-          for (const backCushion of child.children) {
-            if (backCushion.name.includes("Back_Cushion_Group")) {
-              backCushion.visible = backCushion.name.includes(
-                this.selectedArmType.sku.slice(1),
-              );
-            }
-          }
-        } else if (child.name === "Front_Group") {
-          for (const front of child.children) {
-            if (front.name.includes("Front_Group")) {
-              front.visible = front.name.includes(
-                this.selectedArmType.sku.slice(1),
-              );
-            }
-          }
-        } else if (child.material && child.material.name === "welt") {
-          child.visible = this.selectedStitchType?.objectNameSuffix === "Welt";
-        } else if (child.name === "Legs_Group") {
-          for (const back of child.children) {
-            back.visible = back.name.includes(
-              this.selectedBaseType.objectNameSuffix,
-            );
-          }
-        } else if (child.name === "Default_Support_Leg_Clone") {
-          if (
-            ["70", "71", "72", "73", "74"].some((sku) =>
-              child.userData.attachedToSocket.includes(sku),
-            )
-          ) {
-            child.visible = child.userData.attachedToSocket.includes(
-              this.selectedArmType.sku.slice(1),
-            );
-          }
-        }
-
-        if (
-          this.brand.id === "BY" &&
-          (child.name === "41" || child.name === "42" || child.name === "25SW")
-        ) {
-          this.updateModelExclusionsBYmidwoodPlaza(child);
-        }
-      });
-    } else if (this.collection === "luxury-motion") {
-      // Check if current configuration matches skus that should trigger power button visibility
-      function isPowerButtonEnabled(configuration) {
-        let foundSku = false;
-        if (configuration) {
-          let configurationSkus = configuration?.elements.map(
-            (element) => element.id,
-          );
-          let powerButtonSkus = [
-            "17",
-            "18",
-            "55",
-            "56",
-            "61",
-            "62",
-            "70",
-            "90",
-          ];
-          foundSku = configurationSkus.some((sku) =>
-            powerButtonSkus.includes(sku),
-          );
-        }
-        return foundSku;
-      }
-      let powerButtonEnabled = isPowerButtonEnabled(this.modelConfiguration);
-
-      model.traverse((child) => {
-        if (child.name === "Back_Group") {
-          for (const back of child.children) {
-            if (back.name.includes("Back_Group")) {
-              back.visible = back.name.includes(this.selectedArmType.sku);
-            }
-          }
-        } else if (child.name === "Legs_Group") {
-          for (const back of child.children) {
-            back.visible = back.name.includes(this.selectedArmType.sku);
-          }
-        } else if (child.material && child.material.name === "welt") {
-          child.visible = ["962", "968"].includes(this.selectedArmType.sku);
-        } else if (child.name === "Power_Button") {
-          child.visible = powerButtonEnabled;
-        }
-      });
-    } else if (this.collection === "loft-living") {
-      model.traverse((child) => {
-        if (child.name === "Back_Group") {
-          for (const back of child.children) {
-            if (back.name.includes("Back_Group")) {
-              back.visible = back.name.includes(this.selectedArmType.sku);
-            }
-          }
-        } else if (child.name.includes("Back_Cushion_Group")) {
-          child.visible = child.name.includes(
-            `_${this.selectedBackType.objectNameSuffix}`,
-          );
-        } else if (child.name === "Legs_Group") {
-          for (const leg of child.children) {
-            leg.visible = leg.name.includes(
-              this.selectedBaseType.objectNameSuffix,
-            );
-          }
-        } else if (child.material && child.material.name === "welt") {
-          child.visible = ["LL22", "LL24"].includes(this.selectedArmType.sku);
-        } else if (
-          child.name === "Seat_Cushion_Group_Standard" ||
-          child.name === "Seat_Cushion_Group_Bench"
-        ) {
-          child.visible = child.name.includes(
-            this.selectedSeatCushionType?.objectNameSuffix,
-          );
-        }
-
-        if (
-          child.name === "025" ||
-          child.name === "026" ||
-          child.name === "043" ||
-          child.name === "044" ||
-          child.name === "009" ||
-          child.name === "057"
-        ) {
-          this.updateModelExclusionsHFLoftLiving(child);
-        }
-      });
-    } else if (this.collection === "simply-me") {
-      //TODO: UPDATE MODEL EXCLUSIONS FOR SIMPLY ME COLLECTION
-      model.traverse((child) => {
-        if (child.name === "Back_Group") {
-          for (const back of child.children) {
-            if (back.name.includes("Back_Group")) {
-              back.visible = back.name.includes(this.selectedArmType.sku);
-            }
-          }
-        } else if (child.name.includes("Back_Cushion_Group")) {
-          child.visible = child.name.includes(
-            `_${this.selectedBackType.objectNameSuffix}`,
-          );
-        } else if (child.name === "Legs_Group") {
-          for (const leg of child.children) {
-            leg.visible = leg.name.includes(
-              this.selectedBaseType.objectNameSuffix,
-            );
-          }
-        } else if (child.name === "Front_Group") {
-          for (const front of child.children) {
-            front.visible = front.name.includes(this.selectedArmType.sku);
-          }
-        } else if (child.material && child.material.name === "welt") {
-          child.visible = ["SM11", "SM13"].includes(this.selectedArmType.sku);
-        }
-      });
-    }
-  }
-
-  // BY CHECK FOR Chaises and 25SW Luxe for Living
-  updateModelExclusionsBYluxeForLiving(obj) {
-    obj.traverse((child) => {
-      child.userData.collectionExclusion = true;
-
-      if (obj.name === "25SW") {
-        if (child.name === "Arm_Group") {
-          child.children.forEach((child) => {
-            child.visible =
-              child.name === `Arm_Group_${this.selectedArmType.sku}`;
-          });
-        }
-      } else {
-        if (child.name.includes("Front_Group")) {
-          child.children.forEach((child) => {
-            child.visible = child.name.includes(this.selectedArmType.sku);
-          });
-        }
-      }
-    });
-  }
-
-  updateModelExclusionsBYsectionalSeatingByDesign(obj) {
-    let armTypeSkus = this.data.collectionOptions.armTypes
-      .filter((armType) => armType.collection === this.collection)
-      .map((armType) => armType.sku);
-    obj.traverse((child) => {
-      child.userData.collectionExclusion = true;
-      if (child.name.includes("Seat_Cushion_Group")) {
-        child.children.forEach((child) => {
-          child.visible = child.name.includes(this.selectedArmType.sku);
-        });
-      } else if (child.name === "Front_Group") {
-        child.children.forEach((child) => {
-          child.visible = child.name.includes(this.selectedArmType.sku);
-        });
-      } else if (child.name === "Arm_Group") {
-        child.children.forEach((child) => {
-          child.visible = child.name.includes(this.selectedArmType.sku);
-        });
-      } else if (child.name === "Back_Cushion_Group") {
-        child.children.forEach((child) => {
-          if (child.material && child.material.name === "welt") {
-            child.visible =
-              this.selectedStitchType?.objectNameSuffix === "Welt";
-          }
-        });
-      } else if (
-        child.material &&
-        child.material.name === "welt" &&
-        armTypeSkus.some((sku) => child.name.includes(sku))
-      ) {
-        child.visible =
-          child.name.includes(this.selectedArmType.sku) &&
-          this.selectedStitchType?.objectNameSuffix === "Welt";
-      }
-    });
-  }
-
-  updateModelExclusionsBYmidwoodPlaza(obj) {
-    obj.traverse((child) => {
-      child.userData.collectionExclusion = true;
-      if (child.name === "Arm_Group") {
-        child.children.forEach((child) => {
-          child.visible = child.name.includes(this.selectedArmType.sku);
-        });
-      } else if (child.name === "Default_Support_Leg_Clone") {
-        child.visible = child.userData.attachedToSocket.includes(
-          this.selectedArmType.sku,
-        );
-      }
-    });
-  }
-
-  updateModelExclusionsHFLoftLiving(obj) {
-    obj.traverse((child) => {
+    this.model.traverse((child) => {
       if (child.name === "Arm_Group") {
         child.children.forEach((child) => {
           child.visible = child.name.includes(this.selectedArmType.sku);
         });
       }
-    });
+    })
 
-    if (obj.parent.userData.model?.arm) {
-      let armPosition =
-        obj.parent.userData.model?.arm.position.charAt(0).toUpperCase() +
-        obj.parent.userData.model?.arm.position.slice(1);
-
-      let arm = obj.parent.getObjectByName(
-        `${armPosition}_Arm_${this.selectedArmType.sku}_Clone`,
-      );
-      if (arm)
-        arm.traverse((child) => {
-          if (child.name === "Leg_Clone_Front") {
-            child.visible = false;
-          }
-        });
-    }
   }
-
   // LIGHT SLIDER
 
   changeLightsSlider(angle) {
@@ -6023,20 +5026,16 @@ export default class Core {
              vec3 AvgLumin  = vec3(AvgLumR, AvgLumG, AvgLumB);
              const vec3 LumCoeff = vec3(0.2125, 0.7154, 0.0721);
 
-             vec3 brightness  = sampledDiffuseColor.rgb * ${
-               this.saturation.brightness
-             };
+             vec3 brightness  = sampledDiffuseColor.rgb * ${this.saturation.brightness
+        };
              vec3 intensity = vec3(dot(brightness, LumCoeff));
-             vec3 saturation  = mix(intensity, brightness, ${
-               this.saturation.saturation
-             });
-             vec3 contrast  = mix(AvgLumin, saturation, ${
-               this.saturation.contrast
-             });
+             vec3 saturation  = mix(intensity, brightness, ${this.saturation.saturation
+        });
+             vec3 contrast  = mix(AvgLumin, saturation, ${this.saturation.contrast
+        });
 
-             vec3 color = vec3(${this.saturation.red}, ${
-               this.saturation.green
-             }, ${this.saturation.blue});
+             vec3 color = vec3(${this.saturation.red}, ${this.saturation.green
+        }, ${this.saturation.blue});
 
              diffuseColor = vec4(contrast.r * color.r, contrast.g * color.g, contrast.b * color.b, sampledDiffuseColor.a);
 
@@ -6343,7 +5342,7 @@ export default class Core {
           }
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     const lowCores =
       navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;

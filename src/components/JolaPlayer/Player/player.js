@@ -103,28 +103,6 @@ export default class Player extends Core {
     await this.loadConfiguration();
   }
 
-  getAppAreaFinish(appArea) {
-    let appAreaObj = this.applicationAreas.find(
-      (area) => area.dbValue === appArea,
-    );
-
-    return appAreaObj
-      ? this.materials.find(
-          (mat) => appAreaObj.targetedMaterials?.[0] === mat.name,
-        )?.userData || null
-      : null;
-  }
-
-  removeAppAreaFinish(appArea) {
-    let materialNames = this.getAppAreaMaterials(appArea);
-    if (materialNames) {
-      materialNames = new Set(materialNames);
-      this.materials = this.materials.filter(
-        (mat) => !materialNames.has(mat.name),
-      );
-      this.updateTexture();
-    }
-  }
 
   async loadFabric(fabric, materialName, updateTexture = true) {
     let promises = [];
@@ -336,110 +314,12 @@ export default class Player extends Core {
     await this.loadFabric(finish, "wood");
   }
 
-  // TODO: Added staticFrames for reloading models that import external legs (frames have property "legSwitch")
-  async setBaseType(baseTypeData, staticFrames = false) {
-    this.selectedBaseType = baseTypeData;
-
-    if (staticFrames) {
-      await this.loadModel(this.selectedFrame);
-    } else {
-      this.updateModel();
-      this.requestRender();
-    }
-  }
-
-  setBackType(backTypeData) {
-    this.selectedBackType = backTypeData;
-    this.updateModel();
-    this.requestRender();
-  }
 
   async setArmType(armTypeData) {
     this.selectedArmType = armTypeData;
-    await this.loadConfiguration();
+    this.updateModel();
 
     this.setAvailableApplicationAreas();
-  }
-
-  setStitchType(stitchTypeData) {
-    this.selectedStitchType = stitchTypeData;
-    this.updateModel();
-    this.requestRender();
-  }
-
-  setSeatCushionType(seatCushionTypeData) {
-    this.selectedSeatCushionType = seatCushionTypeData;
-    this.updateModel();
-    this.requestRender();
-  }
-
-  setWeltOption(weltOption, weltArea) {
-    //Defaulting to Cushion (Models either have Cushion only or Cushion and two sets of pillows)
-    if (weltArea === undefined) {
-      weltArea = "Cushion";
-    }
-    //Welt option is passed as string but can be also passed as direct object from WELT_OPTIONS
-    let weltOptionObj;
-    if (typeof weltOption === "object" && weltOption !== null) {
-      weltOptionObj = weltOption;
-    } else if (typeof weltOption === "string") {
-      // Remove "SW-"
-      const cleanString = weltOption.replace(/SW|-|\s/g, "");
-
-      switch (cleanString) {
-        case "Flange":
-          weltOptionObj = this.WELT_OPTIONS.Flange;
-          break;
-        case "SelfWelt":
-        case "ContrastingWelt":
-          weltOptionObj = this.WELT_OPTIONS.SelfWelt;
-          break;
-        case "NoWelt":
-        default:
-          weltOptionObj = this.WELT_OPTIONS.NoWelt;
-          break;
-      }
-    }
-
-    let groupName = `${weltArea.replace(" ", "_")}_Welt_Options`;
-    this.model.traverse((child) => {
-      if (child?.parent?.name === groupName) {
-        child.visible =
-          child.name === `${weltArea.replace(" ", "")}_${weltOptionObj?.name}`;
-      }
-    });
-    this.requestRender();
-  }
-
-  async setNailsVisible(value) {
-    this.nailsVisible = value;
-    await this.createNails();
-    this.updateModel();
-    this.requestRender();
-  }
-
-  async setNailColor(color) {
-    this.nailColor = this.data.nailColors.find(
-      (nailColor) => nailColor.id === color,
-    );
-    if (this.nailColor) {
-      await this.loadFabric(this.nailColor, "nailColor");
-      await this.updateNails();
-    }
-  }
-
-  async setNailOptionStandard(value) {
-    this.selectedNailOptionStandard = this.extractNailOption(value);
-
-    await this.updateNails();
-    this.requestRender();
-  }
-
-  async setNailOptionStandard2(value) {
-    this.selectedNailOptionStandard2 = this.extractNailOption(value);
-
-    await this.updateNails();
-    this.requestRender();
   }
 
   setLocalization(input = "en-US") {
