@@ -1,56 +1,122 @@
-# Hooker Furniture
+# Bassett Furniture Configurator
+
+POC 3D furniture configurator built with React and the Jola Player engine. Supports static frame configuration (fabrics, finishes, edge profiles, size) and sectional/BYO configuration (layouts, arms, covers, cushions).
+
+---
+
+## Prerequisites
+
+- Node.js 18+
+- npm
+- Git (for resources repository)
+- WSL2 (if running on Windows)
+
+---
 
 ## Installation
 
-Install Hooker Project with:
+### 1. Clone the repository
 
 ```bash
-    npm install
+git clone <repository-url>
+cd bassett-poc
 ```
 
-Symling local resources
-
-Git repository for resources(Models,textures,etc) `git@git.joladev.com:hookerfurniture-3d.git`
+### 2. Install dependencies
 
 ```bash
-ln -s ~/projects/hookerfurniture-3d/ ~/projects/hooker/public/resources
+npm install
 ```
 
-Mount Network Drive in WSL (where **Z** is assigned network drive letter in Windows for **\\\\JolaNAS\dev**)
+### 3. Link 3D resources
+
+The player requires a `public/resources` folder containing models, textures, HDR maps, and Draco decoders. These live in a separate repository.
+
+** Clone the resources repo and symlink it:**
 
 ```bash
-    sudo mount -t drvfs Z: /mnt/z -o uid=$(id -u),gid=$(id -g),metadata
+git clone git@git.joladev.com:bassett-3d.git ~/projects/bassett-3d
+ln -s ~/projects/bassett-3d/ public/resources
 ```
 
-Create Symbolic link between mounted drive and public/resources
+## Running the project
 
 ```bash
-    ln -s /mnt/z/projects/hooker-furnishings/resources public/resources
+npm start
 ```
 
-Start Hooker Project with:
+Opens at `http://localhost:3000/bassett-furniture`
+
+---
+
+## Building for production
 
 ```bash
-    npm run start
+npm run build
 ```
 
-Build Hooker Project with:
+The build script removes the `public/resources` symlink before bundling (resources are served separately at runtime) and restores it after.
 
-```bash
-    npm run build
+---
+
+## Project structure
+
+```
+bassett-poc/
+├── public/
+│   └── resources/          Symlink to 3D assets (models, textures, HDR, Draco)
+├── src/
+│   ├── assets/
+│   │   ├── fonts/          Soleil font family
+│   │   ├── icons/          UI icons (SVG + PNG)
+│   │   └── images/         Product and option images
+│   ├── components/
+│   │   ├── JolaPlayer/     3D player engine (do not modify)
+│   │   │   ├── data.json   Product data (frames, textures, configurations)
+│   │   │   └── utils.js    SKU resolution helpers
+│   │   ├── modals/         Modal components
+│   │   │   ├── ClearConfirmModal.jsx
+│   │   │   ├── CloseConfirmModal.jsx
+│   │   │   ├── BuildOverview.jsx
+│   │   │   ├── SectionalSummaryModal.jsx
+│   │   │   └── StaticSummaryModal.jsx
+│   │   ├── SectionalPanel.jsx   Sidebar for sectional/BYO frames
+│   │   ├── StaticFramePanel.jsx Sidebar for static frames and tables
+│   │   └── AdditionalOptions.jsx
+│   ├── pages/
+│   │   └── Player.jsx      Main configurator page
+│   ├── data/
+│   │   └── BrandsAndRules.json
+│   ├── App.jsx             Root component and landing page
+│   └── index.css           Global styles
 ```
 
-## Data Update Pipeline
+---
 
-Single entry command (covers/leathers/finishes + static frames + sectionals/BYO):
+## Resources structure
 
-```bash
-bash scripts/update-data.sh
+The `public/resources` folder (symlinked from the 3D assets repo) must contain:
+
+```
+resources/
+├── models/         3D model files (.gltf)
+├── textures/
+│   ├── fabrics/    Fabric texture maps and icons
+│   ├── leathers/   Leather texture maps and icons
+│   └── woods/      Wood texture maps and icons
+├── hdr/            HDR environment maps
+├── draco/          Draco decoder (WASM)
+├── fonts/          3D scene fonts
+└── icons/          In-scene icons
 ```
 
-What `scripts/update-data.sh` does:
+---
 
-- Downloads and applies covers/leathers/finishes updates when source sheet changes
-- Runs `scripts/formatFrames.js` for static frames + sectionals/BYO
-- Prints changed/new frame summaries directly to bash output
-- Builds the app (`npm run build`) after data updates
+## Environment variables
+
+Copy `.env` and adjust as needed:
+
+| Variable                          | Description                                  |
+| --------------------------------- | -------------------------------------------- |
+| `PUBLIC_URL`                      | Base URL path (default `/bassett-furniture`) |
+| `REACT_APP_ASSET_VALIDATOR_TOKEN` | Optional token for asset validation server   |

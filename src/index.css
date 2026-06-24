@@ -90,6 +90,20 @@ code {
   justify-content: flex-start;
   padding: 48px 24px 0;
   box-sizing: border-box;
+  position: relative;
+}
+
+.landing-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.landing-hero > * {
+  position: relative;
+  z-index: 1;
 }
 
 .landing-brand-name {
@@ -102,6 +116,39 @@ code {
   /* height: 38px; */
   width: auto;
   filter: brightness(0) invert(1);
+}
+
+.landing-hero-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 48px;
+  max-width: 800px;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.landing-hero-center--hidden {
+  opacity: 0;
+}
+
+.landing-hero-title {
+  font-size: 52px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 20px;
+  line-height: 1.15;
+}
+
+.landing-hero-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.65;
+  margin: 0;
 }
 
 .landing-plus {

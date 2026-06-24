@@ -260,6 +260,14 @@ function App() {
             <div className='landing-brand-name'>
               <img src={mainLogo} alt='jola' className='landing-jola-logo' />
             </div>
+            <div className={`landing-hero-center${isPanelOpen ? ' landing-hero-center--hidden' : ''}`}>
+              <h1 className='landing-hero-title'>Explore the Possibilities</h1>
+              <p className='landing-hero-subtitle'>
+                This proof of concept demonstrates how CGI can transform the product discovery experience.
+                Navigate through the featured models and open the configurator to explore product variations,
+                materials, finishes, and interactions in a dynamic digital environment.
+              </p>
+            </div>
           </div>
 
           <div className={`product-panel${isPanelOpen ? ' product-panel--open' : ''}`}>
