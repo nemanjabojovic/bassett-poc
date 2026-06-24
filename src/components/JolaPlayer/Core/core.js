@@ -533,13 +533,7 @@ export default class Core {
 
     this.clearSelected();
     //TODO: Fix conditions for frame addition to url
-    let modelURL = `${this.resourcesPath}/models/${this.brand.modelPath}/${this.collection
-      }/low-poly/${this.brand.id === "BY" ||
-        this.collection === "loft-living" ||
-        this.collection === "simply-me"
-        ? "frame-"
-        : ""
-      }${id}.gltf`;
+    let modelURL = `${this.resourcesPath}/models/low-poly/${"frame-"}${id}/${"frame-"}${id}.gltf`;
 
     let exists = await this.tryFetchModel(modelURL);
 
@@ -561,16 +555,10 @@ export default class Core {
           (frame) => frame.collection === this.collection && frame.id === id,
         );
 
-        // FIX: DISABLE SHADER FOR DRAGGED OBJECT
-        // this.updateTexture(this.draggedObject);
 
-        if (draggedModelData?.arm) {
-          await this.loadArm(this.draggedObject, draggedModelData, true);
-        }
 
         this.updateModel(this.draggedObject);
         this.updateTexture(this.draggedObject, true);
-        this.hideCurves(this.draggedObject);
 
         this.scene.add(this.draggedObject);
       },
@@ -1563,7 +1551,6 @@ export default class Core {
             this.shadowCamera,
           );
           this._needsShadowUpdate = true;
-          await this.checkForCurves();
 
           this.currentDimensions = calculateDimensions(this.model);
 

@@ -98,16 +98,6 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
     const first = popularConfigs[0]
     setSelectedLayout(first)
     setConfigElementIds(first.elements.map(e => e.id))
-
-    const load = () => window.player?.setConfiguration(first)
-
-    if (window.player) {
-      load()
-    } else {
-      const handler = () => load()
-      window.addEventListener('playerReady', handler, { once: true })
-      return () => window.removeEventListener('playerReady', handler)
-    }
   }, [])
 
   return (
@@ -145,6 +135,7 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                       setConfigElementIds([])
                       setBuildMode('byo')
                       window.player?.clearConfiguration()
+                      window.player?.setEditSelected(true)
                     }}
                   >
                     <div className='config-layout-new-icon'>
@@ -156,20 +147,31 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                     <p>Start a<br />New Build</p>
                   </div>
                   {popularConfigs.map((pc, i) => (
-                    <div
-                      key={i}
-                      className={`config-layout-item${selectedLayout?.name === pc.name ? ' config-layout-item--selected' : ''}`}
-                      onClick={() => {
-                        setSelectedLayout(pc)
-                        setConfigElementIds(pc.elements.map(e => e.id))
-                        window.player?.setConfiguration(pc)
-                      }}
-                    >
-                      {pc.icon
-                        ? <img src={pc.icon} alt={pc.name} className='config-layout-thumb' />
-                        : <div className='config-layout-thumb' />
-                      }
-                      <p>{pc.name}</p>
+                    <div key={i} className='config-layout-item-wrap'>
+                      <div
+                        className={`config-layout-item${selectedLayout?.name === pc.name ? ' config-layout-item--selected' : ''}`}
+                        onClick={() => {
+                          setSelectedLayout(pc)
+                          setConfigElementIds(pc.elements.map(e => e.id))
+                          window.player?.setConfiguration(pc)
+                          window.player?.setEditSelected(false)
+                        }}
+                      >
+                        {pc.icon
+                          ? <img src={pc.icon} alt={pc.name} className='config-layout-thumb' />
+                          : <div className='config-layout-thumb' />
+                        }
+                        <p>{pc.name}</p>
+                      </div>
+                      <button
+                        className='config-layout-edit'
+                        onClick={() => {
+                          setBuildMode('byo')
+                          window.player?.setEditSelected(true)
+                        }}
+                      >
+                        Edit
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -193,8 +195,22 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                         key={i}
                         className='config-layout-item'
                         onClick={() => {
-                          setConfigElementIds(prev => [...prev, f.id])
-                          window.player?.addConfiguration({ id: f.id })
+                          if (window.player?.swap) {
+                            window.player.setSwapElement(f)
+                          } else {
+                            setConfigElementIds(prev => [...prev, f.id])
+                            window.player?.addConfiguration({ id: f.id, temp: true })
+                            window.player?.setEditSelected(true)
+                          }
+                        }}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          window.player?.onDragStart(f.id)
+                          const onUp = () => {
+                            window.player?.onDragEnd()
+                            document.removeEventListener('mouseup', onUp)
+                          }
+                          document.addEventListener('mouseup', onUp)
                         }}
                       >
                         {f.icon

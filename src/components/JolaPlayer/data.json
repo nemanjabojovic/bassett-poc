@@ -48,19 +48,6 @@
       "brandId": "bassett",
       "name": "41L & 43L",
       "icon": ""
-    },{
-      "elements": [
-        {
-          "id": "M000-LSECT3"
-        },
-        {
-          "id": "M000-LSECT3L"
-        }
-      ],
-      "collection": "bassett",
-      "brandId": "bassett",
-      "name": "M000-LSECT3 & M000-LSECT3L",
-      "icon": ""
     }
   ],
   "frames": [
@@ -102,41 +89,14 @@
       "collection": "bassett"
     },
     {
-      "sku": "M000-LSECT3",
-      "id": "M000-LSECT3",
-      "icon": "",
-      "name": "Magnificent Motion L Sectional",
-      "brandId": "bassett",
-      "textures": ["7219-28", "7229-10"],
-      "pairing": {
-        "right": ["M000-LSECT3L"]
-      },
-      "price": 3000,
-      "status": "Complete",
-      "collection": "bassett"
-    },
-    {
-      "sku": "M000-LSECT3L",
-      "id": "M000-LSECT3L",
-      "icon": "",
-      "name": "Magnificent Leather Motion L Sectional",
-      "brandId": "bassett",
-      "textures": ["7219-28", "7229-10"],
-      "pairing": {
-        "left": ["M000-LSECT3"]
-      },
-      "status": "Complete",
-      "collection": "bassett"
-    },
-    {
       "sku": "41L",
       "id": "41L",
       "icon": "",
-      "name": "Magnificent Motion L Sectional",
+      "name": "Left Arm Magnificent Motion L Sectional",
       "brandId": "bassett",
       "textures": ["7219-28", "7229-10"],
       "pairing": {
-        "right": ["43L"]
+        "right": ["43L","38L"]
       },
       "price": 3000,
       "status": "Complete",
@@ -146,11 +106,11 @@
       "sku": "43L",
       "id": "43L",
       "icon": "",
-      "name": "Magnificent Motion L Sectional",
+      "name": "Right Arm Magnificent Motion L Sectional",
       "brandId": "bassett",
       "textures": ["7219-28", "7229-10"],
       "pairing": {
-        "left": ["41L"]
+        "left": ["41L","38L"]
       },
       "price": 3000,
       "status": "Complete",
@@ -160,11 +120,12 @@
       "sku": "38L",
       "id": "38L",
       "icon": "",
-      "name": "Magnificent Leather Motion L Sectional",
+      "name": "Corner Sectional",
       "brandId": "bassett",
       "textures": ["7219-28", "7229-10"],
       "pairing": {
-        "left": ["38"]
+        "left": ["41L"],
+        "right": ["43L"]
       },
       "status": "Complete",
       "collection": "bassett"
