@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import data from '../components/JolaPlayer/data.json'
-import JolaPlayer from '../components/JolaPlayer'
-import { resolveModelOptions } from '../components/JolaPlayer/utils'
-import StaticFramePanel from '../components/StaticFramePanel'
-import SectionalPanel from '../components/SectionalPanel'
-import JolaIcon from '../assets/icons/jolaLogo.svg'
-import AdditionalOptions from '../components/AdditionalOptions'
-import ClearConfirmModal from '../components/modals/ClearConfirmModal'
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
+import data from "../components/JolaPlayer/data.json";
+import JolaPlayer from "../components/JolaPlayer";
+import { resolveModelOptions } from "../components/JolaPlayer/utils";
+import StaticFramePanel from "../components/StaticFramePanel";
+import SectionalPanel from "../components/SectionalPanel";
+import JolaIcon from "../assets/icons/jolaLogo.svg";
+import AdditionalOptions from "../components/AdditionalOptions";
+import ClearConfirmModal from "../components/modals/ClearConfirmModal";
 
 const Player = ({
   activePlayer,
@@ -28,93 +28,106 @@ const Player = ({
   setIsOpenAdditionalOption,
   goToLanding,
 }) => {
-  const playerRef = useRef()
-  const [skuToLoad, setSkuToLoad] = useState(null)
-  const [playerOptions, setPlayerOptions] = useState(null)
-  const [configurationToLoad, setConfigurationToLoad] = useState(null)
-  const [searchParams] = useSearchParams()
-  const [showClearConfirm, setShowClearConfirm] = useState(false)
-  const [dimensions, setDimensions] = useState(null)
+  const playerRef = useRef();
+  const [skuToLoad, setSkuToLoad] = useState(null);
+  const [playerOptions, setPlayerOptions] = useState(null);
+  const [configurationToLoad, setConfigurationToLoad] = useState(null);
+  const [searchParams] = useSearchParams();
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [dimensions, setDimensions] = useState(null);
 
   useEffect(() => {
-    const paramsObject = {}
+    const paramsObject = {};
     for (const [key, value] of searchParams.entries()) {
-      paramsObject[key] = value
+      paramsObject[key] = value;
     }
 
-    let sku
+    let sku;
     if (paramsObject.collection) {
-      const formattedCollection = paramsObject.collection.split(' ').join('-').toLowerCase()
+      const formattedCollection = paramsObject.collection
+        .split(" ")
+        .join("-")
+        .toLowerCase();
       const firstArm = data.collectionOptions.armTypes.find(
-        a => a.collection === formattedCollection
-      )
+        (a) => a.collection === formattedCollection,
+      );
       const firstConfig = data.popularConfigurations.find(
-        pc => pc.collection === formattedCollection
-      )
+        (pc) => pc.collection === formattedCollection,
+      );
       if (firstArm && firstConfig) {
-        sku = `${firstArm.sku}-${firstConfig.elements[0].id}`
+        sku = `${firstArm.sku}-${firstConfig.elements[0].id}`;
       } else if (firstConfig) {
-        sku = firstConfig.elements[0].id
+        sku = firstConfig.elements[0].id;
       }
-      setConfigurationToLoad(firstConfig || null)
-      setSkuToLoad(sku)
+      setConfigurationToLoad(firstConfig || null);
+      setSkuToLoad(sku);
     } else if (paramsObject.model) {
-      setSkuToLoad(paramsObject.model)
+      setSkuToLoad(paramsObject.model);
     } else {
-      const frame = data.frames.find(f => f.brandId === paramsObject.brand)
-      if (frame) setSkuToLoad(frame.sku)
+      const frame = data.frames.find((f) => f.brandId === paramsObject.brand);
+      if (frame) setSkuToLoad(frame.sku);
     }
-  }, [collection, brandInstance, searchParams])
+  }, [collection, brandInstance, searchParams]);
 
   useEffect(() => {
-    if (!skuToLoad) return
+    if (!skuToLoad) return;
 
-    const options = resolveModelOptions(skuToLoad)
-    if (!options) return
+    const options = resolveModelOptions(skuToLoad);
+    if (!options) return;
 
-    options.containerId = 'player'
-    options.loadingScreenId = 'loading-screen'
+    options.containerId = "player";
+    options.loadingScreenId = "loading-screen";
 
     if (options?.frame?.nails) {
       options.nailOptions = {
         nailsColor: options.frame.nails.defaultNailFinish,
         nailOptionStandard: options.frame.nails.defaultStandardNail,
         nailOptionStandard2: options.frame.nails.defaultStandardNail2,
-      }
+      };
     }
 
-    options.fabric = [{ texture: data.fabrics[0], name: 'PrimaryCover' }]
-    options.popularConfiguration = configurationToLoad
-    options.data = data
+    const allTextures = [
+      ...(data.fabrics || []),
+      ...(data.leathers || []),
+      ...(data.woods || []),
+    ];
+    const frameTextures = options.frame?.textures
+      ? allTextures.filter((t) => options.frame.textures.includes(t.sku))
+      : data.fabrics;
+    options.fabric = [
+      { texture: frameTextures[0] || data.fabrics[0], name: "PrimaryCover" },
+    ];
+    options.popularConfiguration = configurationToLoad;
+    options.data = data;
     options.signalModelConfigurationChange = () => {
-      const dims = window.player?.getDimensions()
-      if (dims) setDimensions(dims)
-      window.dispatchEvent(new Event('playerConfigurationChanged'))
-    }
+      const dims = window.player?.getDimensions();
+      if (dims) setDimensions(dims);
+      window.dispatchEvent(new Event("playerConfigurationChanged"));
+    };
 
-    setPlayerOptions(options)
-  }, [skuToLoad, configurationToLoad])
+    setPlayerOptions(options);
+  }, [skuToLoad, configurationToLoad]);
 
   useEffect(() => {
     const handler = () => {
-      const dims = window.player?.getDimensions()
-      if (dims) setDimensions(dims)
-    }
-    window.addEventListener('animationsAvailable', handler)
-    window.addEventListener('animationsNotAvailable', handler)
+      const dims = window.player?.getDimensions();
+      if (dims) setDimensions(dims);
+    };
+    window.addEventListener("animationsAvailable", handler);
+    window.addEventListener("animationsNotAvailable", handler);
     return () => {
-      window.removeEventListener('animationsAvailable', handler)
-      window.removeEventListener('animationsNotAvailable', handler)
-    }
-  }, [])
+      window.removeEventListener("animationsAvailable", handler);
+      window.removeEventListener("animationsNotAvailable", handler);
+    };
+  }, []);
 
-  const isStaticFrame = brandInstanceConfiguratorType?.name === 'Static'
-  const currentSku = searchParams.get('model') || skuToLoad
+  const isStaticFrame = brandInstanceConfiguratorType?.name === "Static";
+  const currentSku = searchParams.get("model") || skuToLoad;
 
   const handleClearConfirm = () => {
-    window.player?.clearConfiguration()
-    setShowClearConfirm(false)
-  }
+    window.player?.clearConfiguration();
+    setShowClearConfirm(false);
+  };
 
   return (
     <div className='configurator-view'>
@@ -141,34 +154,59 @@ const Player = ({
         </div>
 
         <div className='viewer-nav'>
-          <img src={JolaIcon} alt='Jola' className='viewer-jola-logo' onClick={goToLanding} />
+          <img
+            src={JolaIcon}
+            alt='Jola'
+            className='viewer-jola-logo'
+            onClick={goToLanding}
+          />
           <AdditionalOptions
             isOpenAdditionalOption={isOpenAdditionalOption}
             setIsOpenAdditionalOption={setIsOpenAdditionalOption}
           />
         </div>
 
-        {playerOptions && <JolaPlayer ref={playerRef} options={playerOptions} />}
+        {playerOptions && (
+          <JolaPlayer ref={playerRef} options={playerOptions} />
+        )}
 
         <div className='viewer-footer'>
           <div className='viewer-footer-dims'>
-            <span>Height {dimensions?.height ? `${Math.round(dimensions.height)}"` : '--'}</span>
-            <span>Width {dimensions?.width ? `${Math.round(dimensions.width)}"` : '--'}</span>
-            <span>Depth {dimensions?.depth ? `${Math.round(dimensions.depth)}"` : '--'}</span>
+            <span>
+              Height{" "}
+              {dimensions?.height ? `${Math.round(dimensions.height)}"` : "--"}
+            </span>
+            <span>
+              Width{" "}
+              {dimensions?.width ? `${Math.round(dimensions.width)}"` : "--"}
+            </span>
+            <span>
+              Depth{" "}
+              {dimensions?.depth ? `${Math.round(dimensions.depth)}"` : "--"}
+            </span>
           </div>
           <div className='viewer-footer-right'>
             {!isStaticFrame && (
-              <button className='viewer-clear-btn' onClick={() => setShowClearConfirm(true)}>
+              <button
+                className='viewer-clear-btn'
+                onClick={() => setShowClearConfirm(true)}
+              >
                 <svg width='14' height='14' viewBox='0 0 14 14' fill='none'>
-                  <path d='M1 3h12M5 3V2h4v1M2 3l1 9h8l1-9' stroke='currentColor' strokeWidth='1.2' strokeLinecap='round' strokeLinejoin='round' />
+                  <path
+                    d='M1 3h12M5 3V2h4v1M2 3l1 9h8l1-9'
+                    stroke='currentColor'
+                    strokeWidth='1.2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
                 </svg>
                 Clear Configuration
               </button>
             )}
             <span className='viewer-price'>
               {playerOptions?.frame?.price != null
-                ? `$${playerOptions.frame.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                : '$0.00'}
+                ? `$${playerOptions.frame.price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : "$0.00"}
             </span>
           </div>
         </div>
@@ -190,7 +228,7 @@ const Player = ({
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Player
+export default Player;

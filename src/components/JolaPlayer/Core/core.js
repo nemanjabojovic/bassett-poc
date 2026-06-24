@@ -3231,7 +3231,13 @@ export default class Core {
             (material) => material.name === element.material.name,
           );
 
+
+
           if (!material) {
+
+            if (element.material.name === 'Top' || element.material.name === 'Base') {
+              material = this.materials.find(material => material.name === 'main');
+            }
             //First check if it fallbacks on main material
             if (
               this.materialFallbacksOnMain(element.material.name) ||
