@@ -1802,12 +1802,7 @@ export default class Core {
         await this.loadAndConnectLegs(newModel);
       }
 
-      if (this.collection === "luxury-motion")
-        await this.assembleLuxuryMotionFrame(newModel, modelData);
 
-      if (!modelData.byoMapsPerModel) {
-        await this.insertExternalMaps(newModel, modelData);
-      }
 
       this.model.add(newModel);
 
@@ -3229,25 +3224,12 @@ export default class Core {
               }
             }
           }
-       
 
-   
-
-          //Assign baked maps to material normalMap/aoMap
-          let materialWithBake = this.materialWithBake(element.material.name);
-          if (
-            (materialWithBake && this.staticFrame) ||
-            (!this.staticFrame && materialWithBake && !draggedModel)
-          ) {
-            this.materialNamesInsideModelWithBake.push(element.material.name);
-          }
 
           // TODO: Forced _welt material to not fallback to found material ** Will be removed once getFallbackMaterial(materialName) global function is implemented for all materials
-          let material = element.material.name.includes("_welt")
-            ? false
-            : this.materials.find(
-              (material) => material.name === element.material.name,
-            );
+          let material = this.materials.find(
+            (material) => material.name === element.material.name,
+          );
 
           if (!material) {
             //First check if it fallbacks on main material
@@ -3361,101 +3343,31 @@ export default class Core {
               element.material.sheenColorMap = null;
               element.material.sheen = 0;
             }
-            //TODO: fix this condition WIP
-            if (
-              ((materialWithBake && this.staticFrame) ||
-                (!this.staticFrame && materialWithBake && !draggedModel)) &&
-              this.collection !== "loft-living" &&
-              this.collection !== "simply-me"
-            ) {
-              // SHADER PREP
-              element.material.userData.shaderMaps = {
-                map: undefined,
-                aoMap: undefined,
-                normalMap: undefined,
-              };
-              // PREP BASE COLOR MAP
-              if (element.material.map) {
-                element.material.map.userData.map = material.map;
-                element.material.userData.shaderMaps.map = material.map;
-              }
-              // NORMAL MAP
-              element.material.normalMap =
-                element.userData?.externalMaps?.[material.type.toLowerCase()]
-                  ?.normalMap || this.blankNormal;
-              // AO MAP
-              element.material.aoMap =
-                element.userData?.externalMaps?.[material.type.toLowerCase()]
-                  ?.aoMap || this.blankAO;
-              // PREP NORMAL MAP
-              if (element.material.normalMap) {
-                //override za unfinished materijale seat_cushion_unfinished gde normala od materijala(fabric/leather) nece biti prikazana samo bake od seat-a
-                if (
-                  element.material.name.includes("unfinished") &&
-                  this.brand.id === "BY"
-                ) {
-                  element.material.userData.shaderMaps.normalMap =
-                    this.blankNormal;
-                } else {
-                  element.material.userData.shaderMaps.normalMap =
-                    material.normalMap ? material.normalMap : this.blankNormal;
-                }
-              }
+
+            if (material.normalMap) {
+              element.material.normalMap = material.normalMap;
+
+              if (element.material.map)
+                element.material.normalMap.repeat =
+                  element.material.map.repeat;
             } else {
-              if (material.normalMap) {
-                element.material.normalMap = material.normalMap;
-
-                if (element.material.map)
-                  element.material.normalMap.repeat =
-                    element.material.map.repeat;
-              } else {
-                element.material.normalMap = this.blankNormal;
-              }
-
-              if (material.aoMap) {
-                element.material.aoMap = material.aoMap;
-
-                if (element.material.map)
-                  element.material.aoMap.repeat = element.material.map.repeat;
-                element.material.normalMap.channel = 0;
-              } else {
-                element.material.aoMap = this.blankAO;
-              }
-
-              if (material.color) {
-                element.material.color = material.color;
-              }
-              // BY collections exeption for seat_cushion_unfinished
-              if (
-                element.material.name === "seat_cushion_unfinished" &&
-                this.collectionMaps &&
-                this.brand.id === "BY"
-              ) {
-                element.material.normalMap = element.userData
-                  .collectionExclusion
-                  ? this.collectionMaps.customCushion[
-                    `${this.selectedMaterialType.toLowerCase()}`
-                  ].normalMap
-                  : this.collectionMaps.defaultCushion[
-                    `${this.selectedMaterialType.toLowerCase()}`
-                  ].normalMap;
-
-                element.material.normalMap.channel = 1;
-
-                element.material.aoMap = element.userData.collectionExclusion
-                  ? this.collectionMaps.customCushion[
-                    `${this.selectedMaterialType.toLowerCase()}`
-                  ].aoMap
-                  : this.collectionMaps.defaultCushion[
-                    `${this.selectedMaterialType.toLowerCase()}`
-                  ].aoMap;
-                element.material.aoMap.channel = 1;
-                element.material.roughnessMap = null;
-
-                element.material.userData.shaderMaps =
-                  this.blankExternalMaps.fabric;
-              }
+              element.material.normalMap = this.blankNormal;
             }
+
+            if (material.aoMap) {
+              element.material.aoMap = material.aoMap;
+
+              if (element.material.map)
+                element.material.aoMap.repeat = element.material.map.repeat;
+              element.material.normalMap.channel = 0;
+            } else {
+              element.material.aoMap = this.blankAO;
+            }
+
+            if (material.color) {
+              element.material.color = material.color;
+            }
+
           }
 
           if (this.materialFallbacksOnMain(element.material.name)) {
@@ -4786,165 +4698,6 @@ export default class Core {
     return false;
   }
 
-  materialWithBake(name) {
-    const primary = [
-      "arm",
-      "back_inside_cushion",
-      "back",
-      "front",
-      "wing",
-      "seat",
-      "throw_pillow",
-      "ottoman",
-      "headrest",
-      "console",
-      "main",
-      "extra_border",
-      "outwing",
-      "arm_panel",
-    ];
-
-    const secondary = [
-      "inside",
-      "outside",
-      "top",
-      "bottom",
-      "footrest",
-      "trim",
-      "cushion",
-    ];
-
-    const tertiary = [
-      "band",
-      "face",
-      "panel",
-      "sling",
-      "gimp",
-      "border",
-      "complete",
-    ];
-
-    if (tertiary.includes(name)) return false; // reject all other clean tertiary-only names
-
-    //  Try to find a matching primary (longest match)
-    const matchedPrimary = primary.find(
-      (p) => name === p || name.startsWith(p + "_"),
-    );
-    if (!matchedPrimary) return false;
-
-    // Strip matched primary from name
-    const rest = name.slice(matchedPrimary.length).replace(/^_/, "");
-    const parts = rest ? rest.split("_") : [];
-
-    // Match patterns
-    if (parts.length === 0) {
-      return true; // primary only
-    }
-
-    if (parts.length === 1) {
-      const [p1] = parts;
-      if (primary.includes(p1)) return true; // primary_primary
-      if (secondary.includes(p1)) return true; // primary_secondary
-      if (tertiary.includes(p1)) return true; // primary_tertiary
-      return false;
-    }
-
-    if (parts.length === 2) {
-      const [p1, p2] = parts;
-      if (secondary.includes(p1) && tertiary.includes(p2)) {
-        return true; // primary_secondary_tertiary
-      }
-      return false;
-    }
-
-    return false; // too many parts
-  }
-
-  removeAdditionalMaterials() {
-    let allAdditonalMaterials = this.getAllCombinations();
-
-    this.materials = this.materials.filter(
-      (m) => !allAdditonalMaterials.includes(m.name) || m.name === "unfinished",
-    );
-
-    this.updateTexture();
-  }
-
-  getAllCombinations() {
-    const primary = [
-      "back_pillows",
-      "front_pillows",
-      "throw_pillow",
-      "back_inside_cushion",
-      "arm",
-      "back",
-      "front",
-      "wing",
-      "seat",
-      "ottoman",
-      "headrest",
-      "console",
-      "extra_border",
-      "outwing",
-      "arm_panel",
-      "curtain",
-    ];
-    const secondary = [
-      "inside",
-      "outside",
-      "top",
-      "bottom",
-      "footrest",
-      "trim",
-      "cushion",
-    ];
-    const tertiary = [
-      "welt",
-      "welt_fixed",
-      "flange",
-      "button",
-      "unfinished",
-      "band",
-      "face",
-      "panel",
-      "sling",
-      "gimp",
-      "border",
-      "complete",
-    ];
-    const combinations = new Set();
-
-    // 1-part combinations
-    primary.forEach((p) => combinations.add(p));
-    secondary.forEach((s) => combinations.add(s));
-    tertiary.forEach((t) => combinations.add(t));
-
-    // 2-part combinations
-    primary.forEach((p) => {
-      secondary.forEach((s) => combinations.add(`${p}_${s}`));
-      tertiary.forEach((t) => combinations.add(`${p}_${t}`));
-    });
-    secondary.forEach((s) => {
-      tertiary.forEach((t) => combinations.add(`${s}_${t}`));
-    });
-
-    // 3-part combinations
-    primary.forEach((p) => {
-      secondary.forEach((s) => {
-        tertiary.forEach((t) => {
-          combinations.add(`${p}_${s}_${t}`);
-        });
-      });
-    });
-
-    return Array.from(combinations);
-  }
-
-  checkAnimationsInModels() {
-    if (this.animations && this.animations.length > 0) {
-      return true;
-    } else return false;
-  }
 
   async setSaturationShaderValues() {
     let fabric = null;

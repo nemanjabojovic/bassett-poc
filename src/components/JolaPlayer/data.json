@@ -96,7 +96,7 @@
       "brandId": "bassett",
       "textures": ["7219-28", "7229-10"],
       "pairing": {
-        "right": ["43L","38L"]
+        "right": ["43L", "38L"]
       },
       "price": 3000,
       "status": "Complete",
@@ -110,7 +110,7 @@
       "brandId": "bassett",
       "textures": ["7219-28", "7229-10"],
       "pairing": {
-        "left": ["41L","38L"]
+        "left": ["41L", "38L"]
       },
       "price": 3000,
       "status": "Complete",
@@ -211,7 +211,7 @@
       "sku": "7219-28",
       "name": "Sterling Cocoa",
       "map": "./resources/textures/leathers/7219-28/7219-28.webp",
-      "normalMap": "./resources/textures/leathers/7219-28/7219-28_normal.webp",
+      "normalMap": "./resources/textures/leathers/7219-28/7219-28_normal.jpg",
       "icon": "./resources/textures/leathers/7219-28/7219-28_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
