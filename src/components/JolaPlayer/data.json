@@ -13,7 +13,7 @@
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Panel",
-        "icon": "./resources/icons/bradington-young/sectional-seating-by-design/220.jpg",
+        "icon": "./resources/icons/arm_selection.png",
         "status": "Complete"
       },
       {
@@ -21,7 +21,7 @@
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Slope",
-        "icon": "./resources/icons/bradington-young/sectional-seating-by-design/220.jpg",
+        "icon": "./resources/icons/arm_selection.png",
         "status": "Complete"
       },
       {
@@ -29,7 +29,7 @@
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Sock",
-        "icon": "./resources/icons/bradington-young/sectional-seating-by-design/220.jpg",
+        "icon": "./resources/icons/arm_selection.png",
         "status": "Complete"
       }
     ]

@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import data from './JolaPlayer/data.json'
+import armSelectionImg from '../assets/icons/arm_selection.png'
 
-const ClearConfirmModal = ({ onConfirm, onCancel }) => (
+const CloseConfirmModal = ({ onConfirm, onCancel }) => (
   <div className='modal-overlay'>
     <div className='modal'>
       <button className='modal-dismiss' onClick={onCancel}>&#10005;</button>
-      <p className='modal-title'>Are you sure you want to clear the configuration you&apos;ve made?</p>
-      <p className='modal-subtitle'>Once you start over, you&apos;ll lose all progress you&apos;ve made in your configuration.</p>
+      <p className='modal-title'>Are you sure you want to close the configurator?</p>
+      <p className='modal-subtitle'>We will return you to the previous screen</p>
       <div className='modal-actions'>
-        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Start Over</button>
-        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue with the Current Build</button>
+        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Close</button>
+        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue Building</button>
       </div>
     </div>
   </div>
@@ -18,28 +19,38 @@ const ClearConfirmModal = ({ onConfirm, onCancel }) => (
 const ChevronIcon = ({ open }) => (
   <svg
     width='16' height='16' viewBox='0 0 16 16' fill='none'
-    style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+    style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0 }}
   >
     <path d='M3 6l5 5 5-5' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
   </svg>
 )
 
-const SectionRow = ({ label, children }) => {
-  const [open, setOpen] = useState(false)
-  return (
-    <div className='config-section'>
-      <button className='config-section-header' onClick={() => setOpen(v => !v)}>
-        <span className='config-section-label'>{label}</span>
-        <ChevronIcon open={open} />
-      </button>
-      {open && <div className='config-section-content'>{children}</div>}
+const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => (
+  <button className='config-section-header' onClick={onClick}>
+    <span className='config-section-label'>{label}</span>
+    <div className='config-section-header-meta'>
+      {selectedIcon && (
+        <img src={selectedIcon} alt='' className='config-section-header-icon' />
+      )}
+      {selectedName && (
+        <span className='config-section-selected-text'>{selectedName}</span>
+      )}
+      <ChevronIcon open={open} />
     </div>
-  )
-}
+  </button>
+)
 
 const SectionalPanel = ({ sku, frame, onClose }) => {
   const [layoutOpen, setLayoutOpen] = useState(true)
+  const [armOpen, setArmOpen] = useState(false)
+  const [tallBackOpen, setTallBackOpen] = useState(false)
+  const [coverOpen, setCoverOpen] = useState(false)
+  const [cushionOpen, setCushionOpen] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+
+  const [selectedLayout, setSelectedLayout] = useState(null)
+  const [selectedArm, setSelectedArm] = useState(null)
+  const [tallBack, setTallBack] = useState(null)
 
   const frameName = frame?.name || sku || ''
 
@@ -51,10 +62,13 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
     a => a.collection === 'bassett'
   ) || []
 
+  const defaultArm = armTypes[0]
+  const activeArm = armTypes.find(a => a.name === selectedArm) || defaultArm
+
   return (
     <aside className='config-panel'>
       {showConfirm && (
-        <ClearConfirmModal
+        <CloseConfirmModal
           onConfirm={onClose}
           onCancel={() => setShowConfirm(false)}
         />
@@ -69,14 +83,12 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
 
       <div className='config-panel-body'>
         <div className='config-section'>
-          <button
-            className='config-section-header'
+          <SectionHeader
+            label='Select a Layout'
+            selectedName={selectedLayout?.name || null}
+            open={layoutOpen}
             onClick={() => setLayoutOpen(v => !v)}
-          >
-            <span className='config-section-label'>Select a Layout</span>
-            <ChevronIcon open={layoutOpen} />
-          </button>
-
+          />
           {layoutOpen && (
             <div className='config-section-content'>
               <div className='config-layout-grid'>
@@ -85,7 +97,11 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
                   <p>Start a New Build</p>
                 </div>
                 {popularConfigs.map((pc, i) => (
-                  <div key={i} className='config-layout-item'>
+                  <div
+                    key={i}
+                    className={`config-layout-item${selectedLayout?.name === pc.name ? ' config-layout-item--selected' : ''}`}
+                    onClick={() => setSelectedLayout(pc)}
+                  >
                     <div className='config-layout-thumb' />
                     <p>{pc.name}</p>
                   </div>
@@ -95,28 +111,84 @@ const SectionalPanel = ({ sku, frame, onClose }) => {
           )}
         </div>
 
-        <SectionRow label='Arm Options'>
-          <div className='config-option-list'>
-            {armTypes.map((arm, i) => (
-              <div key={i} className='config-option-item'>{arm.name}</div>
-            ))}
-          </div>
-        </SectionRow>
+        <div className='config-section'>
+          <SectionHeader
+            label='Arm Options'
+            selectedName={activeArm?.name?.replace(/_/g, ' ') || null}
+            selectedIcon={activeArm ? armSelectionImg : null}
+            open={armOpen}
+            onClick={() => setArmOpen(v => !v)}
+          />
+          {armOpen && (
+            <div className='config-section-content'>
+              <div className='config-arm-grid'>
+                {armTypes.map((arm, i) => {
+                  const isSelected = selectedArm ? selectedArm === arm.name : i === 0
+                  return (
+                    <div
+                      key={i}
+                      className={`config-arm-item${isSelected ? ' config-arm-item--selected' : ''}`}
+                      onClick={() => setSelectedArm(arm.name)}
+                    >
+                      <img src={armSelectionImg} alt={arm.name} />
+                      <span>{arm.name.replace(/_/g, ' ')}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
 
-        <SectionRow label='Tall Back'>
-          <div className='config-option-list'>
-            <div className='config-option-item'>Yes</div>
-            <div className='config-option-item'>No</div>
-          </div>
-        </SectionRow>
+        <div className='config-section'>
+          <SectionHeader
+            label='Tall Back'
+            selectedName={tallBack || 'Yes'}
+            open={tallBackOpen}
+            onClick={() => setTallBackOpen(v => !v)}
+          />
+          {tallBackOpen && (
+            <div className='config-section-content'>
+              <div className='config-arm-grid'>
+                {['Yes', 'No'].map((opt, i) => (
+                  <div
+                    key={i}
+                    className={`config-arm-item${(tallBack || 'Yes') === opt ? ' config-arm-item--selected' : ''}`}
+                    onClick={() => setTallBack(opt)}
+                  >
+                    <span className='config-arm-text-only'>{opt}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
-        <SectionRow label='Cover Options'>
-          <p className='config-empty'>Cover options coming soon</p>
-        </SectionRow>
+        <div className='config-section'>
+          <SectionHeader
+            label='Cover Options'
+            open={coverOpen}
+            onClick={() => setCoverOpen(v => !v)}
+          />
+          {coverOpen && (
+            <div className='config-section-content'>
+              <p className='config-empty'>Cover options coming soon</p>
+            </div>
+          )}
+        </div>
 
-        <SectionRow label='Cushion Options'>
-          <p className='config-empty'>Cushion options coming soon</p>
-        </SectionRow>
+        <div className='config-section'>
+          <SectionHeader
+            label='Cushion Options'
+            open={cushionOpen}
+            onClick={() => setCushionOpen(v => !v)}
+          />
+          {cushionOpen && (
+            <div className='config-section-content'>
+              <p className='config-empty'>Cushion options coming soon</p>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className='config-panel-footer'>

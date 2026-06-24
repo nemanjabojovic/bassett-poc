@@ -8,6 +8,20 @@ import SectionalPanel from '../components/SectionalPanel'
 import JolaIcon from '../assets/icons/jolaLogo.svg'
 import AdditionalOptions from '../components/AdditionalOptions'
 
+const ClearConfirmModal = ({ onConfirm, onCancel }) => (
+  <div className='modal-overlay'>
+    <div className='modal'>
+      <button className='modal-dismiss' onClick={onCancel}>&#10005;</button>
+      <p className='modal-title'>Are you sure you want to clear the configuration you&apos;ve made?</p>
+      <p className='modal-subtitle'>Once you start over, you&apos;ll lose all progress you&apos;ve made in your configuration.</p>
+      <div className='modal-actions'>
+        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Start Over</button>
+        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue with the Current Build</button>
+      </div>
+    </div>
+  </div>
+)
+
 const Player = ({
   activePlayer,
   setPlayerInstance,
@@ -32,6 +46,7 @@ const Player = ({
   const [playerOptions, setPlayerOptions] = useState(null)
   const [configurationToLoad, setConfigurationToLoad] = useState(null)
   const [searchParams] = useSearchParams()
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   useEffect(() => {
     const paramsObject = {}
@@ -90,8 +105,19 @@ const Player = ({
   const isStaticFrame = brandInstanceConfiguratorType?.name === 'Static'
   const currentSku = searchParams.get('model') || skuToLoad
 
+  const handleClearConfirm = () => {
+    window.player?.clearConfiguration()
+    setShowClearConfirm(false)
+  }
+
   return (
     <div className='configurator-view'>
+      {showClearConfirm && (
+        <ClearConfirmModal
+          onConfirm={handleClearConfirm}
+          onCancel={() => setShowClearConfirm(false)}
+        />
+      )}
       <div className='viewer-area'>
         <div id='loading-screen' className='flex-column'>
           <div aria-busy='true' id='loading-screen-img'>
@@ -125,7 +151,7 @@ const Player = ({
             <span>Depth {playerOptions?.frame?.depth || '--'}</span>
           </div>
           <div className='viewer-footer-right'>
-            <button className='viewer-clear-btn'>
+            <button className='viewer-clear-btn' onClick={() => setShowClearConfirm(true)}>
               <svg width='14' height='14' viewBox='0 0 14 14' fill='none'>
                 <path d='M1 3h12M5 3V2h4v1M2 3l1 9h8l1-9' stroke='currentColor' strokeWidth='1.2' strokeLinecap='round' strokeLinejoin='round' />
               </svg>

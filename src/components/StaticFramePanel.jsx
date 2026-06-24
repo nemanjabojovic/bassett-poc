@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import data from './JolaPlayer/data.json'
 
-const ClearConfirmModal = ({ onConfirm, onCancel }) => (
+const CloseConfirmModal = ({ onConfirm, onCancel }) => (
   <div className='modal-overlay'>
     <div className='modal'>
       <button className='modal-dismiss' onClick={onCancel}>&#10005;</button>
-      <p className='modal-title'>Are you sure you want to clear the configuration you&apos;ve made?</p>
-      <p className='modal-subtitle'>Once you start over, you&apos;ll lose all progress you&apos;ve made in your configuration.</p>
+      <p className='modal-title'>Are you sure you want to close the configurator?</p>
+      <p className='modal-subtitle'>We will return you to the previous screen</p>
       <div className='modal-actions'>
-        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Start Over</button>
-        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue with the Current Build</button>
+        <button className='modal-confirm-btn' onClick={onConfirm}>Yes, Close</button>
+        <button className='modal-cancel-btn' onClick={onCancel}>No, Continue Building</button>
       </div>
     </div>
   </div>
@@ -18,34 +18,69 @@ const ClearConfirmModal = ({ onConfirm, onCancel }) => (
 const ChevronIcon = ({ open }) => (
   <svg
     width='16' height='16' viewBox='0 0 16 16' fill='none'
-    style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+    style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0 }}
   >
     <path d='M3 6l5 5 5-5' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
   </svg>
 )
 
-const SwatchSection = ({ label, items, search, onSearch, searchPlaceholder }) => {
-  const [open, setOpen] = useState(true)
+const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => (
+  <button className='config-section-header' onClick={onClick}>
+    <span className='config-section-label'>{label}</span>
+    <div className='config-section-header-meta'>
+      {selectedIcon && (
+        <div
+          className='config-section-header-swatch'
+          style={{ backgroundImage: `url(${selectedIcon})` }}
+        />
+      )}
+      {selectedName && (
+        <span className='config-section-selected-text'>{selectedName}</span>
+      )}
+      <ChevronIcon open={open} />
+    </div>
+  </button>
+)
+
+const SwatchSection = ({ label, items, defaultOpen }) => {
+  const [open, setOpen] = useState(defaultOpen || false)
+  const [search, setSearch] = useState('')
+  const [selected, setSelected] = useState(items[0] || null)
+
   const filtered = items.filter(f =>
     !search || f.name.toLowerCase().includes(search.toLowerCase()) || f.sku.toLowerCase().includes(search.toLowerCase())
   )
+
   return (
     <div className='config-section'>
-      <button className='config-section-header' onClick={() => setOpen(v => !v)}>
-        <span className='config-section-label'>{label}</span>
-        <ChevronIcon open={open} />
-      </button>
+      <SectionHeader
+        label={label}
+        selectedName={selected?.name}
+        selectedIcon={selected?.icon || null}
+        open={open}
+        onClick={() => setOpen(v => !v)}
+      />
       {open && (
         <div className='config-section-content'>
-          <input
-            className='config-search'
-            placeholder={searchPlaceholder}
-            value={search}
-            onChange={e => onSearch(e.target.value)}
-          />
+          <div className='config-search-wrapper'>
+            <svg width='14' height='14' viewBox='0 0 16 16' fill='none' className='config-search-icon'>
+              <circle cx='7' cy='7' r='5.5' stroke='#71757b' strokeWidth='1.5' />
+              <path d='M11 11l3 3' stroke='#71757b' strokeWidth='1.5' strokeLinecap='round' />
+            </svg>
+            <input
+              className='config-search'
+              placeholder={`Search ${label}`}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
           <div className='config-swatch-grid'>
             {filtered.length > 0 ? filtered.map((item, i) => (
-              <div key={i} className='config-swatch'>
+              <div
+                key={i}
+                className={`config-swatch${selected?.sku === item.sku ? ' config-swatch--selected' : ''}`}
+                onClick={() => setSelected(item)}
+              >
                 <div
                   className='config-swatch-img'
                   style={{ backgroundImage: item.icon ? `url(${item.icon})` : 'none' }}
@@ -62,20 +97,31 @@ const SwatchSection = ({ label, items, search, onSearch, searchPlaceholder }) =>
   )
 }
 
-const DropdownSection = ({ label, options }) => {
+const DropdownSection = ({ label, options, icons }) => {
   const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(options[0] || null)
+
   return (
     <div className='config-section'>
-      <button className='config-section-header' onClick={() => setOpen(v => !v)}>
-        <span className='config-section-label'>{label}</span>
-        <ChevronIcon open={open} />
-      </button>
+      <SectionHeader
+        label={label}
+        selectedName={selected}
+        selectedIcon={icons?.[selected] || null}
+        open={open}
+        onClick={() => setOpen(v => !v)}
+      />
       {open && (
         <div className='config-section-content'>
           {options.length > 0 ? (
             <div className='config-option-list'>
               {options.map((opt, i) => (
-                <div key={i} className='config-option-item'>{opt}</div>
+                <div
+                  key={i}
+                  className={`config-option-item${selected === opt ? ' config-option-item--selected' : ''}`}
+                  onClick={() => setSelected(opt)}
+                >
+                  {opt}
+                </div>
               ))}
             </div>
           ) : (
@@ -88,7 +134,6 @@ const DropdownSection = ({ label, options }) => {
 }
 
 const FabricBody = ({ frame }) => {
-  const [search, setSearch] = useState('')
   const allOptions = [...(data.fabrics || []), ...(data.leathers || [])]
   const frameOptions = frame?.textures
     ? allOptions.filter(f => frame.textures.includes(f.sku))
@@ -96,39 +141,19 @@ const FabricBody = ({ frame }) => {
 
   return (
     <>
-      <SwatchSection
-        label='Fabric Options'
-        items={frameOptions}
-        search={search}
-        onSearch={setSearch}
-        searchPlaceholder='Search Fabrics'
-      />
+      <SwatchSection label='Fabric Options' items={frameOptions} defaultOpen={true} />
       <DropdownSection label='Cushion Options' options={[]} />
     </>
   )
 }
 
 const TableBody = ({ frame }) => {
-  const [topSearch, setTopSearch] = useState('')
-  const [baseSearch, setBaseSearch] = useState('')
   const finishes = (frame?.textures || []).map(t => ({ sku: t, name: t, icon: null }))
 
   return (
     <>
-      <SwatchSection
-        label='Top Finish'
-        items={finishes}
-        search={topSearch}
-        onSearch={setTopSearch}
-        searchPlaceholder='Search Finishes'
-      />
-      <SwatchSection
-        label='Base Finish'
-        items={finishes}
-        search={baseSearch}
-        onSearch={setBaseSearch}
-        searchPlaceholder='Search Finishes'
-      />
+      <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} />
+      <SwatchSection label='Base Finish' items={finishes} />
       <DropdownSection label='Edge Profiles' options={['Classic', 'Eased', 'Bevel']} />
     </>
   )
@@ -142,7 +167,7 @@ const StaticFramePanel = ({ sku, frame, onClose }) => {
   return (
     <aside className='config-panel'>
       {showConfirm && (
-        <ClearConfirmModal
+        <CloseConfirmModal
           onConfirm={onClose}
           onCancel={() => setShowConfirm(false)}
         />

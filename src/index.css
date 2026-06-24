@@ -141,7 +141,7 @@ code {
   left: 0;
   right: 0;
   background: transparent;
-  transform: translateY(calc(100% - 50px));
+  transform: translateY(calc(100% - 48px));
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
 }
@@ -1111,6 +1111,23 @@ canvas {
   align-items: center;
 }
 
+.additional-options-toggle {
+  border: none;
+  background: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #71757b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.additional-options-toggle:hover {
+  color: #333;
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .additional-options-buttons {
   border: none;
   background-color: white;
@@ -1997,7 +2014,7 @@ canvas {
 /* Config panel */
 
 .config-panel {
-  width: 300px;
+  width: 540px;
   flex-shrink: 0;
   background: white;
   display: flex;
@@ -2054,10 +2071,15 @@ canvas {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #e5e7eb transparent;
+  background: white;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .config-section {
-  border-bottom: 1px solid #e5e7eb;
+  /* container only */
 }
 
 .config-section-header {
@@ -2065,42 +2087,93 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
-  background: none;
+  padding: 14px 18px;
+  background: #f0f1f3;
   border: none;
+  border-radius: 12px;
   cursor: pointer;
   text-align: left;
+  box-sizing: border-box;
+  transition: background 0.15s;
 }
 
 .config-section-header:hover {
-  background: #f9f9f9;
+  background: #e8e9ec;
 }
 
 .config-section-label {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: #333;
+  flex: 1;
+}
+
+.config-section-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #71757b;
+}
+
+.config-section-header-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  opacity: 0.75;
+}
+
+.config-section-header-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+  background-color: #ddd;
+  flex-shrink: 0;
+}
+
+.config-section-selected-text {
+  font-size: 13px;
+  color: #71757b;
 }
 
 .config-section-content {
-  padding: 0 16px 14px;
+  padding: 12px 4px 4px;
+}
+
+.config-search-wrapper {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.config-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .config-search {
   width: 100%;
   box-sizing: border-box;
-  padding: 8px 12px;
+  padding: 10px 12px 10px 34px;
   border: 1px solid #e5e7eb;
-  border-radius: 6px;
+  border-radius: 20px;
   font-family: 'Soleil', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #333;
-  margin-bottom: 12px;
   outline: none;
+  background: white;
+}
+
+.config-search::placeholder {
+  color: #aaa;
 }
 
 .config-search:focus {
-  border-color: #333;
+  border-color: #999;
 }
 
 .config-swatch-grid {
@@ -2123,12 +2196,13 @@ canvas {
   background-color: #e5e7eb;
   background-size: cover;
   background-position: center;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 2px solid transparent;
   transition: border-color 0.15s;
 }
 
-.config-swatch:hover .config-swatch-img {
+.config-swatch:hover .config-swatch-img,
+.config-swatch--selected .config-swatch-img {
   border-color: #333;
 }
 
@@ -2190,6 +2264,55 @@ canvas {
   aspect-ratio: 1;
   background: #e5e7eb;
   border-radius: 4px;
+}
+
+/* Arm / option image blocks */
+
+.config-arm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.config-arm-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s;
+  background: white;
+}
+
+.config-arm-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.config-arm-item span {
+  font-size: 11px;
+  color: #333;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.config-arm-text-only {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 12px 0;
+}
+
+.config-arm-item--selected {
+  border-color: #333;
+}
+
+.config-arm-item:hover {
+  border-color: #999;
 }
 
 /* Option list (arm types etc.) */
@@ -2264,7 +2387,7 @@ canvas {
   flex: 1;
   padding: 11px 0;
   background: white;
-  border: 1px solid #333;
+  border: 1px solid rgba(225, 225, 225, 1);
   border-radius: 6px;
   font-family: 'Soleil', sans-serif;
   font-size: 12px;
@@ -2325,13 +2448,16 @@ canvas {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: none;
-  border: none;
+  background: white;
+  border-radius: 40px;
+  padding: 6px 16px 6px 12px;
   font-family: 'Soleil', sans-serif;
   font-size: 12px;
-  color: #71757b;
+  font-weight: 400;
+  color: #333;
   cursor: pointer;
-  letter-spacing: 0.3px;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .viewer-clear-btn:hover {
@@ -2361,7 +2487,7 @@ canvas {
   background: white;
   border-radius: 16px;
   padding: 40px 36px 32px;
-  max-width: 480px;
+  max-width: 672px;
   width: 90%;
   position: relative;
   text-align: center;
@@ -2384,38 +2510,48 @@ canvas {
 }
 
 .modal-title {
-  font-size: 18px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 24px;
   font-weight: 600;
   color: #333;
-  line-height: 1.35;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
   margin-bottom: 12px;
 }
 
 .modal-subtitle {
-  font-size: 13px;
+  font-family: 'Soleil', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
   color: #71757b;
-  line-height: 1.5;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
   margin-bottom: 28px;
 }
 
 .modal-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 }
 
 .modal-confirm-btn {
+  flex: 1;
   padding: 14px;
   background: #333;
   color: white;
   border: none;
   border-radius: 8px;
   font-family: 'Soleil', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
   cursor: pointer;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .modal-confirm-btn:hover {
@@ -2423,15 +2559,20 @@ canvas {
 }
 
 .modal-cancel-btn {
+  flex: 1;
   padding: 14px;
   background: white;
   color: #333;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   font-family: 'Soleil', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
   cursor: pointer;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .modal-cancel-btn:hover {

@@ -8,8 +8,9 @@ import zoomIn from "../assets/icons/zoomIn.svg";
 import camera from "../assets/icons/camera.svg";
 import animationsIcon from "../assets/icons/animations.svg";
 import dimensions from "../assets/icons/dimensions.svg";
+import additionalOptionsIcon from "../assets/icons/additionalOptions.svg";
 
-const AdditionalOptions = () => {
+const AdditionalOptions = ({ isOpenAdditionalOption, setIsOpenAdditionalOption }) => {
   const [animationsAvailable, setAnimationsAvailable] = useState(false);
 
   const handleDefaultView = () => {
@@ -98,22 +99,32 @@ const AdditionalOptions = () => {
 
   return (
     <div className='additional-options-closed'>
-      {icons.map((item, index) => (
-        <div key={index} className={`tooltip-container ${item.classTitle}`}>
-          <Button
-            icon={<img src={item.icon} alt={item.title} />}
-            className='additional-options-buttons'
-            onClick={item.onClick}
-          />
-          <span className='tooltip-text'>{item.title}</span>
-        </div>
-      ))}
-      {animationsAvailable && (
-        <Button
-          icon={<img src={animationsIcon} alt='Animation' />}
-          className='additional-options-buttons'
-          onClick={handleAnimationToggle}
-        />
+      <button
+        className='additional-options-toggle'
+        onClick={() => setIsOpenAdditionalOption(!isOpenAdditionalOption)}
+      >
+        <img src={additionalOptionsIcon} alt='Toggle options' />
+      </button>
+      {isOpenAdditionalOption && (
+        <>
+          {icons.map((item, index) => (
+            <div key={index} className={`tooltip-container ${item.classTitle}`}>
+              <Button
+                icon={<img src={item.icon} alt={item.title} />}
+                className='additional-options-buttons'
+                onClick={item.onClick}
+              />
+              <span className='tooltip-text'>{item.title}</span>
+            </div>
+          ))}
+          {animationsAvailable && (
+            <Button
+              icon={<img src={animationsIcon} alt='Animation' />}
+              className='additional-options-buttons'
+              onClick={handleAnimationToggle}
+            />
+          )}
+        </>
       )}
     </div>
   );
