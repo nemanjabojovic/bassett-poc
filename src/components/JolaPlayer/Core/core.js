@@ -232,17 +232,7 @@ export default class Core {
 
     this.collectionMaps = null;
 
-    // NAILS //
-    this.loadedNails = [];
-    this.nailsVisible = true;
-    this.nailSizes = {};
-    this.nailDistances = {};
-    this.nailSpacing = false;
-    this.nailPresets = options.data.nailPresets;
-    this.defaultNailSize = this.nailPresets[0];
-    this.nailColors = options.data.nailColors;
-    this.defaultNailColor = this.nailColors[0];
-    this.nailColor = this.defaultNailColor;
+  
     this.WELT_OPTIONS = WELT_OPTIONS;
     this.WELT_AREAS = WELT_AREAS;
 
@@ -1925,6 +1915,7 @@ export default class Core {
 
           // TODO: "result.animations?.length > 0" is for development, should be removed in the future
           if (model.animatedModel || result.animations?.length > 0) {
+            console.log('nasao anim')
             result.animations.forEach((animation) => {
               let anim = this.mixer.clipAction(animation, result.scene);
               anim.clampWhenFinished = true;
@@ -2050,18 +2041,6 @@ export default class Core {
       }
     }
 
-    this.selectedNailOptionStandard =
-      this.selectedNailOptions?.nailOptionStandard ||
-      this.selectedFrame?.nails?.defaultStandardNail;
-    this.selectedNailOptionStandard2 =
-      this.selectedNailOptions?.nailOptionStandard2 ||
-      this.selectedFrame?.nails?.defaultStandardNail2;
-
-    await this.setNailColor(
-      this.selectedNailOptions?.nailColor ||
-        this.selectedFrame?.nails?.defaultNailFinish ||
-        this.defaultNailColor.id,
-    );
 
     if (this.selectedArmType?.nails) {
       window.dispatchEvent(new Event("nailsAvailable"));
@@ -2443,20 +2422,8 @@ export default class Core {
       const index = this.modelConfiguration.elements.indexOf(element);
       let newModel = models[index].scene;
 
-      // if (this.loadMapPerModelCollection) {
-      //   await this.loadModelMaps(modelData, newModel);
-      // } else if (modelData.byoMapsPerModel) {
-      //   await this.loadModelMaps(modelData, newModel, true);
-      // }
 
-      if (modelData.arm) {
-        // Fallback if no armType is selected
-        if (!this.selectedArmType) {
-          this.selectedArmType = this.collectionOptions.armTypes[0];
-        }
 
-        await this.loadArm(newModel, modelData);
-      }
 
       newModel.userData.model = modelData;
 
@@ -3042,117 +3009,7 @@ export default class Core {
     await this.loadFabric(materialObj, lowDashedMaterialName.toLowerCase());
   }
 
-  async loadModelMaps(modelData, model, byoModelExeptions = false) {
-    this.uploadedModelMapsSku = modelData.sku;
-    let batchFolderName = `${this.brand.modelPath}/static-frames/`;
-    let mapFolderLocation =
-      this.loadMapPerModelCollection || byoModelExeptions
-        ? `${this.resourcesPath}/models/${this.brand.modelPath}/${
-            this.collection
-          }/custom-maps/${modelData.sku}/`
-        : `${this.resourcesPath}/models/${batchFolderName}/batch-${
-            modelData.batchNumber
-          }/${modelData.sku}/`;
 
-    if (batchFolderName) {
-      let loadedMaps = await this.loadObjectMappedTextures({
-        fabric: {
-          normalMap: `${mapFolderLocation}${modelData.sku}_FABRIC_Normal.jpg`,
-          aoMap: `${mapFolderLocation}${modelData.sku}_FABRIC_AO.jpg`,
-        },
-        leather: {
-          normalMap: `${mapFolderLocation}${modelData.sku}_LEATHER_Normal.jpg`,
-          aoMap: `${mapFolderLocation}${modelData.sku}_LEATHER_AO.jpg`,
-        },
-      });
-
-      model.traverse((child) => {
-        if (child.material && this.materialWithBake(child.material.name)) {
-          child.material.normalMap =
-            this.selectedMaterialType.toLowerCase() === "fabric"
-              ? loadedMaps.fabric.normalMap
-              : loadedMaps.leather.normalMap;
-          child.material.normalMap =
-            this.selectedMaterialType.toLowerCase() === "fabric"
-              ? loadedMaps.fabric.aoMap
-              : loadedMaps.leather.aoMap;
-          child.userData.externalMaps = loadedMaps;
-        }
-      });
-
-      this.modelExternalLoadedMaps = loadedMaps;
-    }
-
-    if (this.brand.id === "SSW") {
-      let model = this.data.frames.find(
-        (model) => model.brandId === "SSW" && model.sku === modelData.sku,
-      );
-
-      await this.loadMapsPerModelSSW(model.collectionName);
-    }
-  }
-
-  async assembleLuxuryMotionFrame(newModel, modelData) {
-    if (modelData.sku === "09" || modelData.sku === "07") return;
-    let backCushionFileName;
-    let frontFileName;
-
-    switch (this.selectedArmType.sku) {
-      case "949":
-      case "950":
-        backCushionFileName = "-back-cushion-949-950-960";
-        frontFileName = "-front-949-950";
-        break;
-
-      case "960":
-        backCushionFileName = "-back-cushion-949-950-960";
-        frontFileName = "-front-960-962";
-        break;
-
-      case "962":
-        backCushionFileName = "-back-cushion-962";
-        frontFileName = "-front-960-962";
-        break;
-
-      case "916":
-        backCushionFileName = "-back-cushion-916-920-968";
-        frontFileName = "-front-916";
-        break;
-
-      case "920":
-        backCushionFileName = "-back-cushion-916-920-968";
-        frontFileName = "-front-920-968";
-        break;
-
-      case "968":
-        backCushionFileName = "-back-cushion-916-920-968";
-        frontFileName = "-front-920-968";
-        break;
-
-      case "951":
-        backCushionFileName = "-back-cushion-951";
-        frontFileName = "-front-951";
-        break;
-
-      default:
-        console.error("Unknown SKU:", this.selectedArmType.sku);
-        return null;
-    }
-
-    let backCushionUrl = `${this.resourcesPath}/models/${
-      this.brand.modelPath
-    }/${this.collection}/back-cushions/frame-${
-      modelData.sku
-    }${backCushionFileName}.gltf`;
-    let frontUrl = `${this.resourcesPath}/models/${this.brand.modelPath}/${
-      this.collection
-    }/fronts/frame-${modelData.sku}${frontFileName}.gltf`;
-
-    let backCushion = (await this.loadObject(backCushionUrl)).scene;
-    let front = (await this.loadObject(frontUrl)).scene;
-
-    newModel.add(backCushion, front);
-  }
 
   // SET DEFAULT ADDITIONAL OPTIONS FOR COLLECTION
   setDefaultCollectionOptions(collection, brandId) {

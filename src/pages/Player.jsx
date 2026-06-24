@@ -157,7 +157,11 @@ const Player = ({
               </svg>
               Clear Configuration
             </button>
-            <span className='viewer-price'>$0.00</span>
+            <span className='viewer-price'>
+              {playerOptions?.frame?.price != null
+                ? `$${playerOptions.frame.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : '$0.00'}
+            </span>
           </div>
         </div>
       </div>

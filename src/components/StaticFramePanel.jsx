@@ -42,20 +42,20 @@ const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => 
   </button>
 )
 
-const SwatchSection = ({ label, items, defaultOpen }) => {
+const SwatchSection = ({ label, items, defaultOpen, onSelect, materialName }) => {
   const [open, setOpen] = useState(defaultOpen || false)
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState(items[0] || null)
 
   const filtered = items.filter(f =>
-    !search || f.name.toLowerCase().includes(search.toLowerCase()) || f.sku.toLowerCase().includes(search.toLowerCase())
+    !search || f.sku.toLowerCase().includes(search.toLowerCase())
   )
 
   return (
     <div className='config-section'>
       <SectionHeader
         label={label}
-        selectedName={selected?.name}
+        selectedName={selected?.name || selected?.sku || null}
         selectedIcon={selected?.icon || null}
         open={open}
         onClick={() => setOpen(v => !v)}
@@ -79,13 +79,19 @@ const SwatchSection = ({ label, items, defaultOpen }) => {
               <div
                 key={i}
                 className={`config-swatch${selected?.sku === item.sku ? ' config-swatch--selected' : ''}`}
-                onClick={() => setSelected(item)}
+                onClick={() => {
+                  setSelected(item)
+                  if (onSelect) onSelect(item, materialName)
+                }}
               >
                 <div
                   className='config-swatch-img'
                   style={{ backgroundImage: item.icon ? `url(${item.icon})` : 'none' }}
                 />
-                <span className='config-swatch-name'>{item.name}</span>
+                <span className='config-swatch-name'>
+                  <span className='config-swatch-sku'>{item.sku}</span>
+                  {item.name && <span className='config-swatch-label'>{item.name}</span>}
+                </span>
               </div>
             )) : (
               <p className='config-empty'>No results</p>
@@ -133,27 +139,43 @@ const DropdownSection = ({ label, options, icons }) => {
   )
 }
 
+const allTextures = [
+  ...(data.fabrics || []),
+  ...(data.leathers || []),
+  ...(data.woods || [])
+]
+
+const resolveTextures = (skus) =>
+  skus ? allTextures.filter(t => skus.includes(t.sku)) : allTextures
+
+const handleTextureSelect = (item, materialName) => {
+  window.player?.loadFabric(item, materialName, true)
+}
+
 const FabricBody = ({ frame }) => {
-  const allOptions = [...(data.fabrics || []), ...(data.leathers || [])]
-  const frameOptions = frame?.textures
-    ? allOptions.filter(f => frame.textures.includes(f.sku))
-    : allOptions
+  const frameOptions = resolveTextures(frame?.textures)
 
   return (
     <>
-      <SwatchSection label='Fabric Options' items={frameOptions} defaultOpen={true} />
+      <SwatchSection
+        label='Fabric Options'
+        items={frameOptions}
+        defaultOpen={true}
+        onSelect={handleTextureSelect}
+        materialName='main'
+      />
       <DropdownSection label='Cushion Options' options={[]} />
     </>
   )
 }
 
 const TableBody = ({ frame }) => {
-  const finishes = (frame?.textures || []).map(t => ({ sku: t, name: t, icon: null }))
+  const finishes = resolveTextures(frame?.textures)
 
   return (
     <>
-      <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} />
-      <SwatchSection label='Base Finish' items={finishes} />
+      <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} onSelect={handleTextureSelect} materialName='Top' />
+      <SwatchSection label='Base Finish' items={finishes} onSelect={handleTextureSelect} materialName='Base' />
       <DropdownSection label='Edge Profiles' options={['Classic', 'Eased', 'Bevel']} />
     </>
   )

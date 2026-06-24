@@ -44,7 +44,7 @@ const FEATURED_PRODUCTS = [
     staticFrame: true,
     byo: false,
     conftype: 'Static',
-    sku: '2848-Q2_Z4',
+    sku: '2848-Q2',
     collection: null,
   },
 ]

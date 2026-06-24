@@ -117,14 +117,14 @@ const AdditionalOptions = ({ isOpenAdditionalOption, setIsOpenAdditionalOption }
               <span className='tooltip-text'>{item.title}</span>
             </div>
           ))}
-          {animationsAvailable && (
-            <Button
-              icon={<img src={animationsIcon} alt='Animation' />}
-              className='additional-options-buttons'
-              onClick={handleAnimationToggle}
-            />
-          )}
         </>
+      )}
+      {animationsAvailable && (
+        <Button
+          icon={<img src={animationsIcon} alt='Animation' />}
+          className='additional-options-buttons'
+          onClick={handleAnimationToggle}
+        />
       )}
     </div>
   );

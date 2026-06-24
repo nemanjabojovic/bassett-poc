@@ -2207,11 +2207,24 @@ canvas {
 }
 
 .config-swatch-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
   font-size: 9px;
   color: #71757b;
   text-align: center;
   line-height: 1.2;
   word-break: break-word;
+}
+
+.config-swatch-sku {
+  font-weight: 600;
+  color: #333;
+}
+
+.config-swatch-label {
+  color: #71757b;
 }
 
 .config-empty {

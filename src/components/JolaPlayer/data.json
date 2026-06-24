@@ -92,7 +92,7 @@
     {
       "elements": [
         {
-          "id": "2848-Q2_Z4"
+          "id": "2848-Q2"
         }
       ],
       "collection": "bassett",
@@ -157,17 +157,19 @@
       "staticFrame" : true,
       "brandId": "bassett",
       "textures": ["1629-2", "5283-15", "4358-5", "2557-4", "2557-6"],
+      "price": 4000,
       "status": "Complete",
       "collection": "bassett"
     },
     {
-      "sku": "2848-Q2_Z4",
-      "id": "2848-Q2_Z4",
+      "sku": "2848-Q2",
+      "id": "2848-Q2",
       "icon": "",
       "name": "Rounded Track Queen Sleeper",
       "staticFrame" : true,
       "brandId": "bassett",
       "textures": ["1629-2", "5283-15"],
+      "price": 8000,
       "status": "Complete",
       "collection": "bassett"
     },
@@ -182,6 +184,7 @@
       "pairing": {
         "right": ["M000-LSECT3L"]
       },
+      "price": 3000,
       "status": "Complete",
       "collection": "bassett"
     },
@@ -208,174 +211,13 @@
       "type": "table",
       "brandId": "bassett",
       "textures": ["Fawn", "Sandstone", "Navy", "Tidal Blue"],
+      "price": 5000,
       "status": "Complete",
       "collection": "bassett"
     }
   ],
-  "nailColors": [
-    {
-      "name": "Black Nickel",
-      "id": "BlackNickel",
-      "icon": "./resources/icons/nails/BlackNickel.jpg",
-      "metalness": 0.8,
-      "roughness": 0.25,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/BlackNickel.jpg"
-    },
-    {
-      "name": "Brass",
-      "id": "Brass",
-      "icon": "./resources/icons/nails/Brass.jpg",
-      "metalness": 0.3,
-      "roughness": 0.5,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/Brass.jpg"
-    },
-    {
-      "name": "French Natural",
-      "id": "FrenchNatural",
-      "icon": "./resources/icons/nails/FrenchNatural.jpg",
-      "metalness": 0.3,
-      "roughness": 0.25,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/FrenchNatural.jpg"
-    },
-    {
-      "name": "Gun Metal",
-      "id": "GunMetal",
-      "icon": "./resources/icons/nails/GunMetal.jpg",
-      "metalness": 0.7,
-      "roughness": 0.25,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/GunMetal.jpg"
-    },
-    {
-      "name": "Natural",
-      "id": "Natural",
-      "icon": "./resources/textures/woods/HF Custom Natural/HF Custom Natural_icon.jpg",
-      "metalness": 0.5,
-      "roughness": 0.5,
-      "repeatHeight": 17,
-      "repeatWidth": 17,
-      "map": "./resources/textures/woods/HF Custom Natural/HF Custom Natural.jpg",
-      "type": "Wood",
-      "sku": "Natural",
-      "brandId": "HF",
-      "saturation": 1.05,
-      "contrast": 1.01,
-      "brightness": 1.4,
-      "green": 0.97,
-      "status": "Complete",
-      "roughnessMap": "./resources/textures/woods/HF Custom Natural/HF Custom Natural_roughness.jpg",
-      "normalMap": "./resources/textures/woods/HF Custom Natural/HF Custom Natural_normal.jpg"
-    },
-    {
-      "name": "Nickel",
-      "id": "Nickel",
-      "icon": "./resources/icons/nails/Nickel.jpg",
-      "metalness": 0.9,
-      "roughness": 0.15,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/Nickel.jpg"
-    },
-    {
-      "name": "Old Gold",
-      "id": "OldGold",
-      "icon": "./resources/icons/nails/OldGold.jpg",
-      "metalness": 0.4,
-      "roughness": 0.6,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/OldGold.jpg"
-    },
-    {
-      "name": "Pewter",
-      "id": "Pewter",
-      "icon": "./resources/icons/nails/Pewter.jpg",
-      "metalness": 0.4,
-      "roughness": 0.3,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/Pewter.jpg"
-    },
-    {
-      "name": "Vintage",
-      "id": "Vintage",
-      "icon": "./resources/icons/nails/Vintage.jpg",
-      "metalness": 0.6,
-      "roughness": 0.5,
-      "repeatHeight": 1,
-      "repeatWidth": 1,
-      "map": "./resources/models/nails/Vintage.jpg"
-    }
-  ],
-  "nailPresets": [
-    {
-      "size": "1",
-      "standard": 0.008,
-      "spacing": 0.0155,
-      "radius": 0.003935
-    },
-    {
-      "size": "2",
-      "standard": 0.012,
-      "spacing": 0.024,
-      "radius": 0.00559
-    },
-    {
-      "size": " 3",
-      "standard": 0.016,
-      "spacing": 0.028,
-      "radius": 0.00802
-    },
-    {
-      "size": "4",
-      "standard": 0.0205,
-      "spacing": 0.041,
-      "radius": 0.01033
-    },
-    {
-      "size": "5",
-      "standard": 0.0235,
-      "spacing": 0.047,
-      "radius": 0.011865
-    },
-    {
-      "size": "6",
-      "standard": 0.016,
-      "spacing": 0.033,
-      "radius": 0.007853
-    },
-    {
-      "size": "6_BY",
-      "standard": 0.007,
-      "spacing": 0.014,
-      "radius": 0.003556
-    },
-    {
-      "size": "7",
-      "standard": 0.0105,
-      "spacing": 0.021,
-      "radius": 0.005507
-    },
-    {
-      "size": "9",
-      "standard": 0.0105,
-      "spacing": 0.021,
-      "radius": 0.005507
-    },
-    {
-      "size": "54",
-      "standard": 0.016,
-      "spacing": 0.033,
-      "radius": 0.0078535
-    }
-  ],
+
+
   "materialTypes": [
     {
       "name": "Fabric",
@@ -391,11 +233,10 @@
       "type": "Fabric",
       "brand": "Bassett",
       "sku": "1629-2",
-      "name": "1629-2_Sesame",
-      "map": "./resources/textures/fabrics/1629-2_Sesame/1629-2_Sesame.webp",
-      "normalMap": "./resources/textures/fabrics/1629-2_Sesame/1629-2_Sesame_normal.jpg",
-      "aoMap": "./resources/textures/fabrics/1629-2_Sesame/1629-2_Sesame_AO.jpg",
-      "icon": "./resources/textures/fabrics/1629-2_Sesame/1629-2_Sesame_icon.webp",
+      "name": "Sesame",
+      "map": "./resources/textures/fabrics/1629-2/1629-2.webp",
+      "normalMap": "./resources/textures/fabrics/1629-2/1629-2_normal.webp",
+      "icon": "./resources/textures/fabrics/1629-2/1629-2_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
       "status": "Complete"
@@ -404,11 +245,10 @@
       "type": "Fabric",
       "brand": "Bassett",
       "sku": "4358-5",
-      "name": "4358-5_Blue",
-      "map": "./resources/textures/fabrics/4358-5_Blue/4358-5_Blue.webp",
-      "normalMap": "./resources/textures/fabrics/4358-5_Blue/4358-5_Blue_normal.jpg",
-      "aoMap": "./resources/textures/fabrics/4358-5_Blue/4358-5_Blue_AO.jpg",
-      "icon": "./resources/textures/fabrics/4358-5_Blue/4358-5_Blue_icon.webp",
+      "name": "Blue",
+      "map": "./resources/textures/fabrics/4358-5/4358-5.webp",
+      "normalMap": "./resources/textures/fabrics/4358-5/4358-5_normal.webp",
+      "icon": "./resources/textures/fabrics/4358-5/4358-5_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
       "status": "Complete"
@@ -417,11 +257,10 @@
       "type": "Fabric",
       "brand": "Bassett",
       "sku": "5283-15",
-      "name": "5283-15_Ocean",
-      "map": "./resources/textures/fabrics/5283-15_Ocean/5283-15_Ocean.webp",
-      "normalMap": "./resources/textures/fabrics/5283-15_Ocean/5283-15_Ocean_normal.jpg",
-      "aoMap": "./resources/textures/fabrics/5283-15_Ocean/5283-15_Ocean_AO.jpg",
-      "icon": "./resources/textures/fabrics/5283-15_Ocean/5283-15_Ocean_icon.webp",
+      "name": "Ocean",
+      "map": "./resources/textures/fabrics/5283-15/5283-15.webp",
+      "normalMap": "./resources/textures/fabrics/5283-15/5283-15_normal.webp",
+      "icon": "./resources/textures/fabrics/5283-15/5283-15_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
       "status": "Complete"
@@ -430,11 +269,10 @@
       "type": "Fabric",
       "brand": "Bassett",
       "sku": "2557-4",
-      "name": "2557-4_Ranchero Oliver",
-      "map": "./resources/textures/fabrics/2557-4_Ranchero Oliver/2557-4_Ranchero Oliver.webp",
-      "normalMap": "./resources/textures/fabrics/2557-4_Ranchero Oliver/2557-4_Ranchero Oliver_normal.jpg",
-      "aoMap": "./resources/textures/fabrics/2557-4_Ranchero Oliver/2557-4_Ranchero Oliver_AO.jpg",
-      "icon": "./resources/textures/fabrics/2557-4_Ranchero Oliver/2557-4_Ranchero Oliver_icon.webp",
+      "name": "Ranchero Oliver",
+      "map": "./resources/textures/fabrics/2557-4/2557-4.webp",
+      "normalMap": "./resources/textures/fabrics/2557-4/2557-4_normal.webp",
+      "icon": "./resources/textures/fabrics/2557-4/2557-4_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
       "status": "Complete"
@@ -443,11 +281,10 @@
       "type": "Fabric",
       "brand": "Bassett",
       "sku": "2557-6",
-      "name": "2557-6_Ranchero Saddle",
-      "map": "./resources/textures/fabrics/2557-6_Ranchero Saddle/2557-6_Ranchero Saddle.webp",
-      "normalMap": "./resources/textures/fabrics/2557-6_Ranchero Saddle/2557-6_Ranchero Saddle_normal.jpg",
-      "aoMap": "./resources/textures/fabrics/2557-6_Ranchero Saddle/2557-6_Ranchero Saddle_AO.jpg",
-      "icon": "./resources/textures/fabrics/2557-6_Ranchero Saddle/2557-6_Ranchero Saddle_icon.webp",
+      "name": "Ranchero Saddle",
+      "map": "./resources/textures/fabrics/2557-6/2557-6.webp",
+      "normalMap": "./resources/textures/fabrics/2557-6/2557-6_normal.webp",
+      "icon": "./resources/textures/fabrics/2557-6/2557-6_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
       "status": "Complete"
@@ -458,10 +295,10 @@
       "type": "Leather",
       "brand": "Bassett",
       "sku": "7219-28",
-      "name": "7219-28_Sterling Cocoa",
-      "map": "./resources/textures/leathers/7219-28_Sterling Cocoa/7219-28_Sterling Cocoa.webp",
-      "normalMap": "./resources/textures/leathers/7219-28_Sterling Cocoa/7219-28_Sterling Cocoa_normal.jpg",
-      "icon": "./resources/textures/leathers/7219-28_Sterling Cocoa/7219-28_Sterling Cocoa_icon.webp",
+      "name": "Sterling Cocoa",
+      "map": "./resources/textures/leathers/7219-28/7219-28.webp",
+      "normalMap": "./resources/textures/leathers/7219-28/7219-28_normal.webp",
+      "icon": "./resources/textures/leathers/7219-28/7219-28_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
       "status": "Complete"
@@ -470,12 +307,66 @@
       "type": "Leather",
       "brand": "Bassett",
       "sku": "7229-10",
-      "name": "7229-10_Tuscon Star Dust",
-      "map": "./resources/textures/leathers/7229-10_Tuscon Star Dust/7229-10_Tuscon Star Dust.webp",
-      "normalMap": "./resources/textures/leathers/7229-10_Tuscon Star Dust/7229-10_Tuscon Star Dust_normal.jpg",
-      "icon": "./resources/textures/leathers/7229-10_Tuscon Star Dust/7229-10_Tuscon Star Dust_icon.webp",
+      "name": "Tuscon Star Dust",
+      "map": "./resources/textures/leathers/7229-10/7229-10.webp",
+      "normalMap": "./resources/textures/leathers/7229-10/7229-10_normal.webp",
+      "icon": "./resources/textures/leathers/7229-10/7229-10_icon.webp",
       "repeatWidth": 8,
       "repeatHeight": 8,
+      "status": "Complete"
+    }
+  ],
+  "woods": [
+    {
+      "type": "Wood",
+      "brand": "Bassett",
+      "sku": "Fawn",
+      "name": "Fawn",
+      "map": "./resources/textures/woods/Fawn/Fawn.webp",
+      "normalMap": "./resources/textures/woods/Fawn/Fawn_normal.jpg",
+      "roughnessMap": "./resources/textures/woods/Fawn/Fawn_roughness.jpg",
+      "icon": "./resources/textures/woods/Fawn/Fawn_icon.webp",
+      "repeatWidth": 1,
+      "repeatHeight": 1,
+      "status": "Complete"
+    },
+    {
+      "type": "Wood",
+      "brand": "Bassett",
+      "sku": "Sandstone",
+      "name": "Sandstone",
+      "map": "./resources/textures/woods/Sandstone/Sandstone.webp",
+      "normalMap": "./resources/textures/woods/Sandstone/Sandstone_normal.jpg",
+      "roughnessMap": "./resources/textures/woods/Sandstone/Sandstone_roughness.jpg",
+      "icon": "./resources/textures/woods/Sandstone/Sandstone_icon.webp",
+      "repeatWidth": 1,
+      "repeatHeight": 1,
+      "status": "Complete"
+    },
+    {
+      "type": "Wood",
+      "brand": "Bassett",
+      "sku": "Navy",
+      "name": "Navy",
+      "map": "./resources/textures/woods/Navy/Navy.webp",
+      "normalMap": "./resources/textures/woods/Navy/Navy_normal.jpg",
+      "roughnessMap": "./resources/textures/woods/Navy/Navy_roughness.jpg",
+      "icon": "./resources/textures/woods/Navy/Navy_icon.webp",
+      "repeatWidth": 1,
+      "repeatHeight": 1,
+      "status": "Complete"
+    },
+    {
+      "type": "Wood",
+      "brand": "Bassett",
+      "sku": "Tidal Blue",
+      "name": "Tidal Blue",
+      "map": "./resources/textures/woods/Tidal Blue/Tidal Blue.webp",
+      "normalMap": "./resources/textures/woods/Tidal Blue/Tidal Blue_normal.jpg",
+      "roughnessMap": "./resources/textures/woods/Tidal Blue/Tidal Blue_roughness.jpg",
+      "icon": "./resources/textures/woods/Tidal Blue/Tidal Blue_icon.webp",
+      "repeatWidth": 1,
+      "repeatHeight": 1,
       "status": "Complete"
     }
   ]
