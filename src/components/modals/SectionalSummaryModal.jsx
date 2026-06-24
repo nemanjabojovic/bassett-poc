@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import data from '../JolaPlayer/data.json'
 import armSelectionImg from '../../assets/icons/arm_selection.png'
+import downloadIcon from '../../assets/icons/Download.png'
+import shareIcon from '../../assets/icons/Share.png'
+import printIcon from '../../assets/icons/Print.png'
 
 const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tallBack, dimensions, selectedCover, onClose }) => {
   const [screenshot, setScreenshot] = useState(null)
@@ -22,21 +25,25 @@ const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tall
   return (
     <div className='summary-overlay' onClick={onClose}>
       <div className='summary-modal' onClick={e => e.stopPropagation()}>
+        <button className='summary-modal-close' onClick={onClose}>&#10005;</button>
         <div className='summary-modal-topbar'>
           <div>
             <p className='summary-modal-title'>Your Design</p>
             <p className='summary-modal-subtitle'>Below you will find the list of all your selections for your build</p>
           </div>
           <div className='summary-modal-actions'>
-            <button className='summary-icon-btn' title='Download' onClick={() => window.player?.downloadScreenshot()}>
-              <svg width='16' height='16' viewBox='0 0 16 16' fill='none'><path d='M8 2v8M5 7l3 3 3-3M2 12h12' stroke='currentColor' strokeWidth='1.3' strokeLinecap='round' strokeLinejoin='round'/></svg>
+            <button className='summary-icon-btn' title='Download'>
+              <img src={downloadIcon} alt='Download' className='summary-action-icon' />
               <span>Download</span>
             </button>
+            <button className='summary-icon-btn' title='Share'>
+              <img src={shareIcon} alt='Share' className='summary-action-icon' />
+              <span>Share</span>
+            </button>
             <button className='summary-icon-btn' title='Print' onClick={() => window.print()}>
-              <svg width='16' height='16' viewBox='0 0 16 16' fill='none'><rect x='3' y='6' width='10' height='7' rx='1' stroke='currentColor' strokeWidth='1.3'/><path d='M5 6V3h6v3M5 10h6' stroke='currentColor' strokeWidth='1.3' strokeLinecap='round'/></svg>
+              <img src={printIcon} alt='Print' className='summary-action-icon' />
               <span>Print</span>
             </button>
-            <button className='summary-modal-close' onClick={onClose}>&#10005;</button>
           </div>
         </div>
 
