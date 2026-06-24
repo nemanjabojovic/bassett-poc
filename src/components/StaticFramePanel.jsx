@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import data from './JolaPlayer/data.json'
 import CloseConfirmModal from './modals/CloseConfirmModal'
+import StaticSummaryModal from './modals/StaticSummaryModal'
 
 const ChevronIcon = ({ open }) => (
   <svg
@@ -29,10 +30,21 @@ const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => 
   </button>
 )
 
-const SwatchSection = ({ label, items, defaultOpen, onSelect, materialName }) => {
+const SwatchSection = ({ label, items, defaultOpen, onSelect, materialName, value, onChange }) => {
   const [open, setOpen] = useState(defaultOpen || false)
   const [search, setSearch] = useState('')
-  const [selected, setSelected] = useState(items[0] || null)
+  const [internalSelected, setInternalSelected] = useState(items[0] || null)
+
+  const selected = value !== undefined ? value : internalSelected
+
+  const handleSelect = (item) => {
+    if (onChange) {
+      onChange(item)
+    } else {
+      setInternalSelected(item)
+    }
+    if (onSelect) onSelect(item, materialName)
+  }
 
   const filtered = items.filter(f =>
     !search || f.sku.toLowerCase().includes(search.toLowerCase())
@@ -66,10 +78,7 @@ const SwatchSection = ({ label, items, defaultOpen, onSelect, materialName }) =>
               <div
                 key={i}
                 className={`config-swatch${selected?.sku === item.sku ? ' config-swatch--selected' : ''}`}
-                onClick={() => {
-                  setSelected(item)
-                  if (onSelect) onSelect(item, materialName)
-                }}
+                onClick={() => handleSelect(item)}
               >
                 <div
                   className='config-swatch-img'
@@ -139,7 +148,7 @@ const handleTextureSelect = (item, materialName) => {
   window.player?.loadFabric(item, materialName, true)
 }
 
-const FabricBody = ({ frame }) => {
+const FabricBody = ({ frame, selectedCover, onCoverChange }) => {
   const frameOptions = resolveTextures(frame?.textures)
 
   return (
@@ -150,28 +159,45 @@ const FabricBody = ({ frame }) => {
         defaultOpen={true}
         onSelect={handleTextureSelect}
         materialName='main'
+        value={selectedCover}
+        onChange={onCoverChange}
       />
       <DropdownSection label='Cushion Options' options={[]} />
     </>
   )
 }
 
-const TableBody = ({ frame }) => {
+const TableBody = ({ frame, selectedTop, onTopChange, selectedBase, onBaseChange }) => {
   const finishes = resolveTextures(frame?.textures)
 
   return (
     <>
-      <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} onSelect={handleTextureSelect} materialName='Top' />
-      <SwatchSection label='Base Finish' items={finishes} onSelect={handleTextureSelect} materialName='Base' />
+      <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} onSelect={handleTextureSelect} materialName='Top' value={selectedTop} onChange={onTopChange} />
+      <SwatchSection label='Base Finish' items={finishes} onSelect={handleTextureSelect} materialName='Base' value={selectedBase} onChange={onBaseChange} />
       <DropdownSection label='Edge Profiles' options={['Classic', 'Eased', 'Bevel']} />
     </>
   )
 }
 
-const StaticFramePanel = ({ sku, frame, onClose }) => {
+const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showSummary, setShowSummary] = useState(false)
   const isTable = frame?.type === 'table'
   const frameName = frame?.name || sku || ''
+
+  const initialTextures = resolveTextures(frame?.textures)
+  const [selectedCover, setSelectedCover] = useState(initialTextures[0] || null)
+  const [selectedTop, setSelectedTop] = useState(initialTextures[0] || null)
+  const [selectedBase, setSelectedBase] = useState(initialTextures[0] || null)
+
+  useEffect(() => {
+    const textures = resolveTextures(frame?.textures)
+    if (textures[0]) {
+      setSelectedCover(textures[0])
+      setSelectedTop(textures[0])
+      setSelectedBase(textures[0])
+    }
+  }, [frame])
 
   return (
     <aside className='config-panel'>
@@ -190,15 +216,31 @@ const StaticFramePanel = ({ sku, frame, onClose }) => {
       </div>
 
       <div className='config-panel-body'>
-        {isTable ? <TableBody frame={frame} /> : <FabricBody frame={frame} />}
+        {isTable
+          ? <TableBody frame={frame} selectedTop={selectedTop} onTopChange={setSelectedTop} selectedBase={selectedBase} onBaseChange={setSelectedBase} />
+          : <FabricBody frame={frame} selectedCover={selectedCover} onCoverChange={setSelectedCover} />
+        }
       </div>
 
       <div className='config-panel-footer'>
         <div className='config-cta-row'>
-          <button className='config-summary-btn'>View Summary</button>
+          <button className='config-summary-btn' onClick={() => setShowSummary(true)}>View Summary</button>
           <button className='config-cart-btn'>Add to Cart</button>
         </div>
       </div>
+
+      {showSummary && (
+        <StaticSummaryModal
+          sku={sku}
+          frame={frame}
+          dimensions={dimensions}
+          isTable={isTable}
+          selectedCover={isTable ? null : selectedCover}
+          selectedTop={isTable ? selectedTop : null}
+          selectedBase={isTable ? selectedBase : null}
+          onClose={() => setShowSummary(false)}
+        />
+      )}
     </aside>
   )
 }

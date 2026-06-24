@@ -3,7 +3,7 @@ import data from './JolaPlayer/data.json'
 import armSelectionImg from '../assets/icons/arm_selection.png'
 import CloseConfirmModal from './modals/CloseConfirmModal'
 import BuildOverview from './modals/BuildOverview'
-import ViewSummaryModal from './modals/ViewSummaryModal'
+import SectionalSummaryModal from './modals/SectionalSummaryModal'
 
 const allTextures = [
   ...(data.fabrics || []),
@@ -344,7 +344,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
       </div>
 
       {showSummary && (
-        <ViewSummaryModal
+        <SectionalSummaryModal
           sku={sku}
           frame={frame}
           configElementIds={configElementIds}

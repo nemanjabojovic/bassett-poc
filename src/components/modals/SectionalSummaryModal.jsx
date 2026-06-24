@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import data from '../JolaPlayer/data.json'
 import armSelectionImg from '../../assets/icons/arm_selection.png'
 
-const ViewSummaryModal = ({ sku, frame, configElementIds, selectedArm, tallBack, dimensions, selectedCover, onClose }) => {
+const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tallBack, dimensions, selectedCover, onClose }) => {
   const [screenshot, setScreenshot] = useState(null)
 
   useEffect(() => {
@@ -122,4 +122,4 @@ const ViewSummaryModal = ({ sku, frame, configElementIds, selectedArm, tallBack,
   )
 }
 
-export default ViewSummaryModal
+export default SectionalSummaryModal

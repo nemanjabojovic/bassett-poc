@@ -179,6 +179,7 @@ const Player = ({
           sku={currentSku}
           frame={playerOptions?.frame}
           onClose={goToLanding}
+          dimensions={dimensions}
         />
       ) : (
         <SectionalPanel
