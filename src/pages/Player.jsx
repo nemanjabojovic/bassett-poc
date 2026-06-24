@@ -47,6 +47,7 @@ const Player = ({
   const [configurationToLoad, setConfigurationToLoad] = useState(null)
   const [searchParams] = useSearchParams()
   const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [dimensions, setDimensions] = useState(null)
 
   useEffect(() => {
     const paramsObject = {}
@@ -98,6 +99,10 @@ const Player = ({
     options.fabric = [{ texture: data.fabrics[0], name: 'PrimaryCover' }]
     options.popularConfiguration = configurationToLoad
     options.data = data
+    options.signalModelConfigurationChange = () => {
+      const dims = window.player?.getDimensions()
+      if (dims) setDimensions(dims)
+    }
 
     setPlayerOptions(options)
   }, [skuToLoad, configurationToLoad])
@@ -146,9 +151,9 @@ const Player = ({
 
         <div className='viewer-footer'>
           <div className='viewer-footer-dims'>
-            <span>Height {playerOptions?.frame?.height || '--'}</span>
-            <span>Width {playerOptions?.frame?.width || '--'}</span>
-            <span>Depth {playerOptions?.frame?.depth || '--'}</span>
+            <span>Height {dimensions?.height ? `${Math.round(dimensions.height)}"` : '--'}</span>
+            <span>Width {dimensions?.width ? `${Math.round(dimensions.width)}"` : '--'}</span>
+            <span>Depth {dimensions?.depth ? `${Math.round(dimensions.depth)}"` : '--'}</span>
           </div>
           <div className='viewer-footer-right'>
             <button className='viewer-clear-btn' onClick={() => setShowClearConfirm(true)}>
