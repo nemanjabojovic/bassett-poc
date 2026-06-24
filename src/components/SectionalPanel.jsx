@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import data from './JolaPlayer/data.json'
 import armSelectionImg from '../assets/icons/arm_selection.png'
+import loungeImg from '../assets/images/Lounge.png'
+import supportImg from '../assets/images/Support.png'
+import premierImg from '../assets/images/Premier.png'
 import CloseConfirmModal from './modals/CloseConfirmModal'
 import BuildOverview from './modals/BuildOverview'
 import SectionalSummaryModal from './modals/SectionalSummaryModal'
@@ -45,6 +48,13 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
   const [tallBackOpen, setTallBackOpen] = useState(false)
   const [coverOpen, setCoverOpen] = useState(false)
   const [cushionOpen, setCushionOpen] = useState(false)
+  const [selectedCushion, setSelectedCushion] = useState({ name: 'Lounge', icon: loungeImg })
+
+  const cushionOptions = [
+    { name: 'Lounge', icon: loungeImg },
+    { name: 'Support', icon: supportImg },
+    { name: 'Premier', icon: premierImg },
+  ]
   const [showConfirm, setShowConfirm] = useState(false)
 
   const [selectedLayout, setSelectedLayout] = useState(null)
@@ -90,7 +100,15 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
     if (popularConfigs.length === 0) return
     const first = popularConfigs[0]
     setSelectedLayout(first)
-    setConfigElementIds(first.elements.map(e => e.id))
+    const ids = first.elements.map(e => e.id)
+    setConfigElementIds(ids)
+    const skus = new Set()
+    ids.forEach(id => {
+      const f = data.frames.find(fr => fr.id === id)
+      if (f?.textures) f.textures.forEach(s => skus.add(s))
+    })
+    const textures = resolveTextures(skus.size > 0 ? [...skus] : null)
+    if (textures[0]) setSelectedCover(textures[0])
   }, [])
 
   useEffect(() => {
@@ -176,15 +194,6 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                         }
                         <p>{pc.name}</p>
                       </div>
-                      <button
-                        className='config-layout-edit'
-                        onClick={() => {
-                          setBuildMode('byo')
-                          window.player?.setEditSelected(true)
-                        }}
-                      >
-                        Edit
-                      </button>
                     </div>
                   ))}
                 </div>
@@ -278,7 +287,6 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                     className={`config-arm-item${(tallBack || 'Yes') === opt ? ' config-arm-item--selected' : ''}`}
                     onClick={() => {
                       setTallBack(opt)
-                      window.player?.setBackType({ name: opt === 'Yes' ? 'TallBack' : 'StandardBack' })
                     }}
                   >
                     <span className='config-arm-text-only'>{opt}</span>
@@ -292,6 +300,8 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
         <div className='config-section'>
           <SectionHeader
             label='Cover Options'
+            selectedName={selectedCover?.name || selectedCover?.sku || null}
+            selectedIcon={selectedCover?.icon || null}
             open={coverOpen}
             onClick={() => setCoverOpen(v => !v)}
           />
@@ -301,7 +311,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                 {configTextures.map((item, i) => (
                   <div
                     key={i}
-                    className='config-swatch'
+                    className={`config-swatch${selectedCover?.sku === item.sku ? ' config-swatch--selected' : ''}`}
                     onClick={() => {
                       setSelectedCover(item)
                       window.player?.loadFabric(item, 'main', true)
@@ -325,12 +335,25 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
         <div className='config-section'>
           <SectionHeader
             label='Cushion Options'
+            selectedName={selectedCushion?.name || null}
+            selectedIcon={selectedCushion?.icon || null}
             open={cushionOpen}
             onClick={() => setCushionOpen(v => !v)}
           />
           {cushionOpen && (
             <div className='config-section-content'>
-              <p className='config-empty'>Cushion options coming soon</p>
+              <div className='config-arm-grid'>
+                {cushionOptions.map((opt, i) => (
+                  <div
+                    key={i}
+                    className={`config-arm-item${selectedCushion?.name === opt.name ? ' config-arm-item--selected' : ''}`}
+                    onClick={() => setSelectedCushion(opt)}
+                  >
+                    <img src={opt.icon} alt={opt.name} />
+                    <span>{opt.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

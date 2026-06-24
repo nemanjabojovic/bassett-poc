@@ -3,7 +3,7 @@ import downloadIcon from '../../assets/icons/Download.png'
 import shareIcon from '../../assets/icons/Share.png'
 import printIcon from '../../assets/icons/Print.png'
 
-const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, selectedTop, selectedBase, onClose }) => {
+const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, selectedTop, selectedBase, selectedEdge, selectedSize, selectedCushion, onClose }) => {
   const [screenshot, setScreenshot] = useState(null)
 
   useEffect(() => {
@@ -53,6 +53,12 @@ const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, se
                   <p className='summary-section-value'>H{Math.round(dimensions.height)}" W{Math.round(dimensions.width)}" D{Math.round(dimensions.depth)}"</p>
                 </div>
               )}
+              {!isTable && selectedSize && (
+                <div className='summary-section'>
+                  <p className='summary-section-label'>Size</p>
+                  <p className='summary-section-value'>{selectedSize}</p>
+                </div>
+              )}
               {!isTable && selectedCover && (
                 <div className='summary-section'>
                   <p className='summary-section-label'>Fabric Options</p>
@@ -62,6 +68,12 @@ const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, se
                     )}
                     <span className='summary-section-value'>{selectedCover.name || selectedCover.sku}</span>
                   </div>
+                </div>
+              )}
+              {!isTable && selectedCushion && (
+                <div className='summary-section'>
+                  <p className='summary-section-label'>Cushion</p>
+                  <p className='summary-section-value'>{selectedCushion.name}</p>
                 </div>
               )}
               {isTable && selectedTop && (
@@ -83,6 +95,17 @@ const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, se
                       <div className='summary-swatch-thumb' style={{ backgroundImage: `url(${selectedBase.icon})` }} />
                     )}
                     <span className='summary-section-value'>{selectedBase.name || selectedBase.sku}</span>
+                  </div>
+                </div>
+              )}
+              {isTable && selectedEdge && (
+                <div className='summary-section'>
+                  <p className='summary-section-label'>Edge Profile</p>
+                  <div className='summary-section-swatch'>
+                    {selectedEdge.icon && (
+                      <img src={selectedEdge.icon} alt={selectedEdge.name} className='summary-arm-thumb' />
+                    )}
+                    <span className='summary-section-value'>{selectedEdge.name}</span>
                   </div>
                 </div>
               )}

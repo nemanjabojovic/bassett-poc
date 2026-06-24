@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react'
 import data from './JolaPlayer/data.json'
 import CloseConfirmModal from './modals/CloseConfirmModal'
 import StaticSummaryModal from './modals/StaticSummaryModal'
+import loungeImg from '../assets/images/Lounge.png'
+import supportImg from '../assets/images/Support.png'
+import premierImg from '../assets/images/Premier.png'
+import classicImg from '../assets/images/Classic.png'
+import contemporaryImg from '../assets/images/Contemporary.png'
+import transitionalImg from '../assets/images/Transitional.png'
 
 const ChevronIcon = ({ open }) => (
   <svg
@@ -148,11 +154,50 @@ const handleTextureSelect = (item, materialName) => {
   window.player?.loadFabric(item, materialName, true)
 }
 
-const FabricBody = ({ frame, selectedCover, onCoverChange }) => {
+const SIZE_OPTIONS = ['Twin', 'Full', 'Queen', 'King']
+
+const CUSHION_OPTIONS = [
+  { name: 'Lounge', icon: loungeImg },
+  { name: 'Support', icon: supportImg },
+  { name: 'Premier', icon: premierImg },
+]
+
+const EDGE_OPTIONS = [
+  { name: 'Classic', icon: classicImg },
+  { name: 'Contemporary', icon: contemporaryImg },
+  { name: 'Transitional', icon: transitionalImg },
+]
+
+const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeChange, selectedCushion, onCushionChange }) => {
+  const [sizeOpen, setSizeOpen] = useState(false)
+  const [cushionOpen, setCushionOpen] = useState(false)
   const frameOptions = resolveTextures(frame?.textures)
 
   return (
     <>
+      <div className='config-section'>
+        <SectionHeader
+          label='Select Size'
+          selectedName={selectedSize || null}
+          open={sizeOpen}
+          onClick={() => setSizeOpen(v => !v)}
+        />
+        {sizeOpen && (
+          <div className='config-section-content'>
+            <div className='config-size-grid'>
+              {SIZE_OPTIONS.map((size, i) => (
+                <button
+                  key={i}
+                  className={`config-size-item${selectedSize === size ? ' config-size-item--selected' : ''}`}
+                  onClick={() => onSizeChange(size)}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
       <SwatchSection
         label='Fabric Options'
         items={frameOptions}
@@ -162,19 +207,67 @@ const FabricBody = ({ frame, selectedCover, onCoverChange }) => {
         value={selectedCover}
         onChange={onCoverChange}
       />
-      <DropdownSection label='Cushion Options' options={[]} />
+      <div className='config-section'>
+        <SectionHeader
+          label='Cushion Options'
+          selectedName={selectedCushion?.name || null}
+          open={cushionOpen}
+          onClick={() => setCushionOpen(v => !v)}
+        />
+        {cushionOpen && (
+          <div className='config-section-content'>
+            <div className='config-arm-grid'>
+              {CUSHION_OPTIONS.map((opt, i) => (
+                <div
+                  key={i}
+                  className={`config-arm-item${selectedCushion?.name === opt.name ? ' config-arm-item--selected' : ''}`}
+                  onClick={() => onCushionChange(opt)}
+                >
+                  <img src={opt.icon} alt={opt.name} />
+                  <span>{opt.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   )
 }
 
-const TableBody = ({ frame, selectedTop, onTopChange, selectedBase, onBaseChange }) => {
+const TableBody = ({ frame, selectedTop, onTopChange, selectedBase, onBaseChange, selectedEdge, onEdgeChange }) => {
+  const [edgeOpen, setEdgeOpen] = useState(false)
   const finishes = resolveTextures(frame?.textures)
 
   return (
     <>
       <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} onSelect={handleTextureSelect} materialName='Top' value={selectedTop} onChange={onTopChange} />
       <SwatchSection label='Base Finish' items={finishes} onSelect={handleTextureSelect} materialName='Base' value={selectedBase} onChange={onBaseChange} />
-      <DropdownSection label='Edge Profiles' options={['Classic', 'Eased', 'Bevel']} />
+      <div className='config-section'>
+        <SectionHeader
+          label='Edge Profiles'
+          selectedName={selectedEdge?.name || null}
+          selectedIcon={selectedEdge?.icon || null}
+          open={edgeOpen}
+          onClick={() => setEdgeOpen(v => !v)}
+        />
+        {edgeOpen && (
+          <div className='config-section-content'>
+            <div className='config-arm-grid'>
+              {EDGE_OPTIONS.map((opt, i) => (
+                <div
+                  key={i}
+                  className={`config-arm-item${selectedEdge?.name === opt.name ? ' config-arm-item--selected' : ''}`}
+                  onClick={() => onEdgeChange(opt)}
+                >
+                  <img src={opt.icon} alt={opt.name} />
+                  <span>{opt.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   )
 }
@@ -189,6 +282,9 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
   const [selectedCover, setSelectedCover] = useState(initialTextures[0] || null)
   const [selectedTop, setSelectedTop] = useState(initialTextures[0] || null)
   const [selectedBase, setSelectedBase] = useState(initialTextures[0] || null)
+  const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[0])
+  const [selectedCushion, setSelectedCushion] = useState(CUSHION_OPTIONS[0])
+  const [selectedEdge, setSelectedEdge] = useState(EDGE_OPTIONS[0])
 
   useEffect(() => {
     const textures = resolveTextures(frame?.textures)
@@ -217,8 +313,8 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
 
       <div className='config-panel-body'>
         {isTable
-          ? <TableBody frame={frame} selectedTop={selectedTop} onTopChange={setSelectedTop} selectedBase={selectedBase} onBaseChange={setSelectedBase} />
-          : <FabricBody frame={frame} selectedCover={selectedCover} onCoverChange={setSelectedCover} />
+          ? <TableBody frame={frame} selectedTop={selectedTop} onTopChange={setSelectedTop} selectedBase={selectedBase} onBaseChange={setSelectedBase} selectedEdge={selectedEdge} onEdgeChange={setSelectedEdge} />
+          : <FabricBody frame={frame} selectedCover={selectedCover} onCoverChange={setSelectedCover} selectedSize={selectedSize} onSizeChange={setSelectedSize} selectedCushion={selectedCushion} onCushionChange={setSelectedCushion} />
         }
       </div>
 
@@ -238,6 +334,9 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
           selectedCover={isTable ? null : selectedCover}
           selectedTop={isTable ? selectedTop : null}
           selectedBase={isTable ? selectedBase : null}
+          selectedEdge={isTable ? selectedEdge : null}
+          selectedSize={isTable ? null : selectedSize}
+          selectedCushion={isTable ? null : selectedCushion}
           onClose={() => setShowSummary(false)}
         />
       )}
