@@ -2,7 +2,7 @@
   "name": "jola-configurator",
   "version": "0.2.0",
   "private": true,
-  "homepage": "/bassett",
+  "homepage": "/bassett-furniture",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
