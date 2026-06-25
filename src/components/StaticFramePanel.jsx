@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import CloseIcon from '../assets/icons/Close.png'
 import data from './JolaPlayer/data.json'
 import CloseConfirmModal from './modals/CloseConfirmModal'
 import StaticSummaryModal from './modals/StaticSummaryModal'
@@ -10,12 +11,17 @@ import contemporaryImg from '../assets/images/Contemporary.png'
 import transitionalImg from '../assets/images/Transitional.png'
 
 const ChevronIcon = ({ open }) => (
-  <svg
-    width='16' height='16' viewBox='0 0 16 16' fill='none'
-    style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0 }}
-  >
-    <path d='M3 6l5 5 5-5' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
-  </svg>
+  <span style={{
+    display: 'inline-block',
+    width: 0,
+    height: 0,
+    borderLeft: '5px solid transparent',
+    borderRight: '5px solid transparent',
+    borderTop: '6px solid #333',
+    flexShrink: 0,
+    transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+    transition: 'transform 0.2s',
+  }} />
 )
 
 const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick }) => (
@@ -211,6 +217,7 @@ const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeC
         <SectionHeader
           label='Cushion Options'
           selectedName={selectedCushion?.name || null}
+          selectedIcon={selectedCushion?.icon || null}
           open={cushionOpen}
           onClick={() => setCushionOpen(v => !v)}
         />
@@ -308,7 +315,7 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
           <h2 className='config-panel-title'>{frameName}</h2>
           <p className='config-panel-sku'>{sku}</p>
         </div>
-        <button className='config-panel-close' onClick={() => setShowConfirm(true)}>&#10005;</button>
+        <button className='config-panel-close' onClick={() => setShowConfirm(true)}><img src={CloseIcon} alt='Close' /></button>
       </div>
 
       <div className='config-panel-body'>

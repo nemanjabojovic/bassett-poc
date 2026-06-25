@@ -5,7 +5,7 @@ import JolaPlayer from "../components/JolaPlayer";
 import { resolveModelOptions } from "../components/JolaPlayer/utils";
 import StaticFramePanel from "../components/StaticFramePanel";
 import SectionalPanel from "../components/SectionalPanel";
-import JolaIcon from "../assets/icons/jolaLogo.svg";
+import JolaIcon from "../assets/icons/JolaLogo.png";
 import AdditionalOptions from "../components/AdditionalOptions";
 import ClearConfirmModal from "../components/modals/ClearConfirmModal";
 
