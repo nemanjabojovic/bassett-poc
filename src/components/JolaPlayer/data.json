@@ -8,41 +8,34 @@
   ],
   "collectionOptions": {
     "armTypes": [
-        {
+      {
         "name": "Slope_Arm",
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Slope",
-        "icon": "./resources/icons/arm_selection.png",
-        "status": "Complete"
+        "icon": "./resources/icons/arm_selection.png"
       },
       {
         "name": "Panel_Arm",
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Panel",
-        "icon": "./resources/icons/arm_selection.png",
-        "status": "Complete"
+        "icon": "./resources/icons/arm_selection.png"
       },
       {
         "name": "Sock_Arm",
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Sock",
-        "icon": "./resources/icons/arm_selection.png",
-        "status": "Complete"
+        "icon": "./resources/icons/arm_selection.png"
       }
     ]
   },
   "popularConfigurations": [
     {
       "elements": [
-        {
-          "id": "41"
-        },
-        {
-          "id": "43"
-        }
+        { "id": "41" },
+        { "id": "43" }
       ],
       "collection": "bassett",
       "brandId": "bassett",
@@ -60,7 +53,6 @@
       "brandId": "bassett",
       "textures": ["1629-2", "5283-15", "4358-5", "2557-4", "2557-6"],
       "price": 4000,
-      "status": "Complete",
       "collection": "bassett"
     },
     {
@@ -72,7 +64,6 @@
       "brandId": "bassett",
       "textures": ["1629-2", "5283-15"],
       "price": 8000,
-      "status": "Complete",
       "collection": "bassett"
     },
     {
@@ -87,7 +78,6 @@
       "topTextures": ["Fawn", "Sandstone"],
       "baseTextures": ["Fawn", "Sandstone", "Navy", "Tidal Blue"],
       "price": 5000,
-      "status": "Complete",
       "collection": "bassett"
     },
     {
@@ -108,7 +98,6 @@
         "right": ["43", "38"]
       },
       "price": 3000,
-      "status": "Complete",
       "collection": "bassett"
     },
     {
@@ -129,7 +118,6 @@
         "left": ["41", "38"]
       },
       "price": 3000,
-      "status": "Complete",
       "collection": "bassett"
     },
     {
@@ -150,7 +138,6 @@
         "left": ["41"],
         "right": ["43"]
       },
-      "status": "Complete",
       "collection": "bassett"
     }
   ],
@@ -174,9 +161,16 @@
       "map": "./resources/textures/fabrics/1629-2/1629-2.webp",
       "normalMap": "./resources/textures/fabrics/1629-2/1629-2_normal.webp",
       "icon": "./resources/textures/fabrics/1629-2/1629-2_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 24,
+      "repeatHeight": 24,
+      "sheen":0.47,
+      "sheenColorMap": "./resources/textures/fabrics/1629-2/1629-2_sheenColorMap.webp",
+      "sheenRoughness":0.22,
+      "sheenColor": "#fff3e5",
+      "saturation": 0.93,
+      "contrast": 1.15,
+      "brightness": 0.95,
+      "green": 0.973
     },
     {
       "type": "Fabric",
@@ -186,9 +180,16 @@
       "map": "./resources/textures/fabrics/4358-5/4358-5.webp",
       "normalMap": "./resources/textures/fabrics/4358-5/4358-5_normal.webp",
       "icon": "./resources/textures/fabrics/4358-5/4358-5_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 6,
+      "repeatHeight": 6,
+      "sheen": 0.5,
+      "sheenColorMap": "./resources/textures/fabrics/4358-5/4358-5_sheenColorMap.webp",
+      "sheenRoughness": 0.22,
+      "sheenColor": "#d3dfe3",
+      "saturation": 0.94,
+      "contrast": 1.12,
+      "brightness": 0.92,
+      "green": 0.988
     },
     {
       "type": "Fabric",
@@ -198,9 +199,16 @@
       "map": "./resources/textures/fabrics/5283-15/5283-15.webp",
       "normalMap": "./resources/textures/fabrics/5283-15/5283-15_normal.webp",
       "icon": "./resources/textures/fabrics/5283-15/5283-15_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 24,
+      "repeatHeight": 21.92,
+      "sheen": 0.11,
+      "sheenColorMap": "./resources/textures/fabrics/5283-15/5283-15_sheenColorMap.webp",
+      "sheenRoughness": 0.15,
+      "sheenColor": "#ffffff",
+      "saturation": 0.92,
+      "contrast": 1.12,
+      "brightness": 0.92,
+      "green": 0.999
     },
     {
       "type": "Fabric",
@@ -210,9 +218,16 @@
       "map": "./resources/textures/fabrics/2557-4/2557-4.webp",
       "normalMap": "./resources/textures/fabrics/2557-4/2557-4_normal.webp",
       "icon": "./resources/textures/fabrics/2557-4/2557-4_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 15,
+      "repeatHeight": 15,
+      "sheen": 0.4,
+      "sheenColorMap": "./resources/textures/fabrics/2557-4/2557-4_sheenColorMap.webp",
+      "sheenRoughness": 0.3,
+      "sheenColor": "#f9ffcc",
+      "saturation": 0.995,
+      "contrast": 1.05,
+      "brightness": 0.94,
+      "green": 0.99
     },
     {
       "type": "Fabric",
@@ -222,9 +237,16 @@
       "map": "./resources/textures/fabrics/2557-6/2557-6.webp",
       "normalMap": "./resources/textures/fabrics/2557-6/2557-6_normal.webp",
       "icon": "./resources/textures/fabrics/2557-6/2557-6_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 15,
+      "repeatHeight": 15,
+      "sheen": 0.28,
+      "sheenColorMap": "./resources/textures/fabrics/2557-6/2557-6_sheenColorMap.webp",
+      "sheenRoughness": 0.23,
+      "sheenColor": "#ffdab8",
+      "saturation": 0.94,
+      "contrast": 1.09,
+      "brightness": 0.93,
+      "green": 0.985
     }
   ],
   "leathers": [
@@ -234,11 +256,15 @@
       "sku": "7219-28",
       "name": "Sterling Cocoa",
       "map": "./resources/textures/leathers/7219-28/7219-28.webp",
-      "normalMap": "./resources/textures/leathers/7219-28/7219-28_normal.jpg",
+      "normalMap": "./resources/textures/leathers/7219-28/7219-28_normal.webp",
+      "roughnessMap": "./resources/textures/leathers/7219-28/7219-28_roughness.webp",
       "icon": "./resources/textures/leathers/7219-28/7219-28_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 9,
+      "repeatHeight": 9,
+      "saturation": 1.15,
+      "contrast": 1.055,
+      "brightness": 1.03,
+      "green": 0.91
     },
     {
       "type": "Leather",
@@ -247,10 +273,14 @@
       "name": "Tuscon Star Dust",
       "map": "./resources/textures/leathers/7229-10/7229-10.webp",
       "normalMap": "./resources/textures/leathers/7229-10/7229-10_normal.webp",
+      "roughnessMap": "./resources/textures/leathers/7229-10/7229-10_roughness.webp",
       "icon": "./resources/textures/leathers/7229-10/7229-10_icon.webp",
-      "repeatWidth": 8,
-      "repeatHeight": 8,
-      "status": "Complete"
+      "repeatWidth": 14,
+      "repeatHeight": 14,
+      "saturation": 1.02,
+      "contrast": 1.04,
+      "brightness": 0.82,
+      "green": 0.976
     }
   ],
   "woods": [
@@ -261,11 +291,10 @@
       "name": "Fawn",
       "map": "./resources/textures/woods/Fawn/Fawn.webp",
       "normalMap": "./resources/textures/woods/Fawn/Fawn_normal.webp",
-      "roughnessMap": "./resources/textures/woods/Fawn/Fawn_roughness.webp",
+      "aoMap": "./resources/textures/woods/Fawn/Fawn_AO.webp",
       "icon": "./resources/textures/woods/Fawn/Fawn_icon.webp",
       "repeatWidth": 1,
-      "repeatHeight": 1,
-      "status": "Complete"
+      "repeatHeight": 1
     },
     {
       "type": "Wood",
@@ -273,12 +302,11 @@
       "sku": "Sandstone",
       "name": "Sandstone",
       "map": "./resources/textures/woods/Sandstone/Sandstone.webp",
-      "normalMap": "./resources/textures/woods/Sandstone/Sandstone_normal.jpg",
-      "roughnessMap": "./resources/textures/woods/Sandstone/Sandstone_roughness.jpg",
+      "normalMap": "./resources/textures/woods/Sandstone/Sandstone_normal.webp",
+      "aoMap": "./resources/textures/woods/Sandstone/Sandstone_AO.webp",
       "icon": "./resources/textures/woods/Sandstone/Sandstone_icon.webp",
       "repeatWidth": 1,
-      "repeatHeight": 1,
-      "status": "Complete"
+      "repeatHeight": 1
     },
     {
       "type": "Wood",
@@ -286,12 +314,9 @@
       "sku": "Navy",
       "name": "Navy",
       "map": "./resources/textures/woods/Navy/Navy.webp",
-      "normalMap": "./resources/textures/woods/Navy/Navy_normal.jpg",
-      "roughnessMap": "./resources/textures/woods/Navy/Navy_roughness.jpg",
       "icon": "./resources/textures/woods/Navy/Navy_icon.webp",
       "repeatWidth": 1,
-      "repeatHeight": 1,
-      "status": "Complete"
+      "repeatHeight": 1
     },
     {
       "type": "Wood",
@@ -299,12 +324,9 @@
       "sku": "Tidal Blue",
       "name": "Tidal Blue",
       "map": "./resources/textures/woods/Tidal Blue/Tidal Blue.webp",
-      "normalMap": "./resources/textures/woods/Tidal Blue/Tidal Blue_normal.jpg",
-      "roughnessMap": "./resources/textures/woods/Tidal Blue/Tidal Blue_roughness.jpg",
       "icon": "./resources/textures/woods/Tidal Blue/Tidal Blue_icon.webp",
       "repeatWidth": 1,
-      "repeatHeight": 1,
-      "status": "Complete"
+      "repeatHeight": 1
     }
   ]
 }

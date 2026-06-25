@@ -260,6 +260,7 @@ export default class Player extends Core {
         }
 
         if (fabric.sheen) material.sheen = fabric.sheen;
+        if (fabric.sheenRoughness != null) material.sheenRoughness = fabric.sheenRoughness;
 
         if (fabric.sheenColor) {
           //Added failsafe in case of string contains whitespaces

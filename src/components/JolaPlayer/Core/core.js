@@ -3334,6 +3334,9 @@ export default class Core {
             if (material.sheen) {
               element.material.sheen = material.sheen;
             }
+            if (material.sheenRoughness != null) {
+              element.material.sheenRoughness = material.sheenRoughness;
+            }
             //Failsafe condition if material passed is not type MeshPhysicalMaterial
             if (material.sheenColor) {
               if (element.material.sheenColor) {
