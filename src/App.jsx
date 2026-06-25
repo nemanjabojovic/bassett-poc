@@ -9,6 +9,7 @@ import swivelImg from "./assets/images/Swivel.png"
 import tableImg from "./assets/images/Table.png"
 import sectionalImg from "./assets/images/Sectional.png"
 import sofaImg from "./assets/images/Sofa.png"
+import ArrowUp from "./assets/icons/ArrowUp.png"
 
 const FEATURED_PRODUCTS = [
   {
@@ -19,6 +20,7 @@ const FEATURED_PRODUCTS = [
     conftype: 'Static',
     sku: '1144-09',
     collection: null,
+    breakAfter: 4,
   },
   {
     name: 'HideAway Solid Maple Trestle Extendable Counter Dining Table',
@@ -28,6 +30,7 @@ const FEATURED_PRODUCTS = [
     conftype: 'Static',
     sku: '4027-K3470',
     collection: null,
+    breakAfter: 4,
   },
   {
     name: 'Magnificent Motion Slope Arm Reclining Sectional',
@@ -37,6 +40,7 @@ const FEATURED_PRODUCTS = [
     conftype: 'Sectional',
     sku: 'M000-LSECT3',
     collection: 'bassett',
+    breakAfter: 4,
   },
   {
     name: 'Z4 Round Arm Queen Sleeper Sofa',
@@ -46,6 +50,7 @@ const FEATURED_PRODUCTS = [
     conftype: 'Static',
     sku: '2848-Q2',
     collection: null,
+    breakAfter: 3,
   },
 ]
 
@@ -274,21 +279,18 @@ function App() {
             <div className='product-panel-toggle' onClick={() => setIsPanelOpen((p) => !p)}>
               <button className='start-building-btn'>
                 Start Building
-                <svg
-                  width='16'
-                  height='16'
-                  viewBox='0 0 16 16'
-                  fill='none'
+                <img
+                  src={ArrowUp}
+                  alt=''
+                  className='start-building-arrow'
                   style={{ transform: isPanelOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.4s' }}
-                >
-                  <path d='M3 6l5 5 5-5' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
-                </svg>
+                />
               </button>
             </div>
             <div className='product-panel-content'>
             <div className='product-cards-grid'>
               {FEATURED_PRODUCTS.map((product, idx) => (
-                <div key={idx} className='product-card'>
+                <div key={idx} className='product-card' onClick={() => handleConfigureNow(product)}>
                   <div className='product-card-img-wrapper'>
                     <img
                       src={product.icon}
@@ -301,7 +303,15 @@ function App() {
                     />
                   </div>
                   <div className='product-card-footer'>
-                    <p className='product-card-name'>{product.name}</p>
+                    <p className='product-card-name'>
+                      {product.breakAfter
+                        ? (() => {
+                            const words = product.name.split(' ')
+                            return <>{words.slice(0, product.breakAfter).join(' ')}<br />{words.slice(product.breakAfter).join(' ')}</>
+                          })()
+                        : product.name
+                      }
+                    </p>
                     <button
                       className='configure-now-btn'
                       onClick={() => handleConfigureNow(product)}
