@@ -43,8 +43,8 @@ const SectionHeader = ({ label, selectedName, selectedIcon, open, onClick, meta 
         <span className='config-section-selected-text'>{selectedName}</span>
       )}
       {meta}
-      <ChevronIcon open={open} />
     </div>
+    <ChevronIcon open={open} />
   </button>
 )
 

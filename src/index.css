@@ -1597,7 +1597,7 @@ canvas {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   padding: 14px 18px;
   background: #f0f1f3;
   border: none;
@@ -1620,7 +1620,8 @@ canvas {
   line-height: 1.2;
   letter-spacing: 0;
   color: rgba(51, 51, 51, 1);
-  flex: 1;
+  width: 40%;
+  flex-shrink: 0;
 }
 
 .config-section-header-meta {
@@ -1629,6 +1630,10 @@ canvas {
   gap: 8px;
   flex-shrink: 0;
   color: #71757b;
+}
+
+.config-section-header > span:last-child {
+  margin-left: auto;
 }
 
 .config-section-header-icon {
