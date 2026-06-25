@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import CloseIcon from '../assets/icons/Close.png'
+import startNewBuildImg from '../assets/icons/Start new build.png'
 import data from './JolaPlayer/data.json'
 import armSelectionImg from '../assets/icons/arm_selection.png'
 import loungeImg from '../assets/images/Lounge.png'
 import supportImg from '../assets/images/Support.png'
 import premierImg from '../assets/images/Premier.png'
 import CloseConfirmModal from './modals/CloseConfirmModal'
+import ClearConfirmModal from './modals/ClearConfirmModal'
 import BuildOverview from './modals/BuildOverview'
 import SectionalSummaryModal from './modals/SectionalSummaryModal'
 
@@ -62,6 +64,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
     { name: 'Premier', icon: premierImg },
   ]
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showBackConfirm, setShowBackConfirm] = useState(false)
 
   const [selectedLayout, setSelectedLayout] = useState(null)
   const [selectedArm, setSelectedArm] = useState(null)
@@ -134,6 +137,19 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
           onCancel={() => setShowConfirm(false)}
         />
       )}
+      {showBackConfirm && (
+        <ClearConfirmModal
+          onConfirm={async () => {
+            const first = popularConfigs[0]
+            setSelectedLayout(first)
+            setBuildMode('popular')
+            await window.player?.clearConfiguration()
+            if (first) window.player?.setConfiguration(first)
+            setShowBackConfirm(false)
+          }}
+          onCancel={() => setShowBackConfirm(false)}
+        />
+      )}
       {showBuildOverview && (
         <BuildOverview
           configElementIds={configElementIds}
@@ -176,13 +192,8 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                       window.player?.setEditSelected(true)
                     }}
                   >
-                    <div className='config-layout-new-icon'>
-                      <svg width='32' height='32' viewBox='0 0 32 32' fill='none'>
-                        <circle cx='16' cy='16' r='15' stroke='#333' strokeWidth='1.2' />
-                        <path d='M16 10v12M10 16h12' stroke='#333' strokeWidth='1.2' strokeLinecap='round' />
-                      </svg>
-                    </div>
-                    <p>Start a<br />New Build</p>
+                    <img src={startNewBuildImg} alt='Start a New Build' className='config-layout-thumb' />
+                    <p>&nbsp;</p>
                   </div>
                   {popularConfigs.map((pc, i) => (
                     <div key={i} className='config-layout-item-wrap'>
@@ -207,12 +218,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                 <div className='config-byo'>
                   <button
                     className='config-byo-back'
-                    onClick={() => {
-                      setBuildMode('popular')
-                      if (selectedLayout) {
-                        window.player?.setConfiguration(selectedLayout)
-                      }
-                    }}
+                    onClick={() => setShowBackConfirm(true)}
                   >
                     Back to Popular Builds
                   </button>
