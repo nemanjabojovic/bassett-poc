@@ -1,4 +1,5 @@
 import data from '../JolaPlayer/data.json'
+import jolaLogoSvg from '../../assets/icons/jolaLogo.svg'
 
 const BuildOverview = ({ configElementIds, onClose }) => {
   const grouped = configElementIds.reduce((acc, id) => {
@@ -26,7 +27,7 @@ const BuildOverview = ({ configElementIds, onClose }) => {
             <div key={i} className='build-overview-item'>
               {item.frame.icon
                 ? <img src={item.frame.icon} alt={item.frame.name} className='build-overview-thumb' />
-                : <div className='build-overview-thumb' />
+                : <img src={jolaLogoSvg} alt='' className='build-overview-thumb build-overview-thumb--fallback' />
               }
               <div className='build-overview-info'>
                 <p className='build-overview-name'>{item.frame.name}</p>

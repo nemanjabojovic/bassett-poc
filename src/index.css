@@ -1850,11 +1850,11 @@ canvas {
 }
 
 
-.config-layout-item {
-  border: 1px solid #e5e7eb;
+.config-layout-item--selected img {
+  border: 1px solid #222;
 }
 
-.config-layout-item--selected {
+.config-layout-item img --selected {
   border-color: #222;
 }
 
@@ -2002,6 +2002,12 @@ canvas {
   flex-shrink: 0;
 }
 
+.build-overview-thumb--fallback {
+  opacity: 0.15;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
 .build-overview-info {
   display: flex;
   flex-direction: column;
@@ -2097,6 +2103,12 @@ canvas {
   background: #fff;
   border-radius: 4px;
   object-fit: contain;
+}
+
+.config-layout-thumb--fallback {
+  /* opacity: 0.15; */
+  padding: 20%;
+  box-sizing: border-box;
 }
 
 /* Arm / option image blocks */

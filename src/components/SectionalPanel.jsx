@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import CloseIcon from '../assets/icons/Close.png'
 import startNewBuildImg from '../assets/icons/Start new build.png'
+import jolaLogoSvg from '../assets/icons/jolaLogo.svg'
 import data from './JolaPlayer/data.json'
 import armSelectionImg from '../assets/icons/arm_selection.png'
 import loungeImg from '../assets/images/Lounge.png'
@@ -229,7 +230,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                       >
                         {pc.icon
                           ? <img src={pc.icon} alt={pc.name} className='config-layout-thumb' />
-                          : <div className='config-layout-thumb' />
+                          : <img src={jolaLogoSvg} alt='' className='config-layout-thumb config-layout-thumb--fallback' />
                         }
                         <p>{pc.name}</p>
                       </div>
@@ -300,7 +301,7 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                       >
                         {f.icon
                           ? <img src={f.icon} alt={f.name} className='config-layout-thumb' />
-                          : <div className='config-layout-thumb' />
+                          : <img src={jolaLogoSvg} alt='' className='config-layout-thumb config-layout-thumb--fallback' />
                         }
                         <p>{f.name}</p>
                       </div>
