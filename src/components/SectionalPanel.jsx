@@ -65,6 +65,8 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
   ]
   const [showConfirm, setShowConfirm] = useState(false)
   const [showBackConfirm, setShowBackConfirm] = useState(false)
+  const [swapMode, setSwapMode] = useState(false)
+  const [swapState, setSwapState] = useState(null)
 
   const [selectedLayout, setSelectedLayout] = useState(null)
   const [selectedArm, setSelectedArm] = useState(null)
@@ -127,6 +129,26 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
     }
     window.addEventListener('playerConfigurationChanged', handler)
     return () => window.removeEventListener('playerConfigurationChanged', handler)
+  }, [])
+
+  useEffect(() => {
+    const onSwapInitiated = () => {
+      const state = window.player?.getSwapState()
+      setSwapState(state)
+      setSwapMode(true)
+      setBuildMode('byo')
+      setLayoutOpen(true)
+    }
+    const onSwapCompleted = () => {
+      setSwapMode(false)
+      setSwapState(null)
+    }
+    window.addEventListener('swapInitiated', onSwapInitiated)
+    window.addEventListener('swapCompleted', onSwapCompleted)
+    return () => {
+      window.removeEventListener('swapInitiated', onSwapInitiated)
+      window.removeEventListener('swapCompleted', onSwapCompleted)
+    }
   }, [])
 
   return (
@@ -216,24 +238,63 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                 </div>
               ) : (
                 <div className='config-byo'>
-                  <button
-                    className='config-byo-back'
-                    onClick={() => setShowBackConfirm(true)}
-                  >
-                    Back to Popular Builds
-                  </button>
+                  {swapMode ? (
+                    <div className='config-swap-banner'>
+                      <span>Select a component to swap</span>
+                      <button
+                        className='config-swap-cancel'
+                        onClick={() => {
+                          window.player?.cancelSwap()
+                          setSwapMode(false)
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      className='config-byo-back'
+                      onClick={() => setShowBackConfirm(true)}
+                    >
+                      Back to Popular Builds
+                    </button>
+                  )}
                   <div className='config-layout-grid'>
-                    {byoFrames.map((f, i) => (
+                    {(swapMode && swapState
+                      ? byoFrames.filter(f => {
+                          const leftOk = !swapState.leftModel || swapState.leftModel.pairing?.right?.includes(f.id)
+                          const rightOk = !swapState.rightModel || swapState.rightModel.pairing?.left?.includes(f.id)
+                          return leftOk && rightOk
+                        })
+                      : byoFrames
+                    ).map((f, i) => (
                       <div
                         key={i}
-                        className='config-layout-item config-layout-item--draggable'
-                        onMouseDown={(e) => {
+                        className={`config-layout-item${swapMode ? ' config-layout-item--swap' : ' config-layout-item--draggable'}`}
+                        onClick={swapMode ? () => window.player?.setSwapElement({ id: f.id }) : undefined}
+                        onMouseDown={swapMode ? undefined : (e) => {
                           e.preventDefault()
-                          window.player?.onDragStart(f.id)
+                          const startX = e.clientX
+                          const startY = e.clientY
+                          let dragging = false
+
+                          const onMove = (moveEvent) => {
+                            //20px threshold to start dragging
+                            const dx = moveEvent.clientX - startX
+                            const dy = moveEvent.clientY - startY
+                            if (!dragging && Math.sqrt(dx * dx + dy * dy) > 20) {
+                              dragging = true
+                              window.player?.onDragStart(f.id)
+                            }
+                          }
+
                           const onUp = () => {
-                            window.player?.onDragEnd()
+                            if (dragging) window.player?.onDragEnd()
+                            document.removeEventListener('mousemove', onMove)
                             document.removeEventListener('mouseup', onUp)
                           }
+
+                          document.addEventListener('mousemove', onMove)
                           document.addEventListener('mouseup', onUp)
                         }}
                       >

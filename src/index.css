@@ -1987,6 +1987,39 @@ canvas {
   color: #71757b;
 }
 
+.config-swap-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #333;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-family: "Soleil", sans-serif;
+  font-size: 12px;
+}
+
+.config-swap-cancel {
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: "Soleil", sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.config-layout-item--swap {
+  cursor: pointer;
+  border-color: #b0b4bb;
+}
+
+.config-layout-item--swap:hover {
+  border-color: #333;
+}
+
 .config-layout-new-icon {
   display: flex;
   align-items: center;

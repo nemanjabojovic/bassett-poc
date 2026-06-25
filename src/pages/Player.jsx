@@ -104,6 +104,12 @@ const Player = ({
       if (dims) setDimensions(dims);
       window.dispatchEvent(new Event("playerConfigurationChanged"));
     };
+    options.setSwapInitiated = () => {
+      window.dispatchEvent(new Event("swapInitiated"));
+    };
+    options.setSwapCompleted = () => {
+      window.dispatchEvent(new Event("swapCompleted"));
+    };
 
     setPlayerOptions(options);
   }, [skuToLoad, configurationToLoad]);
