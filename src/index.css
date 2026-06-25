@@ -1822,6 +1822,32 @@ canvas {
   color: rgba(113, 117, 123, 1);
 }
 
+.config-material-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.config-material-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Soleil", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.config-material-btn--active {
+  border-color: #222;
+  background: #222;
+  color: #fff;
+}
+
 .config-empty {
   font-size: 12px;
   color: #71757b;

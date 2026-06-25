@@ -92,12 +92,20 @@ const Player = ({
       ...(data.leathers || []),
       ...(data.woods || []),
     ];
-    const frameTextures = options.frame?.textures
-      ? allTextures.filter((t) => options.frame.textures.includes(t.sku))
+    const defaultMaterialType = data.materialTypes?.[0]?.name || 'Fabric';
+    const rawTextures = options.frame?.textures;
+    const textureSKUs = rawTextures
+      ? Array.isArray(rawTextures)
+        ? rawTextures
+        : (rawTextures[defaultMaterialType] || Object.values(rawTextures)[0] || [])
+      : [];
+    const frameTextures = textureSKUs.length > 0
+      ? allTextures.filter((t) => textureSKUs.includes(t.sku))
       : data.fabrics;
     options.fabric = [
       { texture: frameTextures[0] || data.fabrics[0], name: "PrimaryCover" },
     ];
+    options.materialType = defaultMaterialType;
     options.popularConfiguration = configurationToLoad;
     options.data = data;
     options.signalModelConfigurationChange = () => {

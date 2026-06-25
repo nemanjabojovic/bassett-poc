@@ -77,27 +77,28 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
   const [showBuildOverview, setShowBuildOverview] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
   const [selectedCover, setSelectedCover] = useState(data.fabrics?.[0] || null)
+  const [materialType, setMaterialType] = useState(null)
 
   const frameName = frame?.name || sku || ''
 
-  const popularConfigs = data.popularConfigurations.filter(pc => {
-    if (pc.collection !== 'bassett') return false
-    return pc.elements.every(el => {
-      const f = data.frames.find(fr => fr.id === el.id)
-      return f && !f.staticFrame && f.type !== 'table'
+  const popularConfigs = data.popularConfigurations.filter(popularConfig => {
+    if (popularConfig.collection !== 'bassett') return false
+    return popularConfig.elements.every(element => {
+      const frame = data.frames.find(frame => frame.id === element.id)
+      return frame && !frame.staticFrame && frame.type !== 'table'
     })
   })
 
   const byoFrames = data.frames.filter(
-    f => f.collection === 'bassett' && !f.staticFrame && f.type !== 'table'
+    frame => frame.collection === 'bassett' && !frame.staticFrame && frame.type !== 'table'
   )
 
   const armTypes = data.collectionOptions?.armTypes?.filter(
-    a => a.collection === 'bassett'
+    armType => armType.collection === 'bassett'
   ) || []
 
   const defaultArm = armTypes[0]
-  const activeArm = armTypes.find(a => a.name === selectedArm) || defaultArm
+  const activeArm = armTypes.find(armType => armType.name === selectedArm) || defaultArm
 
   const displayTitle = (() => {
     const armDisplay = activeArm?.name.replace(/_/g, ' ')
@@ -109,14 +110,27 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
     return `${stripped} ${armDisplay} Reclining Sectional`
   })()
 
+  const getFrameTextureSKUs = (frame) => {
+    if (!frame?.textures) return []
+    return Array.isArray(frame.textures)
+      ? frame.textures
+      : Object.values(frame.textures).flat()
+  }
+
   const configTextures = (() => {
-    const skus = new Set()
-    configElementIds.forEach(id => {
+    // flatMap because each frame returns an array of SKUs — flattens [["a","b"],["c"]] into ["a","b","c"]
+    const skus = configElementIds.flatMap(id => {
       const f = data.frames.find(fr => fr.id === id)
-      if (f?.textures) f.textures.forEach(s => skus.add(s))
+      return getFrameTextureSKUs(f)
     })
-    return resolveTextures(skus.size > 0 ? [...skus] : null)
+    return resolveTextures(skus.length > 0 ? skus : null)
   })()
+
+  const materialTypes = data.materialTypes || []
+  const activeMaterialType = materialType || materialTypes[0]?.name || null
+  const displayTextures = activeMaterialType
+    ? configTextures.filter(t => t.type === activeMaterialType)
+    : configTextures
 
   useEffect(() => {
     if (popularConfigs.length === 0) return
@@ -124,12 +138,11 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
     setSelectedLayout(first)
     const ids = first.elements.map(e => e.id)
     setConfigElementIds(ids)
-    const skus = new Set()
-    ids.forEach(id => {
+    const allSkus = ids.flatMap(id => {
       const f = data.frames.find(fr => fr.id === id)
-      if (f?.textures) f.textures.forEach(s => skus.add(s))
+      return getFrameTextureSKUs(f)
     })
-    const textures = resolveTextures(skus.size > 0 ? [...skus] : null)
+    const textures = resolveTextures(allSkus.length > 0 ? allSkus : null)
     if (textures[0]) setSelectedCover(textures[0])
   }, [])
 
@@ -391,8 +404,29 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
           />
           {coverOpen && (
             <div className='config-section-content'>
+              {materialTypes.length > 0 && (
+                <div className='config-material-toggle'>
+                  {materialTypes.map(materialType => (
+                    <button
+                      key={materialType.name}
+                      className={`config-material-btn${activeMaterialType === materialType.name ? ' config-material-btn--active' : ''}`}
+                      onClick={() => {
+                        setMaterialType(materialType.name)
+                        const first = configTextures.find(t => t.type === materialType.name)
+                        if (first) {
+                          setSelectedCover(first)
+                          window.player?.setMaterialType(materialType.name)
+                          window.player?.loadFabric(first, 'main', true)
+                        }
+                      }}
+                    >
+                      {materialType.name}
+                    </button>
+                  ))}
+                </div>
+              )}
               <div className='config-swatch-grid'>
-                {configTextures.map((item, i) => (
+                {displayTextures.map((item, i) => (
                   <div
                     key={i}
                     className={`config-swatch${selectedCover?.sku === item.sku ? ' config-swatch--selected' : ''}`}

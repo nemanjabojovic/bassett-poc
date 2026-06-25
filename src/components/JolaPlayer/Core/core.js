@@ -473,7 +473,8 @@ export default class Core {
         frame.collection === this.collection && frame.id === element.id,
     );
 
-    let modelURL = `${this.resourcesPath}/models/${"frame-"}${modelData.id}/${"frame-"}${modelData.id}.gltf`;
+    const variantId = modelData.variants?.[this.selectedMaterialType] || modelData.id;
+    let modelURL = `${this.resourcesPath}/models/${"frame-"}${variantId}/${"frame-"}${variantId}.gltf`;
 
     let modelObject = Object.assign({}, modelData);
     modelObject.url = modelURL;
@@ -533,7 +534,11 @@ export default class Core {
 
     this.clearSelected();
     //TODO: Fix conditions for frame addition to url
-    let modelURL = `${this.resourcesPath}/models/low-poly/${"frame-"}${id}/${"frame-"}${id}.gltf`;
+    const dragFrame = this.data.frames.find(
+      (frame) => frame.collection === this.collection && frame.id === id,
+    );
+    const dragVariantId = dragFrame?.variants?.[this.selectedMaterialType] || id;
+    let modelURL = `${this.resourcesPath}/models/low-poly/${"frame-"}${dragVariantId}/${"frame-"}${dragVariantId}.gltf`;
 
     let exists = await this.tryFetchModel(modelURL);
 

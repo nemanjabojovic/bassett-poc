@@ -323,6 +323,12 @@ export default class Player extends Core {
     this.setAvailableApplicationAreas();
   }
 
+  setMaterialType(type) {
+    this.selectedMaterialType = type;
+    this.updateModel();
+    this.loadConfiguration();
+  }
+
   setLocalization(input = "en-US") {
     this.localization = input;
 

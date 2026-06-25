@@ -38,15 +38,15 @@
     {
       "elements": [
         {
-          "id": "41L"
+          "id": "41"
         },
         {
-          "id": "43L"
+          "id": "43"
         }
       ],
       "collection": "bassett",
       "brandId": "bassett",
-      "name": "41L & 43L",
+      "name": "41 & 43",
       "icon": ""
     }
   ],
@@ -89,43 +89,64 @@
       "collection": "bassett"
     },
     {
-      "sku": "41L",
-      "id": "41L",
+      "sku": "41",
+      "id": "41",
       "icon": "",
-      "name": "Left Arm Magnificent Motion L Sectional",
+      "name": "Left Arm Magnificent Motion Sectional",
       "brandId": "bassett",
-      "textures": ["7219-28", "7229-10"],
+      "textures": {
+        "Leather": ["7219-28", "7229-10"],
+        "Fabric": ["1629-2", "5283-15"]
+      },
+      "variants": {
+        "Leather": "41L",
+        "Fabric": "41M"
+      },
       "pairing": {
-        "right": ["43L", "38L"]
+        "right": ["43", "38"]
       },
       "price": 3000,
       "status": "Complete",
       "collection": "bassett"
     },
     {
-      "sku": "43L",
-      "id": "43L",
+      "sku": "43",
+      "id": "43",
       "icon": "",
-      "name": "Right Arm Magnificent Motion L Sectional",
+      "name": "Right Arm Magnificent Motion Sectional",
       "brandId": "bassett",
-      "textures": ["7219-28", "7229-10"],
+      "textures": {
+        "Leather": ["7219-28", "7229-10"],
+        "Fabric": ["1629-2", "5283-15"]
+      },
+      "variants": {
+        "Leather": "43L",
+        "Fabric": "43M"
+      },
       "pairing": {
-        "left": ["41L", "38L"]
+        "left": ["41", "38"]
       },
       "price": 3000,
       "status": "Complete",
       "collection": "bassett"
     },
     {
-      "sku": "38L",
-      "id": "38L",
+      "sku": "38",
+      "id": "38",
       "icon": "",
       "name": "Corner Sectional",
       "brandId": "bassett",
-      "textures": ["7219-28", "7229-10"],
+      "textures": {
+        "Leather": ["7219-28", "7229-10"],
+        "Fabric": ["1629-2", "5283-15"]
+      },
+      "variants": {
+        "Leather": "38L",
+        "Fabric": "38M"
+      },
       "pairing": {
-        "left": ["41L"],
-        "right": ["43L"]
+        "left": ["41"],
+        "right": ["43"]
       },
       "status": "Complete",
       "collection": "bassett"
