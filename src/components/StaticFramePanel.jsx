@@ -216,11 +216,11 @@ const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeC
         />
         {cushionOpen && (
           <div className='config-section-content'>
-            <div className='config-arm-grid'>
+            <div className='config-option-grid'>
               {CUSHION_OPTIONS.map((opt, i) => (
                 <div
                   key={i}
-                  className={`config-arm-item${selectedCushion?.name === opt.name ? ' config-arm-item--selected' : ''}`}
+                  className={`config-option-item${selectedCushion?.name === opt.name ? ' config-option-item--selected' : ''}`}
                   onClick={() => onCushionChange(opt)}
                 >
                   <img src={opt.icon} alt={opt.name} />
@@ -253,11 +253,11 @@ const TableBody = ({ frame, selectedTop, onTopChange, selectedBase, onBaseChange
         />
         {edgeOpen && (
           <div className='config-section-content'>
-            <div className='config-arm-grid'>
+            <div className='config-option-grid'>
               {EDGE_OPTIONS.map((opt, i) => (
                 <div
                   key={i}
-                  className={`config-arm-item${selectedEdge?.name === opt.name ? ' config-arm-item--selected' : ''}`}
+                  className={`config-option-item${selectedEdge?.name === opt.name ? ' config-option-item--selected' : ''}`}
                   onClick={() => onEdgeChange(opt)}
                 >
                   <img src={opt.icon} alt={opt.name} />

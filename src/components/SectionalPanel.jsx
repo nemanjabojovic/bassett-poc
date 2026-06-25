@@ -249,13 +249,13 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
           />
           {armOpen && (
             <div className='config-section-content'>
-              <div className='config-arm-grid'>
+              <div className='config-option-grid'>
                 {armTypes.map((arm, i) => {
                   const isSelected = selectedArm ? selectedArm === arm.name : i === 0
                   return (
                     <div
                       key={i}
-                      className={`config-arm-item${isSelected ? ' config-arm-item--selected' : ''}`}
+                      className={`config-option-item${isSelected ? ' config-option-item--selected' : ''}`}
                       onClick={() => {
                         setSelectedArm(arm.name)
                         window.player?.setArmType(arm)
@@ -280,16 +280,16 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
           />
           {tallBackOpen && (
             <div className='config-section-content'>
-              <div className='config-arm-grid'>
+              <div className='config-toggle-grid'>
                 {['Yes', 'No'].map((opt, i) => (
                   <div
                     key={i}
-                    className={`config-arm-item${(tallBack || 'Yes') === opt ? ' config-arm-item--selected' : ''}`}
+                    className={`config-option-item${(tallBack || 'Yes') === opt ? ' config-option-item--selected' : ''}`}
                     onClick={() => {
                       setTallBack(opt)
                     }}
                   >
-                    <span className='config-arm-text-only'>{opt}</span>
+                    <span className='config-option-text-only'>{opt}</span>
                   </div>
                 ))}
               </div>
@@ -321,8 +321,8 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                       className='config-swatch-img'
                       style={{ backgroundImage: item.icon ? `url(${item.icon})` : 'none' }}
                     />
-                    <span className='config-swatch-name'>
-                      <span className='config-swatch-sku'>{item.sku}</span>
+                    <span className='config-swatch-sku'>
+                      <span>{item.sku}</span>
                       {item.name && <span className='config-swatch-label'>{item.name}</span>}
                     </span>
                   </div>
@@ -342,11 +342,11 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
           />
           {cushionOpen && (
             <div className='config-section-content'>
-              <div className='config-arm-grid'>
+              <div className='config-option-grid'>
                 {cushionOptions.map((opt, i) => (
                   <div
                     key={i}
-                    className={`config-arm-item${selectedCushion?.name === opt.name ? ' config-arm-item--selected' : ''}`}
+                    className={`config-option-item${selectedCushion?.name === opt.name ? ' config-option-item--selected' : ''}`}
                     onClick={() => setSelectedCushion(opt)}
                   >
                     <img src={opt.icon} alt={opt.name} />
