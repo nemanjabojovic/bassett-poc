@@ -3430,6 +3430,14 @@ export default class Core {
           child.visible = child.name.includes(this.selectedArmType.sku);
         });
       }
+
+      if (child.name === "Power_Button_Group") {
+        child.children.forEach((child) => {
+          child.visible = child.name.includes(this.selectedArmType.sku);
+        });
+      }
+
+
     })
 
   }

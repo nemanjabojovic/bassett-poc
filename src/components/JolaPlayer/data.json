@@ -84,6 +84,8 @@
       "type": "table",
       "brandId": "bassett",
       "textures": ["Fawn", "Sandstone", "Navy", "Tidal Blue"],
+      "topTextures": ["Fawn", "Sandstone"],
+      "baseTextures": ["Fawn", "Sandstone", "Navy", "Tidal Blue"],
       "price": 5000,
       "status": "Complete",
       "collection": "bassett"

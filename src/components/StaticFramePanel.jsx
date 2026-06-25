@@ -244,12 +244,13 @@ const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeC
 
 const TableBody = ({ frame, selectedTop, onTopChange, selectedBase, onBaseChange, selectedEdge, onEdgeChange }) => {
   const [edgeOpen, setEdgeOpen] = useState(false)
-  const finishes = resolveTextures(frame?.textures)
+  const topFinishes = resolveTextures(frame?.topTextures || frame?.textures)
+  const baseFinishes = resolveTextures(frame?.baseTextures || frame?.textures)
 
   return (
     <>
-      <SwatchSection label='Top Finish' items={finishes} defaultOpen={true} onSelect={handleTextureSelect} materialName='Top' value={selectedTop} onChange={onTopChange} />
-      <SwatchSection label='Base Finish' items={finishes} onSelect={handleTextureSelect} materialName='Base' value={selectedBase} onChange={onBaseChange} />
+      <SwatchSection label='Top Finish' items={topFinishes} defaultOpen={true} onSelect={handleTextureSelect} materialName='Top' value={selectedTop} onChange={onTopChange} />
+      <SwatchSection label='Base Finish' items={baseFinishes} onSelect={handleTextureSelect} materialName='Base' value={selectedBase} onChange={onBaseChange} />
       <div className='config-section'>
         <SectionHeader
           label='Edge Profiles'
