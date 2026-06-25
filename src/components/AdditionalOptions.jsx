@@ -6,12 +6,13 @@ import topView from "../assets/icons/topView.svg";
 import leftView from "../assets/icons/leftView.svg";
 import zoomIn from "../assets/icons/zoomIn.svg";
 import camera from "../assets/icons/camera.svg";
-import animationsIcon from "../assets/icons/animations.svg";
+import animationOffIcon from "../assets/icons/animationOff.svg";
 import dimensions from "../assets/icons/dimensions.svg";
 import additionalOptionsIcon from "../assets/icons/additionalOptions.svg";
 
 const AdditionalOptions = ({ isOpenAdditionalOption, setIsOpenAdditionalOption }) => {
   const [animationsAvailable, setAnimationsAvailable] = useState(false);
+  const [animationActive, setAnimationActive] = useState(false);
 
   const handleDefaultView = () => {
     window.player.updateCameraPosition("default");
@@ -89,6 +90,7 @@ const AdditionalOptions = ({ isOpenAdditionalOption, setIsOpenAdditionalOption }
 
   const handleAnimationToggle = () => {
     window.player.playAnimation();
+    setAnimationActive(prev => !prev);
   };
 
 
@@ -121,9 +123,10 @@ const AdditionalOptions = ({ isOpenAdditionalOption, setIsOpenAdditionalOption }
       )}
       {animationsAvailable && (
         <Button
-          icon={<img src={animationsIcon} alt='Animation' />}
+          icon={<img src={animationOffIcon} alt='Animation' style={animationActive ? { filter: 'invert(1)' } : {}} />}
           className='additional-options-buttons'
           onClick={handleAnimationToggle}
+          style={animationActive ? { background: '#333' } : {}}
         />
       )}
     </div>

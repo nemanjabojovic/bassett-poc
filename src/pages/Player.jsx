@@ -173,16 +173,16 @@ const Player = ({
         <div className='viewer-footer'>
           <div className='viewer-footer-dims'>
             <span>
-              Height{" "}
-              {dimensions?.height ? `${Math.round(dimensions.height)}"` : "--"}
+              <span className='dim-label'>Height</span>{" "}
+              <span className='dim-value'>{dimensions?.height ?? "--"}</span>
             </span>
             <span>
-              Width{" "}
-              {dimensions?.width ? `${Math.round(dimensions.width)}"` : "--"}
+              <span className='dim-label'>Width</span>{" "}
+              <span className='dim-value'>{dimensions?.width ?? "--"}</span>
             </span>
             <span>
-              Depth{" "}
-              {dimensions?.depth ? `${Math.round(dimensions.depth)}"` : "--"}
+              <span className='dim-label'>Depth</span>{" "}
+              <span className='dim-value'>{dimensions?.depth ?? "--"}</span>
             </span>
           </div>
           <div className='viewer-footer-right'>
