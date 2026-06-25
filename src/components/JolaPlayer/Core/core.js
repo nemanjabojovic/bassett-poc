@@ -182,9 +182,9 @@ export default class Core {
     this.targetFPS = this.preset.targetFPS || 60;
     this.frameInterval = 1 / this.targetFPS;
     this.frameDelta = 0;
-    this._needsRender = true;
+    this.needsRender = true;
     this._renderFrames = 0;
-    this._needsShadowUpdate = true;
+    this.needsShadowUpdate = true;
     this.mouse = new Vector2();
 
     this.raycaster = new Raycaster();
@@ -362,7 +362,7 @@ export default class Core {
     if (frames) {
       this._renderFrames = Math.max(this._renderFrames, frames);
     }
-    this._needsRender = true;
+    this.needsRender = true;
   }
 
   createLights(lightsArray = this.sceneOptions.lights) {
@@ -689,7 +689,7 @@ export default class Core {
 
     this.isDragging = false;
     this._shadowDisabledForDrag = false;
-    this._needsShadowUpdate = true;
+    this.needsShadowUpdate = true;
     this.requestRender();
 
     // Remove window listener, back to container only
@@ -1550,7 +1550,7 @@ export default class Core {
             this.renderTarget,
             this.shadowCamera,
           );
-          this._needsShadowUpdate = true;
+          this.needsShadowUpdate = true;
 
           this.currentDimensions = calculateDimensions(this.model);
 
@@ -1833,7 +1833,7 @@ export default class Core {
         this.renderTarget,
         this.shadowCamera,
       );
-      this._needsShadowUpdate = true;
+      this.needsShadowUpdate = true;
     }
 
 
@@ -3015,7 +3015,7 @@ export default class Core {
 
     // Keep tweens ticking even between renders
     TWEEN.update();
-    if (TWEEN.getAll().length > 0) this._needsRender = true;
+    if (TWEEN.getAll().length > 0) this.needsRender = true;
 
     // OrbitControls damping needs continuous updates while settling
     this.controls.update();
@@ -3026,25 +3026,26 @@ export default class Core {
       1e-10 ||
       this._prevControlsTarget.distanceToSquared(this.controls.target) > 1e-10;
     if (cameraMoved) {
-      this._needsRender = true;
+      this.needsRender = true;
       this._prevCameraPosition.copy(this.camera.position);
       this._prevControlsTarget.copy(this.controls.target);
     }
 
     // Keep rendering continuously during drag operations
-    if (this.isDragging) this._needsRender = true;
+    if (this.isDragging) this.needsRender = true;
 
     // Animation mixer - only render when animations are actually playing
     if (this.mixer) {
       this.mixer.update(delta);
       if (this._isAnimationPlaying) {
-        this._needsRender = true;
+        this.needsRender = true;
+        this.needsShadowUpdate = true;
       }
     }
 
     // Multi-frame requests (e.g. after texture swap, render a few extra frames)
     if (this._renderFrames > 0) {
-      this._needsRender = true;
+      this.needsRender = true;
       this._renderFrames--;
     }
 
@@ -3053,13 +3054,13 @@ export default class Core {
       this.css2DRenderer.render(this.scene, this.camera);
     }
 
-    if (!this._needsRender) return;
+    if (!this.needsRender) return;
 
     // FPS throttle
     if (this.frameDelta < this.frameInterval) return;
     this.frameDelta = this.frameDelta % this.frameInterval;
 
-    this._needsRender = false;
+    this.needsRender = false;
 
     this.renderer.render(this.scene, this.camera);
     this.stats?.update();
@@ -3100,13 +3101,13 @@ export default class Core {
     // contact shadow (only update when scene geometry changes)
     if (
       this.preset.contactShadow &&
-      this._needsShadowUpdate &&
+      this.needsShadowUpdate &&
       !this._shadowDisabledForDrag
     ) {
       this.ensureRenderTarget();
       this.setShadowVisibility(true);
       this.updateContactShadow();
-      this._needsShadowUpdate = false;
+      this.needsShadowUpdate = false;
     }
   }
 
