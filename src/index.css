@@ -1851,7 +1851,7 @@ canvas {
 
 
 .config-layout-item--selected img {
-  border: 1px solid #222;
+  border: 2px solid #222;
 }
 
 .config-layout-item img --selected {
@@ -2003,7 +2003,6 @@ canvas {
 }
 
 .build-overview-thumb--fallback {
-  opacity: 0.15;
   padding: 14px;
   box-sizing: border-box;
 }

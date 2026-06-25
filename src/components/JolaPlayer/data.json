@@ -8,19 +8,19 @@
   ],
   "collectionOptions": {
     "armTypes": [
+        {
+        "name": "Slope_Arm",
+        "collection": "bassett",
+        "brandId": "bassett",
+        "sku": "Slope",
+        "icon": "./resources/icons/arm_selection.png",
+        "status": "Complete"
+      },
       {
         "name": "Panel_Arm",
         "collection": "bassett",
         "brandId": "bassett",
         "sku": "Panel",
-        "icon": "./resources/icons/arm_selection.png",
-        "status": "Complete"
-      },
-      {
-        "name": "Slope_Arm",
-        "collection": "bassett",
-        "brandId": "bassett",
-        "sku": "Slope",
         "icon": "./resources/icons/arm_selection.png",
         "status": "Complete"
       },
