@@ -307,7 +307,7 @@ function App() {
                       {product.breakAfter
                         ? (() => {
                             const words = product.name.split(' ')
-                            return <>{words.slice(0, product.breakAfter).join(' ')}<br />{words.slice(product.breakAfter).join(' ')}</>
+                            return <>{words.slice(0, product.breakAfter).join(' ')}<br className='name-line-break' />{words.slice(product.breakAfter).join(' ')}</>
                           })()
                         : product.name
                       }

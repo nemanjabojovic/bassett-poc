@@ -263,7 +263,7 @@ code {
   padding: 0 14px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   flex: 1;
   justify-content: space-between;
 }
@@ -294,6 +294,12 @@ code {
 
 .configure-now-btn:hover {
   background: #444;
+}
+
+@media (max-width: 1500px) {
+  .name-line-break {
+    display: none;
+  }
 }
 
 @media (max-width: 900px) {
