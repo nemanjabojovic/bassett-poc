@@ -99,6 +99,16 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
   const defaultArm = armTypes[0]
   const activeArm = armTypes.find(a => a.name === selectedArm) || defaultArm
 
+  const displayTitle = (() => {
+    const armDisplay = activeArm?.name.replace(/_/g, ' ')
+    if (!frameName || !armDisplay) return frameName
+    const stripped = frameName
+      .replace(/^(Left|Right) Arm\s+/, '')
+      .replace(/\s+(L|R|Corner)\s+Sectional$/, '')
+      .replace(/\s+Sectional$/, '')
+    return `${stripped} ${armDisplay} Reclining Sectional`
+  })()
+
   const configTextures = (() => {
     const skus = new Set()
     configElementIds.forEach(id => {
@@ -181,8 +191,8 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
       )}
       <div className='config-panel-header'>
         <div className='config-panel-title-group'>
-          <h2 className='config-panel-title'>{frameName}</h2>
-          <p className='config-panel-sku'>{sku}</p>
+          <h2 className='config-panel-title'>{displayTitle}</h2>
+          <p className='config-panel-sku'>{configElementIds.length > 0 ? configElementIds.join(' & ') : sku}</p>
         </div>
         <button className='config-panel-close' onClick={() => setShowConfirm(true)}><img src={CloseIcon} alt='Close' /></button>
       </div>

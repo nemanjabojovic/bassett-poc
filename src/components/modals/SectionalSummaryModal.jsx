@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import data from '../JolaPlayer/data.json'
 import armSelectionImg from '../../assets/icons/arm_selection.png'
+import jolaLogoSvg from '../../assets/icons/jolaLogo.svg'
 import downloadIcon from '../../assets/icons/Download.png'
 import shareIcon from '../../assets/icons/Share.png'
 import printIcon from '../../assets/icons/Print.png'
@@ -12,6 +13,21 @@ const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tall
     const dataUrl = window.player?.getScreenshot('default')
     if (dataUrl) setScreenshot(dataUrl)
   }, [])
+
+  const frameName = frame?.name || sku || ''
+  const armDisplay = selectedArm?.name?.replace(/_/g, ' ')
+  const displayTitle = (() => {
+    if (!frameName || !armDisplay) return frameName
+    const stripped = frameName
+      .replace(/^(Left|Right) Arm\s+/, '')
+      .replace(/\s+(L|R|Corner)\s+Sectional$/, '')
+      .replace(/\s+Sectional$/, '')
+    return `${stripped} ${armDisplay} Reclining Sectional`
+  })()
+
+  const frameIdSubtitle = configElementIds.length > 0
+    ? configElementIds.join(' & ')
+    : sku
 
   const grouped = configElementIds.reduce((acc, id) => {
     const f = data.frames.find(fr => fr.id === id)
@@ -56,8 +72,8 @@ const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tall
               }
             </div>
             <div className='summary-details'>
-              <p className='summary-frame-name'>{frame?.name || sku}</p>
-              <p className='summary-frame-sku'>{sku}</p>
+              <p className='summary-frame-name'>{displayTitle}</p>
+              <p className='summary-frame-sku'>{frameIdSubtitle}</p>
               {dimensions && (
                 <div className='summary-section'>
                   <p className='summary-section-label'>Dimensions</p>
@@ -108,7 +124,7 @@ const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tall
                   <div key={i} className='summary-build-overview-item'>
                     {item.frame.icon
                       ? <img src={item.frame.icon} alt={item.frame.name} className='summary-build-overview-thumb' />
-                      : <div className='summary-build-overview-thumb' />
+                      : <img src={jolaLogoSvg} alt='' className='summary-build-overview-thumb build-overview-thumb--fallback' />
                     }
                     <p className='summary-build-overview-name'>{item.frame.name}</p>
                     <p className='summary-build-overview-detail'>QTY: {item.qty}</p>
