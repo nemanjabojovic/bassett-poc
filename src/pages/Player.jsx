@@ -7,6 +7,7 @@ import StaticFramePanel from "../components/StaticFramePanel";
 import SectionalPanel from "../components/SectionalPanel";
 import JolaIcon from "../assets/icons/JolaLogo.png";
 import AdditionalOptions from "../components/AdditionalOptions";
+import LightAngleSlider from "../components/LightAngleSlider";
 import ClearConfirmModal from "../components/modals/ClearConfirmModal";
 
 const Player = ({
@@ -170,6 +171,10 @@ const Player = ({
             isOpenAdditionalOption={isOpenAdditionalOption}
             setIsOpenAdditionalOption={setIsOpenAdditionalOption}
           />
+        </div>
+
+        <div className='viewer-light-angle'>
+          <LightAngleSlider />
         </div>
 
         {playerOptions && (
