@@ -182,6 +182,7 @@ export default class Player extends Core {
               map.wrapS = RepeatWrapping;
               map.wrapT = RepeatWrapping;
               map.flipY = false;
+              map.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
 
               map.rotation = biasWelt ? biasRotation : 0;
 
