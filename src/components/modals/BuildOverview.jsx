@@ -1,7 +1,7 @@
 import data from '../JolaPlayer/data.json'
 import jolaLogoSvg from '../../assets/icons/jolaLogo.svg'
 
-const BuildOverview = ({ configElementIds, onClose }) => {
+const BuildOverview = ({ configElementIds, materialType, onClose }) => {
   const grouped = configElementIds.reduce((acc, id) => {
     const f = data.frames.find(fr => fr.id === id)
     if (!f) return acc
@@ -32,7 +32,7 @@ const BuildOverview = ({ configElementIds, onClose }) => {
               <div className='build-overview-info'>
                 <p className='build-overview-name'>{item.frame.name}</p>
                 <p className='build-overview-detail'>QTY: {item.qty}</p>
-                <p className='build-overview-detail'>SKU: {item.frame.sku}</p>
+                <p className='build-overview-detail'>SKU: {item.frame.variants?.[materialType] || item.frame.sku}</p>
               </div>
             </div>
           ))}

@@ -25,8 +25,12 @@ const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tall
     return `${stripped} ${armDisplay} Reclining Sectional`
   })()
 
+  const materialType = selectedCover?.type || null
   const frameIdSubtitle = configElementIds.length > 0
-    ? configElementIds.join(' & ')
+    ? configElementIds.map(id => {
+        const f = data.frames.find(fr => fr.id === id)
+        return f?.variants?.[materialType] || id
+      }).join(' & ')
     : sku
 
   const grouped = configElementIds.reduce((acc, id) => {
@@ -128,7 +132,7 @@ const SectionalSummaryModal = ({ sku, frame, configElementIds, selectedArm, tall
                     }
                     <p className='summary-build-overview-name'>{item.frame.name}</p>
                     <p className='summary-build-overview-detail'>QTY: {item.qty}</p>
-                    <p className='summary-build-overview-detail'>SKU: {item.frame.sku}</p>
+                    <p className='summary-build-overview-detail'>SKU: {item.frame.variants?.[materialType] || item.frame.sku}</p>
                   </div>
                 ))}
               </div>

@@ -199,13 +199,21 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
       {showBuildOverview && (
         <BuildOverview
           configElementIds={configElementIds}
+          materialType={activeMaterialType}
           onClose={() => setShowBuildOverview(false)}
         />
       )}
       <div className='config-panel-header'>
         <div className='config-panel-title-group'>
           <h2 className='config-panel-title'>{displayTitle}</h2>
-          <p className='config-panel-sku'>{configElementIds.length > 0 ? configElementIds.join(' & ') : sku}</p>
+          <p className='config-panel-sku'>
+            {configElementIds.length > 0
+              ? configElementIds.map(id => {
+                  const f = data.frames.find(fr => fr.id === id)
+                  return f?.variants?.[activeMaterialType] || id
+                }).join(' & ')
+              : sku}
+          </p>
         </div>
         <button className='config-panel-close' onClick={() => setShowConfirm(true)}><img src={CloseIcon} alt='Close' /></button>
       </div>
@@ -214,7 +222,12 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
         <div className='config-section'>
           <SectionHeader
             label={buildMode === 'byo' ? 'Pick a Component' : 'Select a Layout'}
-            selectedName={buildMode === 'popular' ? (selectedLayout?.name || null) : null}
+            selectedName={buildMode === 'popular' && selectedLayout
+              ? selectedLayout.elements.map(e => {
+                  const f = data.frames.find(fr => fr.id === e.id)
+                  return f?.variants?.[activeMaterialType] || e.id
+                }).join(' & ')
+              : null}
             selectedIcon={buildMode === 'popular' && selectedLayout?.icon ? selectedLayout.icon : null}
             open={layoutOpen}
             onClick={() => setLayoutOpen(v => !v)}
@@ -255,7 +268,12 @@ const SectionalPanel = ({ sku, frame, onClose, dimensions }) => {
                           ? <img src={pc.icon} alt={pc.name} className='config-layout-thumb' />
                           : <img src={jolaLogoSvg} alt='' className='config-layout-thumb config-layout-thumb--fallback' />
                         }
-                        <p>{pc.name}</p>
+                        <p>
+                        {pc.elements.map(e => {
+                          const f = data.frames.find(fr => fr.id === e.id)
+                          return f?.variants?.[activeMaterialType] || e.id
+                        }).join(' & ')}
+                      </p>
                       </div>
                     </div>
                   ))}

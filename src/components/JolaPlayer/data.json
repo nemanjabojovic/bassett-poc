@@ -91,7 +91,7 @@
         "Fabric": ["1629-2", "5283-15"]
       },
       "variants": {
-        "Leather": "41L",
+        "Leather": "41ML",
         "Fabric": "41M"
       },
       "pairing": {
@@ -111,7 +111,7 @@
         "Fabric": ["1629-2", "5283-15"]
       },
       "variants": {
-        "Leather": "43L",
+        "Leather": "43ML",
         "Fabric": "43M"
       },
       "pairing": {
@@ -131,7 +131,7 @@
         "Fabric": ["1629-2", "5283-15"]
       },
       "variants": {
-        "Leather": "38L",
+        "Leather": "38ML",
         "Fabric": "38M"
       },
       "pairing": {
