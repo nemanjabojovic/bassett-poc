@@ -390,6 +390,26 @@ export default class Player extends Core {
     });
   }
 
+  toggleAnimation() {
+    if (!this.animations?.length) return
+
+    const isPaused = this.animations[0].paused
+
+    if (isPaused) {
+      this.animations.forEach((animation) => {
+        animation.paused = false
+      })
+      this._isAnimationPlaying = true
+    } else if (this._isAnimationPlaying) {
+      this.animations.forEach((animation) => {
+        animation.paused = true
+      })
+      this._isAnimationPlaying = false
+    } else {
+      this.playAnimation()
+    }
+  }
+
   //UPDATERS
   updateCameraPosition(preset = "default", firstLoad = false) {
     this.controls.minAzimuthAngle = Infinity;

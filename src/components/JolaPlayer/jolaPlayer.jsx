@@ -27,6 +27,8 @@ const JolaPlayer = forwardRef(
         ? (options.gui = true)
         : (options.gui = false);
 
+      // options.gui = true;
+
       playerRef.current = new Player(container.id, options);
 
       if (playerRef.current.webglFailed) {
@@ -92,6 +94,7 @@ const JolaPlayer = forwardRef(
             return false;
           },
           playAnimation: noop,
+          toggleAnimation: noop,
           loadFinish: noop,
           setWeltOption: noop,
           getAppAreaFinish: function () {
@@ -165,6 +168,7 @@ const JolaPlayer = forwardRef(
         cancelSwap: () => playerRef.current.cancelSwap(),
         hasAnimation: () => playerRef.current.hasAnimation(),
         playAnimation: () => playerRef.current.playAnimation(),
+        toggleAnimation: () => playerRef.current.toggleAnimation(),
         loadFinish: (finish) => playerRef.current.loadFinish(finish),
         setWeltOption: (weltOption, weltArea) =>
           playerRef.current.setWeltOption(weltOption, weltArea),
