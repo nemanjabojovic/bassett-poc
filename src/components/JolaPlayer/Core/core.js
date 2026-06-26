@@ -3243,24 +3243,14 @@ export default class Core {
             }
             //First check if it fallbacks on main material
             if (
-              this.materialFallbacksOnMain(element.material.name) ||
-              element.material.name.includes("welt") ||
-              element.material.name.includes("flange") ||
-              element.material.name.includes("button") ||
-              element.material.name.includes("gimp") ||
-              element.material.name.includes("band")
+              this.materialFallbacksOnMain(element.material.name)
             ) {
-              // TODO: These if statements _welt and _flange will be removed once getFallbackMaterial(materialName) global function is implemented for all materials
-              if (
-                element.material.name.includes("_welt") ||
-                element.material.name.includes("_flange")
-              ) {
-                material = this.getFallbackMaterial(element.material.name);
-              } else {
+              console.log(element.material.name)
+             
                 material = this.materials.find(
                   (material) => material.name === "main",
                 );
-              }
+            
 
               this.materialsWithMainFallback.push(element.material.name);
             }
@@ -4673,7 +4663,6 @@ export default class Core {
       "welt",
       "welt_fixed",
       "flange",
-      "button",
       "unfinished",
       "band",
       "face",
@@ -4684,9 +4673,7 @@ export default class Core {
       "complete",
     ];
 
-    // Only allow exact "welt" or "button" or includes "welt" from tertiary
-    if (name === "welt" || name === "button" || name.includes("welt"))
-      return true;
+
     if (tertiary.includes(name)) return false; // reject all other clean tertiary-only names
 
     // Try to find a matching primary
