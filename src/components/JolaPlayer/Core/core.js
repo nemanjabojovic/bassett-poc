@@ -1591,6 +1591,7 @@ export default class Core {
           }
 
           this.updateTexture();
+          this.updateModel();
 
           this.modelLoaded = true;
 
@@ -2365,7 +2366,7 @@ export default class Core {
         for (const key of Object.keys(this.collectionOptions)) {
           switch (key) {
             case "armTypes":
-              if (!this.options.armType) {
+              if (!this.selectedArmType) {
                 this.selectedArmType =
                   this.collectionOptions[key].find(
                     (item) => item.sku === this.options.armType,
@@ -3440,7 +3441,7 @@ export default class Core {
         });
       }
 
-      if (child.name === "Table_Top_Group") {
+      if (child.name === "Table_Top_Group" && this.selectedEdgeType) {
         child.children.forEach((child) => {
           child.visible = child.name.includes(this.selectedEdgeType.sku);
         });

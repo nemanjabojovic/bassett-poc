@@ -294,6 +294,10 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
   const [selectedCushion, setSelectedCushion] = useState(CUSHION_OPTIONS[0])
   const [selectedEdge, setSelectedEdge] = useState(EDGE_OPTIONS[0])
 
+  useEffect(() => {
+    if (isTable) window.player?.setEdgeType(EDGE_OPTIONS[0])
+  }, [isTable])
+
   const handleEdgeChange = (opt) => {
     setSelectedEdge(opt)
     window.player?.setEdgeType(opt)
