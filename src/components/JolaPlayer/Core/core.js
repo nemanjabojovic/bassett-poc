@@ -3440,7 +3440,11 @@ export default class Core {
         });
       }
 
-
+      if (child.name === "Table_Top_Group") {
+        child.children.forEach((child) => {
+          child.visible = child.name.includes(this.selectedEdgeType.sku);
+        });
+      }
     })
 
   }

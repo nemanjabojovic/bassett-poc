@@ -19,6 +19,7 @@ export default class Player extends Core {
     this.selectedFrame = options.frame;
     this.selectedPopularConfiguration = options.popularConfiguration;
     this.selectedArmType = options.armType;
+    this.selectedEdgeType = options.edgeType || null;
     this.selectedBackType = options.backType;
     this.selectedBaseType = options.baseType;
     this.selectedStitchType = options.stitchType;
@@ -322,6 +323,11 @@ export default class Player extends Core {
     this.updateModel();
 
     this.setAvailableApplicationAreas();
+  }
+
+  setEdgeType(edgeTypeData) {
+    this.selectedEdgeType = edgeTypeData;
+    this.updateModel();
   }
 
   setMaterialType(type) {

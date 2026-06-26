@@ -72,6 +72,7 @@ const JolaPlayer = forwardRef(
           changeLightsSlider: noop,
           updateCameraPosition: noop,
           setArmType: noop,
+          setEdgeType: noop,
           setBackType: noop,
           onMouseClick: noop,
           loadModel: noop,
@@ -133,6 +134,9 @@ const JolaPlayer = forwardRef(
         },
         setArmType: (armType) => {
           playerRef.current.setArmType(armType);
+        },
+        setEdgeType: (edgeType) => {
+          playerRef.current.setEdgeType(edgeType);
         },
         setBackType: (backType) => {
           playerRef.current.setBackType(backType);

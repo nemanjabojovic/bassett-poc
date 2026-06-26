@@ -169,9 +169,9 @@ const CUSHION_OPTIONS = [
 ]
 
 const EDGE_OPTIONS = [
-  { name: 'Classic', icon: classicImg },
-  { name: 'Contemporary', icon: contemporaryImg },
-  { name: 'Transitional', icon: transitionalImg },
+  { name: 'Classic', sku: 'Classic', icon: classicImg },
+  { name: 'Contemporary', sku: 'Contemporary', icon: contemporaryImg },
+  { name: 'Transitional', sku: 'Transitional', icon: transitionalImg },
 ]
 
 const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeChange, selectedCushion, onCushionChange }) => {
@@ -294,6 +294,11 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
   const [selectedCushion, setSelectedCushion] = useState(CUSHION_OPTIONS[0])
   const [selectedEdge, setSelectedEdge] = useState(EDGE_OPTIONS[0])
 
+  const handleEdgeChange = (opt) => {
+    setSelectedEdge(opt)
+    window.player?.setEdgeType(opt)
+  }
+
   useEffect(() => {
     const textures = resolveTextures(frame?.textures)
     if (textures[0]) {
@@ -321,10 +326,9 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
 
       <div className='config-panel-body'>
         {isTable
-          ? <TableBody frame={frame} selectedTop={selectedTop} onTopChange={setSelectedTop} selectedBase={selectedBase} onBaseChange={setSelectedBase} selectedEdge={selectedEdge} onEdgeChange={setSelectedEdge} />
+          ? <TableBody frame={frame} selectedTop={selectedTop} onTopChange={setSelectedTop} selectedBase={selectedBase} onBaseChange={setSelectedBase} selectedEdge={selectedEdge} onEdgeChange={handleEdgeChange} />
           : <FabricBody frame={frame} selectedCover={selectedCover} onCoverChange={setSelectedCover} selectedSize={selectedSize} onSizeChange={setSelectedSize} selectedCushion={selectedCushion} onCushionChange={setSelectedCushion} />
-        }
-      </div>
+        }      </div>
 
       <div className='config-panel-footer'>
         <div className='config-cta-row'>

@@ -2356,7 +2356,7 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px;
+  padding: 0 40px 40px ;
   z-index: 20;
 }
 
