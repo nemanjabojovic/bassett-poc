@@ -868,25 +868,23 @@ export default class Core {
 
           spacePosition.copy(lastComponentR).add(offset);
         } else {
-          child
-            .getObjectByName("component_R")
-            ?.getWorldPosition(lastComponentR);
+          componentR?.getWorldPosition(lastComponentR);
         }
 
         let canBeSnapped = false;
 
         if (lastComponentUserData) {
           canBeSnapped =
-            lastComponentUserData.model.pairing.right.includes(id) &&
-            child.userData.model.pairing.left.includes(id);
+            lastComponentUserData.model.pairing.right?.includes(id) &&
+            child.userData.model.pairing.left?.includes(id);
         } else {
-          canBeSnapped = child.userData.model.pairing.left.includes(id);
+          canBeSnapped = child.userData.model.pairing.left?.includes(id) ?? false;
 
           if (index === 1) {
             let canBeAdded =
               this.model.children[
                 index - 1
-              ].userData.model.pairing.right.includes(id);
+              ].userData.model.pairing.right?.includes(id);
             if (!canBeAdded) {
               canBeSnapped = false;
             }
@@ -929,7 +927,7 @@ export default class Core {
 
           spacePosition = position;
 
-          let canBeSnapped = child.userData.model.pairing.right.includes(id);
+          let canBeSnapped = child.userData.model.pairing.right?.includes(id) ?? false;
 
           let spaceObject = new Group();
           spaceObject.position.copy(spacePosition);
@@ -951,9 +949,7 @@ export default class Core {
 
           this.spaces.add(spaceObject);
         } else {
-          child
-            .getObjectByName("component_R")
-            ?.getWorldPosition(lastComponentR);
+          componentR?.getWorldPosition(lastComponentR);
         }
       }
     });
