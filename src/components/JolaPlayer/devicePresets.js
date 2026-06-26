@@ -6,7 +6,7 @@ export const DEVICE_PRESETS = {
     pixelRatio: () => Math.min(window.devicePixelRatio, 2),
     shadowMapEnabled: true,
     shadowMapType: PCFSoftShadowMap,
-    shadowMapSize: 512,
+    shadowMapSize: 2048,
     contactShadow: true,
     spotLightsOn: true,
     floor: true,

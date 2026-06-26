@@ -206,6 +206,7 @@ export default class Player extends Core {
               normalMap.wrapS = RepeatWrapping;
               normalMap.wrapT = RepeatWrapping;
               normalMap.flipY = false;
+              normalMap.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
 
               normalMap.rotation = biasWelt ? biasRotation : 0;
 
@@ -226,6 +227,7 @@ export default class Player extends Core {
                 roughnessMap.wrapS = RepeatWrapping;
                 roughnessMap.wrapT = RepeatWrapping;
                 roughnessMap.flipY = false;
+                roughnessMap.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
 
                 roughnessMap.rotation = biasWelt ? biasRotation : 0;
 
@@ -247,7 +249,7 @@ export default class Player extends Core {
             if (aoMap) {
               aoMap.wrapS = RepeatWrapping;
               aoMap.wrapT = RepeatWrapping;
-              // flipY?
+              aoMap.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
 
               aoMap.rotation = biasWelt ? biasRotation : 0;
 
