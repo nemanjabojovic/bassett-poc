@@ -90,7 +90,7 @@ export default class Core {
     else this.preset = DEVICE_PRESETS.highEnd;
 
     this.defaultSceneOptions = {
-      lights: LIGHT_PRESETS[options.brand?.id] || LIGHT_PRESETS["default"],
+      lights: LIGHT_PRESETS[options.frame?.type] || LIGHT_PRESETS[options.brand?.id] || LIGHT_PRESETS["default"],
       controls: {
         enableZoom: true,
         enablePan: true,
@@ -1557,7 +1557,6 @@ export default class Core {
 
           // TODO: "result.animations?.length > 0" is for development, should be removed in the future
           if (model.animatedModel || result.animations?.length > 0) {
-            console.log('nasao anim')
             result.animations.forEach((animation) => {
               let anim = this.mixer.clipAction(animation, result.scene);
               anim.clampWhenFinished = true;
@@ -1692,7 +1691,7 @@ export default class Core {
 
     if (this.options.gui) {
       this.createGuiContainer();
-      this.createStats();
+      // this.createStats();
     }
 
     if (this.selectedFabric) {
@@ -2342,7 +2341,6 @@ export default class Core {
 
   // SET DEFAULT ADDITIONAL OPTIONS FOR COLLECTION
   setDefaultCollectionOptions(collection, brandId) {
-    console.log(collection, brandId)
     if (collection) {
       // Filtered additional options per collection
       let collectionOptionsData = {};
@@ -3056,7 +3054,7 @@ export default class Core {
       this.css2DRenderer.render(this.scene, this.camera);
     }
 
-    if (!this.needsRender) return;
+    this.needsRender = true;
 
     // FPS throttle
     if (this.frameDelta < this.frameInterval) return;
@@ -4964,6 +4962,7 @@ export default class Core {
     };
 
     this.colorGUI = this.gui.addFolder("Color Correction");
+    this.colorGUI.domElement.style.setProperty("display", "none", "important");
 
     let scbFolder = this.colorGUI.addFolder("Saturation/Contrast/Brightness");
     let scbParameters = {
