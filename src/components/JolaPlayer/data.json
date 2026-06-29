@@ -63,6 +63,12 @@
       "staticFrame": true,
       "brandId": "bassett",
       "textures": ["1629-2", "5283-15"],
+      "arms": [
+        { "name": "Closed_Arm", "sku": "Closed_Arm" },
+        { "name": "Soft_Arm", "sku": "Soft_Arm" },
+        { "name": "Round_Arm", "sku": "Round_Arm" },
+        { "name": "Knife_Arm", "sku": "Knife_Arm" }
+      ],
       "price": 8000,
       "collection": "bassett"
     },

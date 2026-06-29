@@ -9,6 +9,7 @@ import premierImg from '../assets/images/Premier.png'
 import classicImg from '../assets/images/Classic.png'
 import contemporaryImg from '../assets/images/Contemporary.png'
 import transitionalImg from '../assets/images/Transitional.png'
+import armSelectionImg from '../assets/icons/arm_selection.png'
 
 const ChevronIcon = ({ open }) => (
   <span style={{
@@ -168,15 +169,17 @@ const CUSHION_OPTIONS = [
   { name: 'Premier', icon: premierImg },
 ]
 
+
 const EDGE_OPTIONS = [
   { name: 'Classic', sku: 'Classic', icon: classicImg },
   { name: 'Contemporary', sku: 'Contemporary', icon: contemporaryImg },
   { name: 'Transitional', sku: 'Transitional', icon: transitionalImg },
 ]
 
-const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeChange, selectedCushion, onCushionChange }) => {
+const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeChange, selectedCushion, onCushionChange, armOptions, selectedArm, onArmChange }) => {
   const [sizeOpen, setSizeOpen] = useState(false)
   const [cushionOpen, setCushionOpen] = useState(false)
+  const [armOpen, setArmOpen] = useState(false)
   const frameOptions = resolveTextures(frame?.textures)
 
   return (
@@ -238,6 +241,36 @@ const FabricBody = ({ frame, selectedCover, onCoverChange, selectedSize, onSizeC
           </div>
         )}
       </div>
+      {armOptions.length > 0 && (
+        <div className='config-section'>
+          <SectionHeader
+            label='Arm Options'
+            selectedName={selectedArm?.name?.replace(/_/g, ' ') || null}
+            selectedIcon={selectedArm ? armSelectionImg : null}
+            open={armOpen}
+            onClick={() => setArmOpen(v => !v)}
+          />
+          {armOpen && (
+            <div className='config-section-content'>
+              <div className='config-option-grid'>
+                {armOptions.map((arm, i) => (
+                  <div
+                    key={i}
+                    className={`config-option-item${selectedArm?.name === arm.name ? ' config-option-item--selected' : ''}`}
+                    onClick={() => {
+                      onArmChange(arm)
+                      window.player?.setArmType(arm)
+                    }}
+                  >
+                    <img src={armSelectionImg} alt={arm.name} />
+                    <span>{arm.name.replace(/_/g, ' ')}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </>
   )
 }
@@ -293,6 +326,8 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
   const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[0])
   const [selectedCushion, setSelectedCushion] = useState(CUSHION_OPTIONS[0])
   const [selectedEdge, setSelectedEdge] = useState(EDGE_OPTIONS[0])
+  const armOptions = frame?.arms || []
+  const [selectedArm, setSelectedArm] = useState(armOptions[0] || null)
 
   useEffect(() => {
     if (isTable) window.player?.setEdgeType(EDGE_OPTIONS[0])
@@ -310,6 +345,8 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
       setSelectedTop(textures[0])
       setSelectedBase(textures[0])
     }
+    const arms = frame?.arms || []
+    setSelectedArm(arms[0] || null)
   }, [frame])
 
   return (
@@ -331,7 +368,7 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
       <div className='config-panel-body'>
         {isTable
           ? <TableBody frame={frame} selectedTop={selectedTop} onTopChange={setSelectedTop} selectedBase={selectedBase} onBaseChange={setSelectedBase} selectedEdge={selectedEdge} onEdgeChange={handleEdgeChange} />
-          : <FabricBody frame={frame} selectedCover={selectedCover} onCoverChange={setSelectedCover} selectedSize={selectedSize} onSizeChange={setSelectedSize} selectedCushion={selectedCushion} onCushionChange={setSelectedCushion} />
+          : <FabricBody frame={frame} selectedCover={selectedCover} onCoverChange={setSelectedCover} selectedSize={selectedSize} onSizeChange={setSelectedSize} selectedCushion={selectedCushion} onCushionChange={setSelectedCushion} armOptions={armOptions} selectedArm={selectedArm} onArmChange={setSelectedArm} />
         }      </div>
 
       <div className='config-panel-footer'>
@@ -353,6 +390,7 @@ const StaticFramePanel = ({ sku, frame, onClose, dimensions }) => {
           selectedEdge={isTable ? selectedEdge : null}
           selectedSize={isTable ? null : selectedSize}
           selectedCushion={isTable ? null : selectedCushion}
+          selectedArm={isTable ? null : selectedArm}
           onClose={() => setShowSummary(false)}
         />
       )}

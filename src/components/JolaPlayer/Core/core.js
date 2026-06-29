@@ -1585,6 +1585,10 @@ export default class Core {
             window.dispatchEvent(new Event("NoWeltOptions"));
           }
 
+          if (model.arms?.length > 0) {
+            this.selectedArmType = model.arms[0];
+          }
+
           this.updateTexture();
           this.updateModel();
 

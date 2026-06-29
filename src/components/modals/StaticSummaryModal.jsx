@@ -3,7 +3,7 @@ import downloadIcon from '../../assets/icons/Download.png'
 import shareIcon from '../../assets/icons/Share.png'
 import printIcon from '../../assets/icons/Print.png'
 
-const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, selectedTop, selectedBase, selectedEdge, selectedSize, selectedCushion, onClose }) => {
+const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, selectedTop, selectedBase, selectedEdge, selectedSize, selectedCushion, selectedArm, onClose }) => {
   const [screenshot, setScreenshot] = useState(null)
 
   useEffect(() => {
@@ -74,6 +74,12 @@ const StaticSummaryModal = ({ sku, frame, dimensions, isTable, selectedCover, se
                 <div className='summary-section'>
                   <p className='summary-section-label'>Cushion</p>
                   <p className='summary-section-value'>{selectedCushion.name}</p>
+                </div>
+              )}
+              {!isTable && selectedArm && (
+                <div className='summary-section'>
+                  <p className='summary-section-label'>Arm Style</p>
+                  <p className='summary-section-value'>{selectedArm.name.replace(/_/g, ' ')}</p>
                 </div>
               )}
               {isTable && selectedTop && (
