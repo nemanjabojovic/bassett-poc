@@ -95,7 +95,7 @@ const SwatchSection = ({ label, items, defaultOpen, onSelect, materialName, valu
               >
                 <div
                   className='config-swatch-img'
-                  style={{ backgroundImage: item.icon ? `url(${item.icon})` : 'none' }}
+                  style={{ backgroundImage: item.icon ? `url("${item.icon}")` : 'none' }}
                 />
                 <span className='config-swatch-name'>
                   <span className='config-swatch-sku'>{item.sku}</span>
