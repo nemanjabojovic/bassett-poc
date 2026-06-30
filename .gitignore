@@ -5,8 +5,6 @@
 /.pnp
 .pnp.js
 /dist
-# testing
-/coverage
 
 # production
 /build
@@ -14,8 +12,6 @@
 # resources
 /public/resources
 
-#sheet files
-/scripts/sheets/
 
 # misc
 .DS_Store
