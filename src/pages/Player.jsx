@@ -41,10 +41,10 @@ const Player = ({
         .join("-")
         .toLowerCase();
       const firstArm = data.collectionOptions.armTypes.find(
-        (a) => a.collection === formattedCollection,
+        (arm) => arm.collection === formattedCollection,
       );
       const firstConfig = data.popularConfigurations.find(
-        (pc) => pc.collection === formattedCollection,
+        (popularConfiguration) => popularConfiguration.collection === formattedCollection,
       );
       if (firstArm && firstConfig) {
         sku = `${firstArm.sku}-${firstConfig.elements[0].id}`;
@@ -56,7 +56,7 @@ const Player = ({
     } else if (paramsObject.model) {
       setSkuToLoad(paramsObject.model);
     } else {
-      const frame = data.frames.find((f) => f.brandId === paramsObject.brand);
+      const frame = data.frames.find((frame) => frame.brandId === paramsObject.brand);
       if (frame) setSkuToLoad(frame.sku);
     }
   }, [collection, searchParams]);
@@ -70,13 +70,6 @@ const Player = ({
     options.containerId = "player";
     options.loadingScreenId = "loading-screen";
 
-    if (options?.frame?.nails) {
-      options.nailOptions = {
-        nailsColor: options.frame.nails.defaultNailFinish,
-        nailOptionStandard: options.frame.nails.defaultStandardNail,
-        nailOptionStandard2: options.frame.nails.defaultStandardNail2,
-      };
-    }
 
     const allTextures = [
       ...(data.fabrics || []),
@@ -91,7 +84,7 @@ const Player = ({
         : (rawTextures[defaultMaterialType] || Object.values(rawTextures)[0] || [])
       : [];
     const frameTextures = textureSKUs.length > 0
-      ? allTextures.filter((t) => textureSKUs.includes(t.sku))
+      ? allTextures.filter((texture) => textureSKUs.includes(texture.sku))
       : data.fabrics;
     options.fabric = [
       { texture: frameTextures[0] || data.fabrics[0], name: "PrimaryCover" },
@@ -100,8 +93,8 @@ const Player = ({
     options.popularConfiguration = configurationToLoad;
     options.data = data;
     options.signalModelConfigurationChange = () => {
-      const dims = window.player?.getDimensions();
-      if (dims) setDimensions(dims);
+      const dimensions = window.player?.getDimensions();
+      if (dimensions) setDimensions(dimensions);
       window.dispatchEvent(new Event("playerConfigurationChanged"));
     };
     options.setSwapInitiated = () => {
