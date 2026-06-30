@@ -12,19 +12,10 @@ import ClearConfirmModal from "../components/modals/ClearConfirmModal";
 
 const Player = ({
   activePlayer,
-  setPlayerInstance,
-  modelPath,
-  brandInstance,
   brandInstanceConfiguratorType,
-  setBrandInstanceConfiguratorType,
   collection,
   setCollection,
   setSearchParams,
-  setSearchParamsModel,
-  handleAddParam,
-  additionalOptionsCollectionFilter,
-  setStaticModelWithAnimation,
-  staticModelWithAnimation,
   isOpenAdditionalOption,
   setIsOpenAdditionalOption,
   goToLanding,
@@ -68,7 +59,7 @@ const Player = ({
       const frame = data.frames.find((f) => f.brandId === paramsObject.brand);
       if (frame) setSkuToLoad(frame.sku);
     }
-  }, [collection, brandInstance, searchParams]);
+  }, [collection, searchParams]);
 
   useEffect(() => {
     if (!skuToLoad) return;
